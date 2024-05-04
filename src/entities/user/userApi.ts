@@ -11,6 +11,10 @@ interface ILogin{
     password: string 
 }
 
+interface IRegister{
+
+}
+
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({ baseUrl: globalUrl }),
@@ -20,6 +24,19 @@ export const userApi = createApi({
                 url: '/auth/login',
                 method: 'POST',
                 body,
+            })
+        }),
+        register: build.mutation<IUser, IRegister>({
+            query: (body) => ({
+                url: '/auth/register',
+                method: 'POST',
+                body
+            })
+        }),
+        logout: build.mutation({
+            query: () => ({
+                url: '/auth/logout',
+                method: 'POST'
             })
         })
     })

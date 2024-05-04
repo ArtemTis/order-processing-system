@@ -10,12 +10,12 @@ import Profile from "../../../pages/auth/Profile";
 import NotFound from "../../NotFound";
 import Settings from "../../../pages/Settings";
 import Chat from "../../../pages/Chat";
+import Chats from "../../../pages/Chats";
 
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-
       <Route path={HOME_PATH} element={<AppSider />} >
         <Route path={CHATS_PATH} element={<Main />} />
 
@@ -31,7 +31,7 @@ export const router = createBrowserRouter(
 
           <Route path={`${SECTIONS_BASE_PATH}/:id`} element={<SubsectionContainer />} />
         </Route> */}
-        <Route path={CHATS_PATH} element={<Settings />} >
+        <Route path={CHATS_PATH} element={<Chats />} >
           <Route index element={<Navigate to={CHAT_PATH} />} />
           <Route path={`${CHAT_PATH}/:chatId`} element={<Chat />} />
         </Route>

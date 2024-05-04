@@ -6,6 +6,7 @@ import { BrowserRouter, RouterProvider } from 'react-router-dom';
 import { router } from '../shared/config/routerConfig/router';
 import { Provider } from 'react-redux'
 import { store } from './store/store';
+import Chat from '../pages/Chat';
 
 function App() {
   return (
@@ -26,7 +27,8 @@ function App() {
     >
       <Provider store={store}>
         <BrowserRouter>
-          <RouterProvider router={router} />
+          {/* <RouterProvider router={router} /> */}
+          <Chat />
         </BrowserRouter>
       </Provider>
     </ConfigProvider>

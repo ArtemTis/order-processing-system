@@ -42,7 +42,6 @@ const AppSider: React.FC = () => {
                         {
                             key: '2',
                             icon: <img src={book} alt='book icon' />,
-
                             label: <Link to={SETTINGS_PATH}>Тесты</Link>,
                         },
                         {
