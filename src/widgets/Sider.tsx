@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Layout, Menu, Button, theme } from 'antd';
 import { Link, Outlet } from 'react-router-dom';
-import menu from '../assets/sider/Menu.svg'
-import link from '../assets/sider/link.svg'
+import menu from '../shared/assets/Menu.svg'
+import link from '../shared/assets/link.svg'
 import book from '../assets/sider/Book.svg'
 import teacher from '../assets/sider/Teacher.svg'
 import profile from '../assets/sider/Profile.svg'
@@ -22,31 +22,31 @@ const AppSider: React.FC = () => {
 
     return (
         <LayoutStyle>
-            <SiderStyle trigger={null} collapsible collapsed={collapsed} >
-                <ButtonClose
+            <SiderStyle trigger={null} collapsible collapsed={false} >
+                {/* <ButtonClose
                     type="text"
                     icon={collapsed ? <img src={menu} alt='menu icon' /> : <img src={link} alt='link icon' />}
                     onClick={() => setCollapsed(!collapsed)}
                     children={collapsed ? '' : 'Свернуть меню системы'}
                     style={{ overflow: 'hidden', height: '75px' }}
-                />
+                /> */}
                 <MenuStyle
                     mode="inline"
                     // defaultSelectedKeys={['2']}
                     items={[
                         {
                             key: '1',
-                            icon: <img src={teacher} alt='teacher icon' />,
+                            icon: <img src="" alt='teacher icon' />,
                             label: <Link to={CHATS_PATH}>Обучение</Link>,
                         },
                         {
                             key: '2',
-                            icon: <img src={book} alt='book icon' />,
+                            icon: <img src="" alt='book icon' />,
                             label: <Link to={SETTINGS_PATH}>Тесты</Link>,
                         },
                         {
                             key: '3',
-                            icon: <img src={profile} alt='profile icon' />,
+                            icon: <img src="" alt='profile icon' />,
                             label: <Link to={PROFILE_PATH}>Личный кабинет</Link>,
                         },
                     ]}

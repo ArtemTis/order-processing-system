@@ -8,7 +8,7 @@ const Account = () => {
 
   return (
     <div>Account
-      <Outlet />
+      {/* <Outlet /> */}
 
       {
         isAuthorised

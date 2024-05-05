@@ -21,20 +21,12 @@ export const router = createBrowserRouter(
 
         <Route index element={<Navigate to={CHATS_PATH} />} />
 
-        {/* <Route path={CONTENT_PATH} element={<Training />} /> */}
-
-        {/* <Route path={KNOWLEDGE_BASE_PATH} element={<BaseHeader />} >
-
-          <Route index element={<Navigate to={SECTIONS_BASE_PATH} />} />
-
-          <Route path={SECTIONS_BASE_PATH} element={<KnowBaseList />} />
-
-          <Route path={`${SECTIONS_BASE_PATH}/:id`} element={<SubsectionContainer />} />
-        </Route> */}
-        <Route path={CHATS_PATH} element={<Chats />} >
+        {/* <Route path={CHATS_PATH} element={<Chats />} >
           <Route index element={<Navigate to={CHAT_PATH} />} />
-          <Route path={`${CHAT_PATH}/:chatId`} element={<Chat />} />
-        </Route>
+        </Route> */}
+
+        <Route path={`${CHAT_PATH}/:chatId`} element={<Chat />} />
+
 
         {/* <Route path={TESTS_PATH} element={<Tests />} />
         <Route path={`${TESTS_PATH}/:testId`} element={<Test />} />
@@ -50,9 +42,9 @@ export const router = createBrowserRouter(
 
       <Route path={ACCOUNT_PATH} element={<Account />}>
         <Route index element={<AuthGuard element={<Navigate to={HOME_PATH} replace />} />} />
-        <Route path={LOGIN_PATH} element={<Login />} >
-          <Route index element={<Navigate to={LOGIN_PATH} />} />
-        </Route>
+        <Route path={LOGIN_PATH} element={<Login />} />
+        {/* <Route index element={<Navigate to={LOGIN_PATH} />} /> */}
+        {/* </Route> */}
 
         <Route path={REGISTER_PATH} element={<Register />} />
         <Route path={PROFILE_PATH} element={<AuthGuard element={<Profile />} />} />

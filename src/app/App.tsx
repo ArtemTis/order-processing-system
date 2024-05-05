@@ -26,10 +26,9 @@ function App() {
       }}
     >
       <Provider store={store}>
-        <BrowserRouter>
-          {/* <RouterProvider router={router} /> */}
-          <Chat />
-        </BrowserRouter>
+        {/* <BrowserRouter> */}
+          <RouterProvider router={router} />
+        {/* </BrowserRouter> */}
       </Provider>
     </ConfigProvider>
   );
