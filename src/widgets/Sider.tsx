@@ -8,7 +8,7 @@ import book from '../assets/sider/Book.svg'
 import teacher from '../assets/sider/Teacher.svg'
 import profile from '../assets/sider/Profile.svg'
 import logout from '../assets/sider/Logout.svg'
-import { CHATS_PATH, PROFILE_PATH, SETTINGS_PATH } from '../shared/config/routerConfig/routeConstants';
+import { ACCOUNT_PATH, CHATS_PATH, PROFILE_PATH, SETTINGS_PATH } from '../shared/config/routerConfig/routeConstants';
 
 
 const { Header, Sider, Content } = Layout;
@@ -37,17 +37,17 @@ const AppSider: React.FC = () => {
                         {
                             key: '1',
                             icon: <img src="" alt='teacher icon' />,
-                            label: <Link to={CHATS_PATH}>Обучение</Link>,
+                            label: <Link to={CHATS_PATH}>Чаты</Link>,
                         },
                         {
                             key: '2',
                             icon: <img src="" alt='book icon' />,
-                            label: <Link to={SETTINGS_PATH}>Тесты</Link>,
+                            label: <Link to={SETTINGS_PATH}>Настройки</Link>,
                         },
                         {
                             key: '3',
                             icon: <img src="" alt='profile icon' />,
-                            label: <Link to={PROFILE_PATH}>Личный кабинет</Link>,
+                            label: <Link to={ACCOUNT_PATH}>Личный кабинет</Link>,
                         },
                     ]}
                 />
@@ -85,16 +85,16 @@ const ButtonClose = styled(Button)`
   &.ant-btn.ant-btn-icon-only{
     width: 100% !important;
   }
-
 `
 
 const SiderStyle = styled(Sider)`
-    background: #F5F6F8 !important;
+    /* background: #F5F6F8 !important; */
     height:100vh;
     overflow: hidden;
 
     & ul {
-        background: #F5F6F8 !important;
+        /* background: #F5F6F8 !important; */
+        background: #4218b4 !important;
     }
 
     & li {

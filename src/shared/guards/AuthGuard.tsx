@@ -9,8 +9,10 @@ interface GuardProps {
 const AuthGuard: React.FC<GuardProps> = ({element}) => {
    // const isAuthorised = useAppSelector(selectIsAuthorised);
 
-   // return true ? element : <Navigate to={LOGIN_PATH} replace />
-   return <Navigate to={LOGIN_PATH} replace />
+   const isAuthorised = false;
+
+   return isAuthorised ? element : <Navigate to={LOGIN_PATH} replace />
+   // return <Navigate to={LOGIN_PATH} replace />
 }
 
 export default AuthGuard

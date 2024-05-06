@@ -7,14 +7,14 @@ const Account = () => {
   const isAuthorised = true;
 
   return (
-    <div>Account
-      {/* <Outlet /> */}
+    <div>
+      <Outlet />
 
-      {
+      {/* {
         isAuthorised
           ? <Profile />
           : <Outlet/>
-      }
+      } */}
     </div>
   )
 }

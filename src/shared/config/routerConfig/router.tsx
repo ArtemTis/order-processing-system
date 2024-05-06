@@ -17,15 +17,15 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path={HOME_PATH} element={<AppSider />} >
-        <Route path={CHATS_PATH} element={<Main />} />
+        <Route path={CHATS_PATH} element={<Chats />} />
 
         <Route index element={<Navigate to={CHATS_PATH} />} />
 
-        {/* <Route path={CHATS_PATH} element={<Chats />} >
-          <Route index element={<Navigate to={CHAT_PATH} />} />
-        </Route> */}
+        <Route path={CHATS_PATH} element={<Chats />} >
+          {/* <Route index element={<Navigate to={CHAT_PATH} />} /> */}
+          <Route path={`${CHAT_PATH}/:chatId`} element={<Chat />} />
+        </Route>
 
-        <Route path={`${CHAT_PATH}/:chatId`} element={<Chat />} />
 
 
         {/* <Route path={TESTS_PATH} element={<Tests />} />
@@ -37,20 +37,35 @@ export const router = createBrowserRouter(
         <Route path={SETTINGS_PATH} element={<Settings />} />
         <Route path="*" element={<NotFound />} />
 
+
+
+        <Route path={ACCOUNT_PATH} element={<Account />}>
+          <Route index element={<AuthGuard element={<Navigate to={PROFILE_PATH} replace />} />} />
+          <Route path={LOGIN_PATH} element={<Login />} />
+          {/* <Route index element={<Navigate to={LOGIN_PATH} />} /> */}
+          {/* </Route> */}
+
+          <Route path={REGISTER_PATH} element={<Register />} />
+          <Route path={PROFILE_PATH} element={<AuthGuard element={<Profile />} />} />
+        </Route>
+
       </Route>
       {/* hakaton */}
 
-      <Route path={ACCOUNT_PATH} element={<Account />}>
-        <Route index element={<AuthGuard element={<Navigate to={HOME_PATH} replace />} />} />
-        <Route path={LOGIN_PATH} element={<Login />} />
-        {/* <Route index element={<Navigate to={LOGIN_PATH} />} /> */}
-        {/* </Route> */}
 
-        <Route path={REGISTER_PATH} element={<Register />} />
+
+
+      {/* <Route path={ACCOUNT_PATH} element={<Account />}>
+        <Route index element={<AuthGuard element={<Navigate to={PROFILE_PATH} replace />} />} />
+        <Route path={LOGIN_PATH} element={<Login />} >
+          <Route index element={<Navigate to={SINGIN_TEL_PATH} />} />
+          <Route path={SINGIN_TEL_PATH} element={<LoginTel />} />
+          <Route path={SINGIN_EMAIL_PATH} element={<LoginEmail />} />
+          <Route path={SINGIN_CODE_PATH} element={<LoginCode />} />
+        </Route>
         <Route path={PROFILE_PATH} element={<AuthGuard element={<Profile />} />} />
-      </Route>
-
-
+        <Route path={REGISTER_PATH} element={<Register />} />
+      </Route> */}
 
     </>
   ));
