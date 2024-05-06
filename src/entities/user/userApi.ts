@@ -9,13 +9,13 @@ interface IUser{
     email_verified_at: boolean | null,
 }
 
-interface ILoginResponce{
+export interface ILoginResponse{
     access_token: string,
     token_type: string,
     user: IUser
 }
 
-interface ILogin{ 
+export interface ILogin{ 
     email: string; 
     password: string 
 }
@@ -28,7 +28,7 @@ export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({ baseUrl: globalUrl }),
     endpoints: (build) => ({
-        login: build.mutation<ILoginResponce, ILogin>({
+        login: build.mutation<ILoginResponse, ILogin>({
             query: (body) => ({
                 url: '/auth/login',
                 method: 'POST',
