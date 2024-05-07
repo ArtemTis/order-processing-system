@@ -1,21 +1,38 @@
 import React from 'react'
-import { userApi } from '../../entities/user/userApi';
+import { userApi } from '../../entities/auth/userApi';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { PROFILE_PATH } from '../../shared/config/routerConfig/routeConstants';
+import { ACCOUNT_PATH, PROFILE_PATH, REGISTER_PATH } from '../../shared/config/routerConfig/routeConstants';
+import { useAppDispatch } from '../../app/store/store';
+import { setCredentials } from '../../entities/auth/authSlice';
+import { useDispatch } from 'react-redux';
 
 const Login = () => {
   const [sendInfo, { isError, isLoading, data }] = userApi.useLoginMutation();
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const login = async () => {
-    await sendInfo({ email: "user@mail.ru", password: '12345678' })
-    .then(() => {
-      // OpenAPI.TOKEN = `${auth.credential.authToken}`;
+    // const user = await sendInfo({ email: "user@mail.ru", password: '12345678' }).unwrap();
+    // console.log(user);
+    // if (data) {
+    //   dispatch(setCredentials(data))
+    //   navigate(`/${PROFILE_PATH}`);
+    //   console.log('reroute');
+    // }
 
+    try {
+      const user = await sendInfo({ email: "user@mail.ru", password: '12345678' }).unwrap();
+      dispatch(setCredentials(user))
       navigate(`/${PROFILE_PATH}`);
-  });
+    } catch (err) {
+
+    }
+  }
+
+  const register = () => {
+    navigate(`/${ACCOUNT_PATH}/${REGISTER_PATH}`);
   }
 
 
@@ -32,13 +49,19 @@ const Login = () => {
         Login
       </button>
       {
-        data && 
+        data &&
         <div>
-        <p>{data.user.name}</p>
-        <p>{data.user.email}</p>
+          <p>{data.user?.name}</p>
+          <p>{data.user?.email}</p>
 
         </div>
       }
+
+      <hr />
+
+      <button onClick={register}>
+        Register
+      </button>
     </StyledWrapper>
   )
 }

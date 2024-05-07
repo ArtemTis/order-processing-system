@@ -1,10 +1,11 @@
 import React from 'react'
-import { userApi } from '../../entities/user/userApi'
+import { userApi } from '../../entities/auth/userApi'
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { LOGIN_PATH } from '../../shared/config/routerConfig/routeConstants';
+import { ACCOUNT_PATH, LOGIN_PATH } from '../../shared/config/routerConfig/routeConstants';
 import { useSelector } from 'react-redux';
-import { selectIsAuthorised, selectLoginResponse } from '../../entities/user/selectors';
+import { selectIsAuthorised, selectLoginResponse } from '../../entities/auth/selectors';
+import { selectCurrentUser } from '../../entities/auth/authSlice';
 
 const Profile = () => {
   const [sendInfo, { isError, isLoading, data }] = userApi.useLogoutMutation();
@@ -14,20 +15,23 @@ const Profile = () => {
 
   const logout = () => {
     sendInfo(1).then(() => {
-      navigate(LOGIN_PATH)
+      navigate(`/${ACCOUNT_PATH}/${LOGIN_PATH}`)
     });
   }
 
-  const selector = useSelector(selectLoginResponse);
+  // const selector = useSelector(selectLoginResponse);
+  // const isAuthorised = useSelector(selectIsAuthorised);
 
-  const isAuthorised = useSelector(selectIsAuthorised);
+  const user = useSelector(selectCurrentUser);
 
-  console.log(selector);
+  console.log(user);
 
   return (
     <StyledWrapper>
       Profile
-
+      <h1>{user?.name}</h1>
+      <h3>{user?.email}</h3>
+      
       {
         isLoading && <p>Loading...</p>
       }

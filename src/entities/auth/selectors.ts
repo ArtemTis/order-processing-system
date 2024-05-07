@@ -1,8 +1,8 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { RootState } from "@reduxjs/toolkit/query";
-import { ILogin, userApi } from "./userApi";
+import { userApi } from "./userApi";
+import { RootState } from "../../app/store/store";
 
-// const selectPosts = (state: RootState) => state.postsApi.posts;
+const selectPosts = (state: RootState) => state.userApi;
 // const selectAuthors = (state) => state.postsApi.authors;
 
 // const selectPostsAndAuthors = createSelector(
@@ -25,3 +25,20 @@ export const selectIsAuthorised = createSelector(
    state => state.data?.access_token
 );
 
+
+
+// const selectPosts = (state) => state.postsApi.posts;
+// const selectAuthors = (state) => state.postsApi.authors;
+
+// const selectPostsAndAuthors = createSelector(
+//   selectPosts,
+//   selectAuthors,
+//   (posts, authors) => {
+//     return posts.map((post) => {
+//       return {
+//         ...post,
+//         author: authors.find((author) => author.id === post.authorId),
+//       };
+//     });
+//   }
+// );
