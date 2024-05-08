@@ -28,6 +28,12 @@ export const companyApi = createApi({
                 method: 'GET'
             })
         }),
+        chatsMessages: build.query<ICompanyChatsResponse, number>({
+            query: (chatId) => ({
+                url: `/chats/${chatId}/messages`,
+                method: 'GET'
+            })
+        }),
 
     })
 })

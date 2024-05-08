@@ -10,7 +10,6 @@ const Chats = () => {
   const { data:  response, isLoading, isError } = companyApi.useChatsByCompanyQuery(11);
 
   console.log(response?.data);
-  
 
   return (
     <StyledChatsWrapper>

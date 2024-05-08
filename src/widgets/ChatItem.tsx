@@ -14,13 +14,7 @@ const ChatItem: React.FC<ChatItemProps> = ({ data }) => {
 
     const { id } = useParams();
 
-    // console.log(data);
-    console.log(data.last_message?.created_at);
-    // console.log(data.last_message.created_at);
-
     const time = data.last_message?.created_at.slice(11, 16);
-    console.log(time);
-
 
     return (
         <StyledChatItem>

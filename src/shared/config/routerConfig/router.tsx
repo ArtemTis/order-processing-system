@@ -19,7 +19,8 @@ export const router = createBrowserRouter(
       <Route path={HOME_PATH} element={<AppSider />} >
         <Route path={CHATS_PATH} element={<Chats />} />
 
-        <Route index element={<Navigate to={CHATS_PATH} />} />
+        {/* <Route index element={<Navigate to={CHATS_PATH} />} /> */}
+        <Route index element={<AuthGuard element={<Navigate to={CHATS_PATH} replace />} />} />
 
         <Route path={CHATS_PATH} element={<Chats />} >
           {/* <Route index element={<Navigate to={CHAT_PATH} />} /> */}
