@@ -1,17 +1,24 @@
 import React from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
-import ChatItem from '../widgets/StyledChatItem'
+import ChatItem from '../widgets/ChatItem'
 import { CHAT_PATH } from '../shared/config/routerConfig/routeConstants'
+import { companyApi } from '../entities/company/companyApi'
 
 const Chats = () => {
+
+  const { data:  response, isLoading, isError } = companyApi.useChatsByCompanyQuery(11);
+
+  console.log(response?.data);
+  
+
   return (
     <StyledChatsWrapper>
       <StyledChats>
         {
-          [0, 1, 4, 5, 1, 2, 6, 2, 4, 6, 7, 8].map((item, index) =>
-            <Link to={`${CHAT_PATH}/${index}`} key={index}>
-              <ChatItem key={index} />
+          response?.data.map((item, index) =>
+            <Link to={`${CHAT_PATH}/${item.id}`} key={item.id}>
+              <ChatItem key={item.id} data={item}/>
             </Link>
           )
         }
@@ -35,8 +42,9 @@ const StyledChats = styled.div`
   flex-direction: column;
   /* align-items: stretch; */
 
-  min-width: 220px;
-  max-width: 350px;
+  min-width: 250px;
+  /* width: 310px; */
+  max-width: 320px;
   padding: 10px;
 
   background-color: #533f5c;

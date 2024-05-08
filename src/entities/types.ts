@@ -25,3 +25,47 @@ export interface ILogin {
 export interface IRegister {
 
 }
+
+export interface IChatSnippen {
+    id: number,
+    name: number,
+    channel: {
+        id: number,
+        name: string,
+        photo_url: string | null
+    },
+    last_message: {
+        id: number,
+        text: string,
+        from_user_id: {
+            id: number,
+            name: string
+        },
+        created_at: string
+    } | null,
+    created_at: string 
+}
+
+export interface ICompanyChatsResponse {
+    data: IChatSnippen[],
+    links: {
+        first: string
+        last: string
+        prev: string | null,
+        next: string | null
+    }
+    meta: {
+        current_page: number,
+        from: number,
+        last_page: number,
+        links: {
+            active: boolean
+            label: string
+            url: string | null
+        }[],
+        path: string,
+        per_page: number,
+        to: number,
+        total: number,
+    }
+}

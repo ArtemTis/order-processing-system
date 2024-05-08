@@ -3,6 +3,7 @@ import { setupListeners } from '@reduxjs/toolkit/query/react'
 import { userApi } from '../../entities/auth/userApi'
 import authSlice from '../../entities/auth/authSlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import { companyApi } from '../../entities/company/companyApi'
 
 
 // const rootReducer = combineReducers({
@@ -13,10 +14,11 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 export const store = configureStore({
     reducer: {
         [userApi.reducerPath]: userApi.reducer,
+        [companyApi.reducerPath]: companyApi.reducer,
         auth: authSlice,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(userApi.middleware),
+        getDefaultMiddleware().concat(userApi.middleware).concat(companyApi.middleware),
 })
 
 // export type RootState = ReturnType<typeof rootReducer>;
