@@ -4,6 +4,8 @@ import { UserOutlined } from '@ant-design/icons'
 import { Avatar } from 'antd'
 import { companyApi } from '../entities/company/companyApi'
 import { useParams } from 'react-router-dom'
+import moment from 'moment'
+import 'moment/locale/ru'
 
 enum Role {
   USER = 'user',
@@ -20,6 +22,8 @@ const Chat = () => {
 
   console.log(responseMessages);
 
+  moment.locale('ru')
+  
 
   return (
     <div className="container">
@@ -44,26 +48,8 @@ const Chat = () => {
                 responseMessages?.data.map((message, i) => {
                   const itsMe = message.from_user_id.name.trim().toLowerCase() === Role.ADMIN;
 
-                  const date = message.created_at.split('T');
-                  const time = date[1].split(':').splice(0, 2).join(':');
-                  const dateDay = date[0].split('-').reverse().splice(0, 1).join('.');
-                  const dateMounth = date[0].split('-').reverse().splice(1, 1).join('.');
-
-                  const months = [
-                    'Январь',
-                    'Февраль',
-                    'Март',
-                    'Апрель',
-                    'Май',
-                    'Июнь',
-                    'Июль',
-                    'Август',
-                    'Сентябрь',
-                    'октябрь',
-                    'Ноябрь',
-                    'Декабрь',
-                  ];
-
+                  const date = moment(message.created_at).format( "hh:mm | D MMM")
+                
                   return itsMe ? (
                     <div className="outgoing-chats">
                       <div className="outgoing-chats-img">
@@ -74,7 +60,7 @@ const Chat = () => {
                           <p className="multi-msg">
                             {message.text}
                           </p>
-                          <span className="time">{time} | {`${months[+dateMounth-1]} | ${dateDay}`}</span>
+                          <span className="time">{date}</span>
                         </div>
                       </div>
                     </div>
@@ -89,7 +75,7 @@ const Chat = () => {
                             <p>
                               {message.text}
                             </p>
-                            <span className="time">{time} | {`${months[+dateMounth]} | ${dateDay}`}</span>
+                            {/* <span className="time">{time} | {`${months[+dateMounth]} | ${dateDay}`}</span> */}
                           </div>
                         </div>
                       </div>
