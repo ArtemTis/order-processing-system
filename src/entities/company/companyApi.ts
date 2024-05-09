@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { ICompanyChatsResponse, ILogin, ILoginResponse, IRegister, IUser } from '../types';
+import { ICompanyChatsResponse, ILogin, ILoginResponse, IMessagesResponse, IRegister, IUser } from '../types';
 import { RootState } from '../../app/store/store';
 
 const globalUrl = process.env.REACT_APP_API_URL;
@@ -28,7 +28,7 @@ export const companyApi = createApi({
                 method: 'GET'
             })
         }),
-        chatsMessages: build.query<ICompanyChatsResponse, number>({
+        chatsMessages: build.query<IMessagesResponse, number>({
             query: (chatId) => ({
                 url: `/chats/${chatId}/messages`,
                 method: 'GET'

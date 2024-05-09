@@ -5,6 +5,11 @@ import { Avatar } from 'antd'
 import { companyApi } from '../entities/company/companyApi'
 import { useParams } from 'react-router-dom'
 
+enum Role {
+  USER = 'user',
+  ADMIN = 'admin'
+}
+
 const Chat = () => {
 
   const { chatId } = useParams();
@@ -14,7 +19,7 @@ const Chat = () => {
   const { data: responseMessages } = companyApi.useChatsMessagesQuery(+(chatId ?? -1));
 
   console.log(responseMessages);
-  
+
 
   return (
     <div className="container">
@@ -35,6 +40,61 @@ const Chat = () => {
 
             <div className="msg-page">
 
+              {
+                responseMessages?.data.map((message, i) => {
+                  const itsMe = message.from_user_id.name.trim().toLowerCase() === Role.ADMIN;
+
+                  const date = message.created_at.split('T');
+                  const time = date[1].split(':').splice(0, 2).join(':');
+                  const dateDay = date[0].split('-').reverse().splice(0, 1).join('.');
+                  const dateMounth = date[0].split('-').reverse().splice(1, 1).join('.');
+
+                  const months = [
+                    'Январь',
+                    'Февраль',
+                    'Март',
+                    'Апрель',
+                    'Май',
+                    'Июнь',
+                    'Июль',
+                    'Август',
+                    'Сентябрь',
+                    'октябрь',
+                    'Ноябрь',
+                    'Декабрь',
+                  ];
+
+                  return itsMe ? (
+                    <div className="outgoing-chats">
+                      <div className="outgoing-chats-img">
+                        <img src="user1.png" />
+                      </div>
+                      <div className="outgoing-msg">
+                        <div className="outgoing-chats-msg">
+                          <p className="multi-msg">
+                            {message.text}
+                          </p>
+                          <span className="time">{time} | {`${months[+dateMounth-1]} | ${dateDay}`}</span>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                    : (
+                      <div className="received-chats">
+                        <div className="received-chats-img">
+                          <img src="user2.png" />
+                        </div>
+                        <div className="received-msg">
+                          <div className="received-msg-inbox">
+                            <p>
+                              {message.text}
+                            </p>
+                            <span className="time">{time} | {`${months[+dateMounth]} | ${dateDay}`}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                })}
 
               <div className="received-chats">
                 <div className="received-chats-img">

@@ -43,7 +43,7 @@ export interface IChatSnippen {
         },
         created_at: string
     } | null,
-    created_at: string 
+    created_at: string
 }
 
 export interface ICompanyChatsResponse {
@@ -68,4 +68,39 @@ export interface ICompanyChatsResponse {
         to: number,
         total: number,
     }
+}
+
+export interface IChatMessages {
+    created_at: string
+    from_user_id: {
+        id: number,
+        name: string
+    }
+    id: number
+    text: string
+}
+
+export interface IMessagesResponse {
+    data: IChatMessages[],
+    links: {
+        first: string,
+        last: string,
+        next: string,
+        prev: null
+    },
+    meta: {
+        current_page: number,
+        from: number,
+        last_page: number,
+        links: {
+            active: boolean
+            label: string
+            url: string
+        }[],
+        path: string
+        per_page: number
+        to: number
+        total: number
+    }
+
 }
