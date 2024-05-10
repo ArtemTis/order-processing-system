@@ -1,4 +1,4 @@
-export enum ReqStatus {
+export enum ReqStatusRedux {
     never,
     pending,
     fulfilled,

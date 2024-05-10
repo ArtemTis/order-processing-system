@@ -71,12 +71,12 @@ export interface ICompanyChatsResponse {
 }
 
 export interface IChatMessages {
-    created_at: string
+    created_at: string,
     from_user_id: {
         id: number,
         name: string
-    }
-    id: number
+    } | null,
+    id: number,
     text: string
 }
 
@@ -103,4 +103,67 @@ export interface IMessagesResponse {
         total: number
     }
 
+}
+
+export interface IMessageSendResponse {
+    data: [
+        {
+            id: number,
+            text: string,
+            from_user_id: number | null,
+            created_at: string
+        }
+    ],
+    links: {
+        first: string,
+        last: string,
+        prev: null,
+        next: null
+    },
+    meta: {
+        current_page: number,
+        from: number,
+        last_page: number,
+        links: [
+            {
+                url: string | null,
+                label:string
+                active: boolean
+            }
+        ],
+        path: string,
+        per_page: number,
+        to: number,
+        total: number
+    }
+}
+
+export interface ISendMessage {
+    chatId: number,
+    text: string
+}
+
+export enum EChannelsName {
+    VKGroup,
+    Telegram,
+    Viber,
+    WhatsApp
+}
+
+export interface IChannel {
+    data: {
+        id: number,
+        name: EChannelsName,
+        photo_url: string | null
+    }[]
+}
+
+export interface IAddGroupVk {
+    access_key: string,
+    group_id: number
+}
+
+export enum ReqStatus {
+    success,
+    reject
 }

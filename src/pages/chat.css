@@ -97,6 +97,11 @@ img {
     scrollbar-width: thin;
 }
 
+.messages-wrapper {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
 /* Styling the msg-bottom container */
 .msg-bottom {
     border-top: 1px solid #ccc;

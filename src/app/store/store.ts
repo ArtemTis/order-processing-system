@@ -4,6 +4,7 @@ import { userApi } from '../../entities/auth/userApi'
 import authSlice from '../../entities/auth/authSlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { companyApi } from '../../entities/company/companyApi'
+import { channelApi } from '../../entities/channel/channelApi'
 
 
 // const rootReducer = combineReducers({
@@ -15,10 +16,11 @@ export const store = configureStore({
     reducer: {
         [userApi.reducerPath]: userApi.reducer,
         [companyApi.reducerPath]: companyApi.reducer,
+        [channelApi.reducerPath]: channelApi.reducer,
         auth: authSlice,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(userApi.middleware).concat(companyApi.middleware),
+        getDefaultMiddleware().concat(userApi.middleware).concat(companyApi.middleware).concat(channelApi.middleware),
 })
 
 // export type RootState = ReturnType<typeof rootReducer>;
