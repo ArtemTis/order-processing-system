@@ -4,8 +4,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { ACCOUNT_PATH, LOGIN_PATH } from '../../shared/config/routerConfig/routeConstants';
 import { useSelector } from 'react-redux';
-import { selectIsAuthorised, selectLoginResponse } from '../../entities/auth/selectors';
-import { selectCurrentUser } from '../../entities/auth/authSlice';
+import { selectCurrentUser } from '../../entities/auth/selectors';
 
 const Profile = () => {
   const [sendInfo, { isError, isLoading, data }] = userApi.useLogoutMutation();

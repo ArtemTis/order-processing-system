@@ -3,8 +3,9 @@ import { setupListeners } from '@reduxjs/toolkit/query/react'
 import { userApi } from '../../entities/auth/userApi'
 import authSlice from '../../entities/auth/authSlice'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { companyApi } from '../../entities/company/companyApi'
+import { companyApi } from '../../entities/chats/companyApi'
 import { channelApi } from '../../entities/channel/channelApi'
+import chatSlice from '../../entities/chats/chatSlice'
 
 
 // const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ export const store = configureStore({
         [companyApi.reducerPath]: companyApi.reducer,
         [channelApi.reducerPath]: channelApi.reducer,
         auth: authSlice,
+        chats: chatSlice,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat(userApi.middleware).concat(companyApi.middleware).concat(channelApi.middleware),

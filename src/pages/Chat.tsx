@@ -1,39 +1,43 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './chat.css'
 import { UserOutlined } from '@ant-design/icons'
 import { Avatar } from 'antd'
-import { companyApi } from '../entities/company/companyApi'
+import { companyApi } from '../entities/chats/companyApi'
 import { useParams } from 'react-router-dom'
-import moment from 'moment'
 import 'moment/locale/ru'
+import Messages from '../widgets/Messages'
+import { useSelector } from 'react-redux'
+import { selectAuthToken } from '../entities/auth/selectors'
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+import useEcho from '../shared/config/hooks/useEcho'
+import { selectAllChats } from '../entities/chats/selectors'
+import { RootState } from '../app/store/store'
 
 enum Role {
   USER = 'user',
   ADMIN = 'admin'
 }
 
+//@ts-ignore
+// window.Pusher = Pusher;
+
 const Chat = () => {
 
-  moment.locale('ru')
   const { chatId } = useParams();
-
-  console.log(chatId);
-
-  const { data: responseMessages } = companyApi.useChatsMessagesQuery(+(chatId ?? -1));
-
-  console.log(responseMessages);
-
-  const [sendText, { isError, isLoading, data }] = companyApi.useSendMessageMutation();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const scroll = useRef<HTMLSpanElement>(null);
+
+
+  const [sendText, { isError, isLoading, data }] = companyApi.useSendMessageMutation();
 
   const sendMessage = async () => {
 
     try {
       if (inputRef.current?.value) {
-        await sendText({ chatId: +(chatId ?? -1) , text: inputRef.current?.value }).unwrap();
-        inputRef.current.value = ''
+        await sendText({ chatId: +(chatId ?? -1), text: inputRef.current?.value }).unwrap();
+        inputRef.current.value = "";
         scroll.current?.scrollIntoView({ behavior: "smooth" });
       }
 
@@ -45,9 +49,21 @@ const Chat = () => {
 
 
 
+  // useEffect(() => {
+  //   getMessages();
+  //   connectWebSocket();
+
+  //   return () => {
+  //     window.Echo.leave(webSocketChannel);
+  //   }
+  // }, []);
+
   // const changeTextMessage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
   //   setTextMessage(e.value);
   // },[])
+
+
+  const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
   return (
     <div className="container">
@@ -55,7 +71,8 @@ const Chat = () => {
       <div className="msg-header">
         <div className="container1">
           {/* <img src="user1.png" className="msgimg" /> */}
-          <Avatar size={26} icon={<UserOutlined />} />
+          <Avatar size={26} icon={<img src={chatById?.client_contact.photo_url ?? ''} alt="User avatar" />} />
+          
           <div className="active">
             <p>User name</p>
           </div>
@@ -68,47 +85,7 @@ const Chat = () => {
 
             <div className="msg-page">
 
-              <div className="messages-wrapper">
-                {
-                  responseMessages?.data.map((message, i) => {
-                    // const itsMe = message.from_user_id.name.trim().toLowerCase() === Role.ADMIN;
-                    const itsMe = !!message.from_user_id?.name;
-
-                    const date = moment(message.created_at).format("hh:mm | D MMM")
-
-                    return itsMe ? (
-                      <div className="outgoing-chats" key={message.id}>
-                        <div className="outgoing-chats-img">
-                          <img src="user1.png" />
-                        </div>
-                        <div className="outgoing-msg">
-                          <div className="outgoing-chats-msg">
-                            <p className="multi-msg">
-                              {message.text}
-                            </p>
-                            <span className="time">{date}</span>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                      : (
-                        <div className="received-chats" key={message.id}>
-                          <div className="received-chats-img">
-                            <img src="user2.png" />
-                          </div>
-                          <div className="received-msg">
-                            <div className="received-msg-inbox">
-                              <p>
-                                {message.text}
-                              </p>
-                              <span className="time">{date}</span>
-                            </div>
-                          </div>
-                        </div>
-                      )
-                  })
-                }
-              </div>
+              <Messages chatId={chatId} />
 
               <span ref={scroll}></span>
 

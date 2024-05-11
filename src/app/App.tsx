@@ -7,8 +7,11 @@ import { router } from '../shared/config/routerConfig/router';
 import { Provider } from 'react-redux'
 import { store } from './store/store';
 import Chat from '../pages/Chat';
+import moment from 'moment';
 
 function App() {
+  moment.locale('ru')
+
   return (
     <ConfigProvider
       theme={{
@@ -27,7 +30,7 @@ function App() {
     >
       <Provider store={store}>
         {/* <BrowserRouter> */}
-          <RouterProvider router={router} />
+        <RouterProvider router={router} />
         {/* </BrowserRouter> */}
       </Provider>
     </ConfigProvider>

@@ -26,9 +26,14 @@ export interface IRegister {
 
 }
 
-export interface IChatSnippen {
+export interface IChatSnippet {
     id: number,
     name: number,
+    client_contact: {
+        created_at: string
+        name: string
+        photo_url: string | null
+    }
     channel: {
         id: number,
         name: string,
@@ -47,7 +52,7 @@ export interface IChatSnippen {
 }
 
 export interface ICompanyChatsResponse {
-    data: IChatSnippen[],
+    data: IChatSnippet[],
     links: {
         first: string
         last: string
@@ -127,7 +132,7 @@ export interface IMessageSendResponse {
         links: [
             {
                 url: string | null,
-                label:string
+                label: string
                 active: boolean
             }
         ],

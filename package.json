@@ -50,6 +50,8 @@
     ]
   },
   "devDependencies": {
-    "@rtk-query/codegen-openapi": "^1.2.0"
+    "@rtk-query/codegen-openapi": "^1.2.0",
+    "laravel-echo": "^1.16.1",
+    "pusher-js": "^8.4.0-rc2"
   }
 }

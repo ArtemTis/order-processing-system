@@ -4,8 +4,7 @@ import { ACCOUNT_PATH, LOGIN_PATH } from '../config/routerConfig/routeConstants'
 import { userApi } from '../../entities/auth/userApi'
 import { createSelector } from '@reduxjs/toolkit'
 import { useSelector } from 'react-redux'
-import { selectIsAuthorised } from '../../entities/auth/selectors'
-import { selectCurrentUser } from '../../entities/auth/authSlice'
+import { selectCurrentUser } from '../../entities/auth/selectors'
 
 interface GuardProps {
    element: React.ReactElement

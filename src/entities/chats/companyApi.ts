@@ -33,7 +33,7 @@ export const companyApi = createApi({
                 url: `/chats/${chatId}/messages`,
                 method: 'GET'
             }),
-            providesTags: ['Messages']
+            // providesTags: ['Messages']
         }),
         sendMessage: build.mutation<IMessageSendResponse, ISendMessage>({
             query: ({ chatId, text }) => ({
@@ -43,7 +43,7 @@ export const companyApi = createApi({
                     text
                 }
             }),
-            invalidatesTags: ['Messages']
+            // invalidatesTags: ['Messages']
         }),
     })
 })
