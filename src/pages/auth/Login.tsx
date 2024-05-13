@@ -25,7 +25,7 @@ const Login = () => {
     try {
       const user = await sendInfo({ email: "user@mail.ru", password: '12345678' }).unwrap();
       dispatch(setCredentials(user))
-      navigate(`/${PROFILE_PATH}`);
+      navigate(`/${ACCOUNT_PATH}/${PROFILE_PATH}`);
     } catch (err) {
 
     }

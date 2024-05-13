@@ -17,12 +17,12 @@ function App() {
       theme={{
         token: {
           // Seed Token
-          colorPrimary: '#0f4e34',
+          colorPrimary: '#818180',
           borderRadius: 2,
 
 
           // Alias Token
-          colorBgContainer: '#f6ffed',
+          colorBgContainer: '#6D31ED',
 
         },
         algorithm: theme.darkAlgorithm,

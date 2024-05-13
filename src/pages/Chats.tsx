@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Navigate, Outlet } from 'react-router-dom'
 import styled from 'styled-components'
 import ChatItem from '../widgets/ChatItem'
-import { CHAT_PATH } from '../shared/config/routerConfig/routeConstants'
+import { ACCOUNT_PATH, CHAT_PATH, LOGIN_PATH } from '../shared/config/routerConfig/routeConstants'
 import { companyApi } from '../entities/chats/companyApi'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setChats } from '../entities/chats/chatSlice'
 import useEcho from '../shared/config/hooks/useEcho'
 import { IChatSnippet } from '../entities/types'
+import { selectCurrentUser } from '../entities/auth/selectors'
 
 const Chats = () => {
 
@@ -36,6 +37,10 @@ const Chats = () => {
     }
   })
 
+  const isAuthorised = !!useSelector(selectCurrentUser)
+  if (!isAuthorised) {
+    return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
+  }
 
   return (
     <StyledChatsWrapper>

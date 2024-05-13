@@ -2,6 +2,10 @@ import React from 'react'
 import { Tabs } from 'antd';
 import { channelApi } from '../entities/channel/channelApi';
 import { ReqStatus } from '../entities/types';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../entities/auth/selectors';
+import { ACCOUNT_PATH, LOGIN_PATH } from '../shared/config/routerConfig/routeConstants';
 
 const Settings = () => {
 
@@ -23,6 +27,11 @@ const Settings = () => {
 
     }
   }
+
+  const isAuthorised = !!useSelector(selectCurrentUser)
+    if (!isAuthorised) {
+        return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
+    }
   
 
   return (

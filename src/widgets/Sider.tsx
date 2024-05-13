@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Layout, Menu, Button, theme } from 'antd';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Navigate, Outlet } from 'react-router-dom';
 import menu from '../shared/assets/Menu.svg'
 import link from '../shared/assets/link.svg'
 import book from '../assets/sider/Book.svg'
 import teacher from '../assets/sider/Teacher.svg'
 import profile from '../assets/sider/Profile.svg'
 import logout from '../assets/sider/Logout.svg'
-import { ACCOUNT_PATH, CHATS_PATH, PROFILE_PATH, SETTINGS_PATH } from '../shared/config/routerConfig/routeConstants';
+import { ACCOUNT_PATH, CHATS_PATH, LOGIN_PATH, PROFILE_PATH, SETTINGS_PATH } from '../shared/config/routerConfig/routeConstants';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../entities/auth/selectors';
+import { CommentOutlined, MessageOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 
 
 const { Header, Sider, Content } = Layout;
@@ -19,6 +22,11 @@ const AppSider: React.FC = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+
+    // const isAuthorised = !!useSelector(selectCurrentUser)
+    // if (!isAuthorised) {
+    //     return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
+    // }
 
     return (
         <LayoutStyle>
@@ -36,27 +44,27 @@ const AppSider: React.FC = () => {
                     items={[
                         {
                             key: '1',
-                            icon: <img src="" alt='teacher icon' />,
+                            icon: <CommentOutlined />,
                             label: <Link to={CHATS_PATH}>Чаты</Link>,
                         },
                         {
                             key: '2',
-                            icon: <img src="" alt='book icon' />,
+                            icon: <SettingOutlined />,
                             label: <Link to={SETTINGS_PATH}>Настройки</Link>,
                         },
                         {
                             key: '3',
-                            icon: <img src="" alt='profile icon' />,
+                            icon: <UserOutlined />,
                             label: <Link to={ACCOUNT_PATH}>Личный кабинет</Link>,
                         },
                     ]}
                 />
             </SiderStyle>
-            <Content 
-             style={{
-                overflow: 'auto',
-                height: '100vh',
-            }}>
+            <Content
+                style={{
+                    overflow: 'auto',
+                    height: '100vh',
+                }}>
                 <Outlet />
             </Content>
         </LayoutStyle>
@@ -94,12 +102,19 @@ const SiderStyle = styled(Sider)`
 
     & ul {
         /* background: #F5F6F8 !important; */
-        background: #4218b4 !important;
+        background: #424242 !important;
+
+        .ant-menu-item-selected{
+            background-color: #6D31ED;
+            color: #eeeeee !important;
+        }
     }
 
     & li {
         padding: 18px 24px !important;
         height: 64px !important;
+        margin: 0 !important;
+        width: auto !important;
     }
 
     span{
