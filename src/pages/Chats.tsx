@@ -21,12 +21,12 @@ const Chats = () => {
     dispatch(setChats(response?.data));
   }
 
-  const [newChats, setNewChats] = useState<IChatSnippet[]>([]);
+  // const [newChats, setNewChats] = useState<IChatSnippet[]>([]);
 
   echo.private(`chats.new`)
     .listen('.chat.new', (message: IChatSnippet) => {
       console.log(message);
-      setNewChats([...newChats, message])
+      // setNewChats([...newChats, message])
     });
 
   useEffect(() => {

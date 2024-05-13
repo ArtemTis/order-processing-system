@@ -21,18 +21,37 @@ const Messages: React.FC<IMessageProps> = ({ chatId }) => {
 
     const [newMessages, setNewMessages] = useState<IChatMessages[]>([]);
 
+    console.log(responseMessages?.data);
+
+
+    console.log(newMessages);
+
+
     echo.private(`chats.${chatId}`)
         .listen('.message.new', (message: IChatMessages) => {
-            console.log(message);
-            setNewMessages([...newMessages, message])
+            // console.log(message);
+            // console.log(responseMessages);
+
+            const uniq = new Set([message, ...newMessages, ...responseMessages?.data ?? []].map(e => JSON.stringify(e)));
+
+            const res = Array.from(uniq).map(e => JSON.parse(e));
+
+            setNewMessages(res)
         });
 
     useEffect(() => {
+        setNewMessages(responseMessages?.data ?? [])
+
+    }, [responseMessages?.data])
+
+
+    useEffect(() => {
+        setNewMessages(responseMessages?.data ?? [])
 
         return () => {
             echo.leave(`chats.${chatId}`)
         }
-    })
+    }, [])
 
     return (
         <div className="messages-wrapper">
@@ -42,18 +61,19 @@ const Messages: React.FC<IMessageProps> = ({ chatId }) => {
             }
             {
                 isError &&
-                <p>Упс, какая-то ошибочка</p>
+                <p>Упс, какая-то ошибочка...</p>
             }
             {
                 responseMessages &&
-                [...responseMessages?.data, ...newMessages].map((message, i) => {
+                // [...newMessages, ...responseMessages?.data].map((message, i) => {
+                responseMessages?.data.map((message, index) => {
                     // const itsMe = message.from_user_id.name.trim().toLowerCase() === Role.ADMIN;
                     const itsMe = !!message.from_user_id?.name;
 
                     const date = moment(message.created_at).format("hh:mm | D MMM")
 
                     return itsMe ? (
-                        <div className="outgoing-chats" key={message.id}>
+                        <div className="outgoing-chats" key={index}>
                             <div className="outgoing-chats-img">
                                 <img src="user1.png" />
                             </div>
@@ -68,7 +88,7 @@ const Messages: React.FC<IMessageProps> = ({ chatId }) => {
                         </div>
                     )
                         : (
-                            <div className="received-chats" key={message.id}>
+                            <div className="received-chats" key={index}>
                                 <div className="received-chats-img">
                                     {/* <img src="user2.png" /> */}
                                     <Avatar size={18}
@@ -88,6 +108,11 @@ const Messages: React.FC<IMessageProps> = ({ chatId }) => {
                         )
                 })
             }
+            {/* {
+                newMessages.map((message, index) => (
+
+                ))
+            } */}
         </div>
     )
 }
