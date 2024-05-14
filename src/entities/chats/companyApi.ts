@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IChannel, ICompanyChatsResponse, ILogin, ILoginResponse, IMessageSendResponse, IMessagesResponse, IRegister, ISendMessage, IUser } from '../types';
+import { IAddPattern, IAddPatternResponse, IChannel, ICompanyChatsResponse, ILogin, ILoginResponse, IMessageSendResponse, IMessagesResponse, IPatterns, IRegister, ISendMessage, ITag, ITypePattern, IUser } from '../types';
 import { RootState } from '../../app/store/store';
 
 const globalUrl = process.env.REACT_APP_API_URL;
@@ -45,5 +45,46 @@ export const companyApi = createApi({
             }),
             // invalidatesTags: ['Messages']
         }),
-    })
+
+
+        getTypesPatterns: build.query<{ data: ITypePattern }, void>({
+            query: () => ({
+                url: `/type-of-message-patterns`,
+                method: 'GET',
+            }),
+        }),
+        addTypePattern: build.mutation<{ data: ITypePattern[] }, { name: string }>({
+            query: (body) => ({
+                url: `/type-of-message-patterns`,
+                method: 'POST',
+                body
+            }),
+        }),
+        addPattern: build.mutation<IAddPatternResponse, IAddPattern>({
+            query: (body) => ({
+                url: `/message-patterns`,
+                method: 'POST',
+                body
+            }),
+        }),
+        getPatternsByType: build.query<IPatterns, void>({
+            query: () => ({
+                url: `/message-patterns`,
+                method: 'GET',
+            }),
+        }),
+        addNewTag: build.mutation<{ data: ITag }, { name: string }>({
+            query: (body) => ({
+                url: `/tags-for-chat`,
+                method: 'POST',
+                body
+            }),
+        }),
+        getAllTags: build.query<{ data: ITag[] }, void>({
+            query: () => ({
+                url: `/tags-for-chat`,
+                method: 'GET',
+            }),
+        }),
+    }),
 })

@@ -13,6 +13,7 @@ import Pusher from 'pusher-js';
 import useEcho from '../shared/config/hooks/useEcho'
 import { selectAllChats } from '../entities/chats/selectors'
 import { RootState } from '../app/store/store'
+import Pattern from '../widgets/Pattern'
 
 enum Role {
   USER = 'user',
@@ -61,19 +62,6 @@ const Chat = () => {
   // const changeTextMessage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
   //   setTextMessage(e.value);
   // },[])
-
-  const content = (
-    <div style={{height: '100px', overflowY: 'scroll', scrollbarWidth: 'none'}}>
-      <p>Content</p>
-      <p>Content</p>
-      <p>Content</p>
-      <p>Content</p>
-      <p>Content</p>
-      <p>Content</p>
-      <p>Content</p>
-      <p>Content</p>
-    </div>
-  );
 
 
   const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
@@ -145,9 +133,9 @@ const Chat = () => {
 
 
           <div className="msg-bottom">
-            <Popover content={content} title="Title" trigger="click">
-              <Button>Click me</Button>
-            </Popover>
+           
+
+            <Pattern/>
 
             <div className="input-group">
               <input

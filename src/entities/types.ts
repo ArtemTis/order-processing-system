@@ -172,3 +172,55 @@ export enum ReqStatus {
     success,
     reject
 }
+
+export interface IAddPattern {
+    text: string,
+    type_of_message_pattern_id: number
+}
+
+export interface ITypePattern {
+    id: number,
+    name: string
+}
+
+export interface IAddPatternResponse {
+    data: {
+        text: string,
+        type_of_message_pattern_id: number,
+        updated_at: string,
+        created_at: string,
+        id: number
+    }
+}
+
+export interface ITag {
+    id: number,
+    name: string,
+    created_at: string,
+    updated_at: string
+}
+
+export interface IPatterns{
+    data: [
+        {
+            id: number,
+            name: string,
+            messagePatterns: [
+                {
+                    id: number,
+                    text: string,
+                    type_of_message_pattern_id: number,
+                    created_at: string,
+                    updated_at: string
+                },
+                {
+                    id: number,
+                    text: string,
+                    type_of_message_pattern_id: number,
+                    created_at: string,
+                    updated_at: string
+                }
+            ]
+        }
+    ]
+}
