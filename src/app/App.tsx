@@ -18,11 +18,13 @@ function App() {
         token: {
           // Seed Token
           colorPrimary: '#818180',
+          // colorPrimary: '#667eea',
           borderRadius: 2,
 
 
           // Alias Token
-          colorBgContainer: '#6D31ED',
+          // colorBgContainer: '#6D31ED',
+          colorBgContainer: '#aeacb1',
 
         },
         algorithm: theme.darkAlgorithm,

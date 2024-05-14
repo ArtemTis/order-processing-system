@@ -102,12 +102,24 @@ const SiderStyle = styled(Sider)`
 
     & ul {
         /* background: #F5F6F8 !important; */
-        background: #424242 !important;
+        /* background: #424242 !important; */
+        background: #f0f0f0 !important;
+
+      
 
         .ant-menu-item-selected{
-            background-color: #6D31ED;
+            /* background-color: #6D31ED; */
+            /* background-color: #3b4a8f; */
+            background-color: #667eea;
             color: #eeeeee !important;
+
+            transition: colo;
         }
+
+        /* .ant-menu-item-active{
+            background: #dadce2 !important;
+            color: #667eea !important;
+        } */
     }
 
     & li {
@@ -115,6 +127,8 @@ const SiderStyle = styled(Sider)`
         height: 64px !important;
         margin: 0 !important;
         width: auto !important;
+
+        color: #667eea !important;
     }
 
     span{

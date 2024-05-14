@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './chat.css'
 import { UserOutlined } from '@ant-design/icons'
-import { Avatar } from 'antd'
+import { Avatar, Button, Popover } from 'antd'
 import { companyApi } from '../entities/chats/companyApi'
 import { useParams } from 'react-router-dom'
 import 'moment/locale/ru'
@@ -62,6 +62,19 @@ const Chat = () => {
   //   setTextMessage(e.value);
   // },[])
 
+  const content = (
+    <div style={{height: '100px', overflowY: 'scroll', scrollbarWidth: 'none'}}>
+      <p>Content</p>
+      <p>Content</p>
+      <p>Content</p>
+      <p>Content</p>
+      <p>Content</p>
+      <p>Content</p>
+      <p>Content</p>
+      <p>Content</p>
+    </div>
+  );
+
 
   const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
@@ -72,7 +85,7 @@ const Chat = () => {
         <div className="container1">
           {/* <img src="user1.png" className="msgimg" /> */}
           <Avatar size={26} icon={<img src={chatById?.client_contact.photo_url ?? ''} alt="User avatar" />} />
-          
+
           <div className="active">
             <p>User name</p>
           </div>
@@ -132,6 +145,10 @@ const Chat = () => {
 
 
           <div className="msg-bottom">
+            <Popover content={content} title="Title" trigger="click">
+              <Button>Click me</Button>
+            </Popover>
+
             <div className="input-group">
               <input
                 type="text"

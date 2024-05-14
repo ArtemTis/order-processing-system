@@ -18,9 +18,11 @@ const Chats = () => {
 
   const dispatch = useDispatch();
 
-  if (response?.data) {
-    dispatch(setChats(response?.data));
-  }
+  useEffect(() => {
+    if (response?.data) {
+      dispatch(setChats(response?.data));
+    }
+  }, [])
 
   // const [newChats, setNewChats] = useState<IChatSnippet[]>([]);
 
@@ -77,7 +79,11 @@ const StyledChats = styled.div`
   max-width: 320px;
   padding: 10px;
 
-  background-color: #533f5c;
+  /* background-color: #533f5c; */
+  /* background-color: #667eea; */
+  /* background-color: #3f3f3f; */
+  /* background-color: #213698; */
+  background-color: #5943af;
 
   overflow: scroll;
   

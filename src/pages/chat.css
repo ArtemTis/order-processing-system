@@ -18,6 +18,8 @@
     /* margin-top: 2rem; */
     letter-spacing: 0.5px;
     height: 80%;
+
+    background: #f3f4f6;
 }
 
 img {
@@ -35,7 +37,7 @@ img {
     border-bottom: none;
     display: inline-block;
     /* background-color: #efefef; */
-    background-color: #3b2966;
+    background-color: #667eea;
     margin: 0;
     /* border-top-left-radius: 20px;
     border-top-right-radius: 20px; */
@@ -89,7 +91,7 @@ img {
     /* max-height: 500px; */
     /* max-height: 100vh; */
 
-    height: calc(100vh - 95px);
+    height: calc(100vh - 108px);
 
     width: auto;
     overflow-y: auto;
@@ -104,13 +106,16 @@ img {
 
 /* Styling the msg-bottom container */
 .msg-bottom {
-    border-top: 1px solid #ccc;
+    /* border-top: 1px solid #ccc; */
     position: relative;
-    height: 11%;
+    height: 1%;
     /* background-color: rgb(239 239 239); */
 
     display: flex;
     justify-content: center;
+
+    /* background-color: #5943af; */
+    /* background-color: #667eea; */
 }
 
 /* Styling the input field */
@@ -127,6 +132,10 @@ img {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
+
+    border: #5943af 2px solid;
+    padding: 5px;
+    border-radius: 30px;
 }
 
 .input-group>.form-control {
@@ -211,13 +220,16 @@ received-chats-img {
 
 .received-msg-inbox p {
     background: #efefef none repeat scroll 0 0;
+
+    background-color: #ffffff;
     border-radius: 10px;
     color: #646464;
     font-size: 14px;
     /* margin-left: 1rem; */
     padding: 1rem;
     width: 100%;
-    box-shadow: rgb(0 0 0 / 25%) 0px 5px 5px 2px;
+    /* box-shadow: rgb(0 0 0 / 25%) 0px 5px 5px 2px; */
+    box-shadow: 0px 0px 6px 0px rgba(34, 60, 80, 0.2);
 }
 
 p {
@@ -239,8 +251,9 @@ p {
 }
 
 .outgoing-chats-msg p {
-    background-color: #3a12ff;
-    background-image: linear-gradient(45deg, #ee087f 0%, #DD2A7B 25%, #9858ac 50%, #8134AF 75%, #515BD4 100%);
+    background-color: #5943af;
+    /* background-color: #3a12ff; */
+    /* background-image: linear-gradient(45deg, #ee087f 0%, #DD2A7B 25%, #9858ac 50%, #8134AF 75%, #515BD4 100%); */
     color: #fff;
     border-radius: 10px;
     font-size: 14px;
@@ -248,7 +261,8 @@ p {
     padding: 5px 10px 5px 12px;
     width: 100%;
     padding: 1rem;
-    box-shadow: rgb(0 0 0 / 25%) 0px 2px 5px 2px;
+    /* box-shadow: rgb(0 0 0 / 25%) 0px 2px 5px 2px; */
+    box-shadow: 0px 0px 6px 0px rgba(34, 60, 80, 0.2);
 }
 
 .outgoing-chats-msg {
