@@ -105,7 +105,10 @@ const SiderStyle = styled(Sider)`
         /* background: #424242 !important; */
         background: #f0f0f0 !important;
 
-      
+        
+        &.ant-menu-light.ant-menu-root.ant-menu-inline{
+            border-inline-end: none !important;
+        }
 
         .ant-menu-item-selected{
             /* background-color: #6D31ED; */

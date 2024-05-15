@@ -17,17 +17,20 @@ function App() {
       theme={{
         token: {
           // Seed Token
-          colorPrimary: '#818180',
+          // colorPrimary: '#818180',
+          colorPrimary: '#d8d8d8',
           // colorPrimary: '#667eea',
           borderRadius: 2,
 
 
           // Alias Token
           // colorBgContainer: '#6D31ED',
-          colorBgContainer: '#aeacb1',
+          // colorBgContainer: '#aeacb1',
+          colorBgContainer: '#667eea',
 
         },
-        algorithm: theme.darkAlgorithm,
+        // algorithm: theme.darkAlgorithm,
+        algorithm: theme.defaultAlgorithm,
       }}
     >
       <Provider store={store}>

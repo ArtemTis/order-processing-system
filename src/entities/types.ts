@@ -212,13 +212,6 @@ export interface IPatterns{
                     type_of_message_pattern_id: number,
                     created_at: string,
                     updated_at: string
-                },
-                {
-                    id: number,
-                    text: string,
-                    type_of_message_pattern_id: number,
-                    created_at: string,
-                    updated_at: string
                 }
             ]
         }

@@ -50,6 +50,6 @@ export default Profile
 
 
 const StyledWrapper = styled.div`
-  background-color: #303030;
+  /* background-color: #303030; */
   height: 100vh;
 `

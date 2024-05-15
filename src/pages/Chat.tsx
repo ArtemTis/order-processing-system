@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './chat.css'
 import { UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Popover } from 'antd'
+import { Avatar, Button, Cascader, CascaderProps, Popover } from 'antd'
 import { companyApi } from '../entities/chats/companyApi'
 import { useParams } from 'react-router-dom'
 import 'moment/locale/ru'
@@ -20,25 +20,31 @@ enum Role {
   ADMIN = 'admin'
 }
 
-//@ts-ignore
-// window.Pusher = Pusher;
+interface Option {
+  value: string;
+  label: string;
+  children?: Option[];
+}
 
 const Chat = () => {
 
   const { chatId } = useParams();
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputValue, setInputValue] = useState('');
+  // const inputRef = useRef<HTMLInputElement>(null);
   const scroll = useRef<HTMLSpanElement>(null);
 
+  const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
   const [sendText, { isError, isLoading, data }] = companyApi.useSendMessageMutation();
 
   const sendMessage = async () => {
 
     try {
-      if (inputRef.current?.value) {
-        await sendText({ chatId: +(chatId ?? -1), text: inputRef.current?.value }).unwrap();
-        inputRef.current.value = "";
+      if (inputValue) {
+        await sendText({ chatId: +(chatId ?? -1), text: inputValue }).unwrap();
+        // inputRef.current.value = "";
+        setInputValue('');
         scroll.current?.scrollIntoView({ behavior: "smooth" });
       }
 
@@ -49,22 +55,39 @@ const Chat = () => {
   }
 
 
+  const { data: res, isLoading: isLoad, isError: isErr } = companyApi.useGetPatternsByTypeQuery();
 
-  // useEffect(() => {
-  //   getMessages();
-  //   connectWebSocket();
+  const options: Option[] = (res?.data || []).map(pattern => {
+    return {
+      value: `${pattern.id}`,
+      label: pattern.name,
+      children: pattern.messagePatterns.map(patternChild => (
+        {
+          value: `${patternChild.id}`,
+          label: patternChild.text,
+        }
+      ))
+    }
+  })
 
-  //   return () => {
-  //     window.Echo.leave(webSocketChannel);
-  //   }
-  // }, []);
 
-  // const changeTextMessage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setTextMessage(e.value);
-  // },[])
+  const [text, setText] = useState('');
 
+  const onChange: CascaderProps<Option>['onChange'] = (_, selectedOptions) => {
+    setText(selectedOptions[1]?.label);
 
-  const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
+    setInputValue(selectedOptions[1]?.label)
+
+    // if (inputRef.current) {
+    //   console.log(text);
+    //   inputRef.current.value = `aaaaaaaa`;
+
+    // }
+
+    //@ts-ignore
+    // inputRef.current = text;
+    // setText(selectedOptions.map((o) => o.label).join(', '));
+  };
 
   return (
     <div className="container">
@@ -90,60 +113,26 @@ const Chat = () => {
 
               <span ref={scroll}></span>
 
-              {/* <div className="received-chats">
-                <div className="received-chats-img">
-                  <img src="user2.png" />
-                </div>
-                <div className="received-msg">
-                  <div className="received-msg-inbox">
-                    <p>
-                      Hi !! This is message from Riya . Lorem ipsum, dolor sit
-                      amet consectetur adipisicing elit. Non quas nemo eum,
-                      earum sunt, nobis similique quisquam eveniet pariatur
-                      commodi modi voluptatibus iusto omnis harum illum iste
-                      distinctio expedita illo!
-                    </p>
-                    <span className="time">18:06 PM | July 24</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="outgoing-chats">
-                <div className="outgoing-chats-img">
-                  <img src="user1.png" />
-                </div>
-                <div className="outgoing-msg">
-                  <div className="outgoing-chats-msg">
-                    <p className="multi-msg">
-                      Hi riya , Lorem ipsum dolor sit amet consectetur
-                      adipisicing elit. Illo nobis deleniti earum magni
-                      recusandae assumenda.
-                    </p>
-                    <p className="multi-msg">
-                      Lorem ipsum dolor sit amet consectetur.
-                    </p>
-
-                    <span className="time">18:30 PM | July 24</span>
-                  </div>
-                </div>
-              </div> */}
-
             </div>
           </div>
 
 
           <div className="msg-bottom">
-           
 
-            <Pattern/>
+
+            <Cascader options={options} onChange={onChange}>
+              <a>Паттерн ответа</a>
+            </Cascader>
 
             <div className="input-group">
               <input
                 type="text"
                 className="form-control"
                 placeholder="Write message..."
-                ref={inputRef}
+                // ref={inputRef}
 
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
               />
 
               <span className="input-group-text send-icon" onClick={sendMessage}>

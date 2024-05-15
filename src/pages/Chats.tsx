@@ -22,7 +22,7 @@ const Chats = () => {
     if (response?.data) {
       dispatch(setChats(response?.data));
     }
-  }, [])
+  }, [response?.data])
 
   // const [newChats, setNewChats] = useState<IChatSnippet[]>([]);
 
