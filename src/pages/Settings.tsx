@@ -62,32 +62,72 @@ const Settings = () => {
     setIsModalOpen(false);
   };
 
+
+  const items = [
+    {
+      key: '1',
+      label: 'Каналы',
+      children: (
+        <>
+          {
+            isLoading &&
+            <p>Loading...</p>
+          }
+
+          <StyledTabs
+            tabPosition={"left"}
+            // @ts-ignore
+            items={response?.data.map((channel, i) => {
+              const id = String(i + 1);
+              return {
+                label: channel.name,
+                key: channel.id,
+                children: `Content of Tab ${channel.name}`,
+              };
+            })}
+          />
+
+          <StyledButton onClick={addVkGroup}>Add Vk Group</StyledButton>
+          {
+            addVkRes &&
+            <p>{addVkRes.message}</p>
+          }
+        </>
+      )
+      ,
+    },
+    {
+      key: '2',
+      label: 'Шаблоны ответов',
+      children: (
+        <StyledTabs
+          tabPosition={"left"}
+          // @ts-ignore
+          items={res?.data.map((pattern, i) => {
+            const id = String(i + 1);
+            return {
+              label: pattern.name,
+              key: pattern.id,
+              children: (<>
+                {
+                  pattern.messagePatterns.map(mess => (
+                    <h6 key={mess.id}>{mess.text}</h6>
+                  ))
+                }
+                <StyledButton onClick={() => addPatternModal(pattern.id)}>Add pattern</StyledButton>
+              </>)
+            };
+          })}
+        />
+      ),
+    }
+  ];
+
   return (
-    <div>
+    <StyledWrapper>
       Settings
-      {
-        isLoading &&
-        <p>Loading...</p>
-      }
+      <StyledMainTabs defaultActiveKey='1' items={items} />
 
-      <StyledTabs
-        tabPosition={"left"}
-        // @ts-ignore
-        items={response?.data.map((channel, i) => {
-          const id = String(i + 1);
-          return {
-            label: channel.name,
-            key: channel.id,
-            children: `Content of Tab ${channel.name}`,
-          };
-        })}
-      />
-
-      <button onClick={addVkGroup}>Add Vk Group</button>
-      {
-        addVkRes &&
-        <p>{addVkRes.message}</p>
-      }
 
       {/* {
         response &&
@@ -98,28 +138,8 @@ const Settings = () => {
         ))
       } */}
 
-      <StyledTabs
-        tabPosition={"left"}
-        // @ts-ignore
-        items={res?.data.map((pattern, i) => {
-          const id = String(i + 1);
-          return {
-            label: pattern.name,
-            key: pattern.id,
-            children: (<>
-              {
-                pattern.messagePatterns.map(mess => (
-                  <h6 key={mess.id}>{mess.text}</h6>
-                ))
-              }
-              <Button onClick={() => addPatternModal(pattern.id)}>Add pattern</Button>
-            </>)
-          };
-        })}
-      />
 
-
-      <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <StyledModal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
         <p>Введите текст новго шаблона</p>
         <TextArea
           value={areaValue}
@@ -130,20 +150,81 @@ const Settings = () => {
             maxRows: 5,
           }}
         />
-      </Modal>
-    </div>
+      </StyledModal>
+    </StyledWrapper>
   )
 }
 
-export default Settings
+export default Settings;
+
+  const StyledWrapper = styled.div`
+    padding: 20px 0 0 20px;
+    background-color: #d6d6d6;
+    height: 100vh;
+`
+
+const StyledButton = styled(Button)`
+  border-radius: 7px;
+  color: #f1f1f1;
+  border: none;
+
+`
 
 const StyledTabs = styled(Tabs)`
-  
- .ant-tabs-tab-active{
-  background-color:  #667eea;
- }
+    
+  .ant-tabs-tab-active{
+    background-color:  #667eea;
+  }
 
- .ant-tabs-tab:hover{
+  .ant-tabs-tab:hover{
+    color: #667eea;
+  }
+
+  .ant-tabs-nav-list{
+    padding-right: 10px;
+  }
+
+  .ant-tabs-ink-bar{
+    background: #667eea;
+  }
+`
+
+const StyledMainTabs = styled(Tabs)`
+
+  /* .ant-tabs-tab{
+    border-radius: 10px;
+  } */
+    
+  .ant-tabs-tab-active{
+    background-color:  #667eea;
+    border-radius: 7px;
+  }
+
+  .ant-tabs-tab:hover{
   color: #667eea;
- }
+  }
+
+  .ant-tabs-tab{
+    padding: 7px 12px;
+  }
+
+  .ant-tabs-nav-list{
+    padding-bottom: 10px;
+  }
+
+  .ant-tabs-ink-bar{
+    background: #667eea;
+  }
+`
+
+const StyledModal = styled(Modal)`
+  .ant-input-outlined{
+    background: white;
+  }
+
+  textarea:hover{
+    border-width: 1px;
+    border-style: solid;
+    border-color: #d9d9d9;
+  }
 `

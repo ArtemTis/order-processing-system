@@ -18,9 +18,9 @@ function App() {
         token: {
           // Seed Token
           // colorPrimary: '#818180',
-          colorPrimary: '#d8d8d8',
+          colorPrimary: '#f1f1f1',
           // colorPrimary: '#667eea',
-          borderRadius: 2,
+          borderRadius: 0,
 
 
           // Alias Token

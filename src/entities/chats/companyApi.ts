@@ -19,7 +19,7 @@ export const companyApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Messages'],
+    tagTypes: ['Messages', 'Patterns'],
 
     endpoints: (build) => ({
         chatsByCompany: build.query<ICompanyChatsResponse, number>({
@@ -58,7 +58,7 @@ export const companyApi = createApi({
                 url: `/type-of-message-patterns`,
                 method: 'POST',
                 body
-            }),
+            }),   
         }),
         addPattern: build.mutation<IAddPatternResponse, IAddPattern>({
             query: (body) => ({
@@ -66,12 +66,14 @@ export const companyApi = createApi({
                 method: 'POST',
                 body
             }),
+            invalidatesTags: ['Patterns']
         }),
         getPatternsByType: build.query<IPatterns, void>({
             query: () => ({
                 url: `/message-patterns`,
                 method: 'GET',
             }),
+            providesTags: ['Patterns']
         }),
         addNewTag: build.mutation<{ data: ITag }, { name: string }>({
             query: (body) => ({
