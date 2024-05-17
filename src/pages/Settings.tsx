@@ -62,6 +62,25 @@ const Settings = () => {
     setIsModalOpen(false);
   };
 
+  const channalsTabs = [
+    {
+      key: '1',
+      label: 'Каналы',
+      children: (
+        <>
+          <h2>Добавьте группу ВК</h2>
+          <p>Вы можете добавить группы ВКОНТАКТЕ, созданные вами или в которых вы являетесь администратором. Чтобы добавить их, войдите в группу VK и скопируйте токен и айди</p>
+
+          <StyledButton onClick={addVkGroup}>Add Vk Group</StyledButton>
+          {
+            addVkRes &&
+            <p>{addVkRes.message}</p>
+          }
+        </>
+      )
+    }
+  ]
+
 
   const items = [
     {
@@ -73,6 +92,7 @@ const Settings = () => {
             isLoading &&
             <p>Loading...</p>
           }
+
 
           <StyledTabs
             tabPosition={"left"}
@@ -87,11 +107,7 @@ const Settings = () => {
             })}
           />
 
-          <StyledButton onClick={addVkGroup}>Add Vk Group</StyledButton>
-          {
-            addVkRes &&
-            <p>{addVkRes.message}</p>
-          }
+        
         </>
       )
       ,
@@ -157,9 +173,9 @@ const Settings = () => {
 
 export default Settings;
 
-  const StyledWrapper = styled.div`
+const StyledWrapper = styled.div`
     padding: 20px 0 0 20px;
-    background-color: #d6d6d6;
+    background-color: #f5f5f5;
     height: 100vh;
 `
 

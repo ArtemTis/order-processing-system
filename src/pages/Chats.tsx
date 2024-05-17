@@ -83,7 +83,8 @@ const StyledChats = styled.div`
   /* background-color: #667eea; */
   /* background-color: #3f3f3f; */
   /* background-color: #213698; */
-  background-color: #5943af;
+  background-color: #8296ee;
+  /* background-color: #5943af; */
 
   overflow: scroll;
   

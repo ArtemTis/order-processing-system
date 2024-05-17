@@ -89,6 +89,10 @@ const Chat = () => {
     // setText(selectedOptions.map((o) => o.label).join(', '));
   };
 
+  useEffect(() => {
+    scroll.current?.scrollIntoView();
+  },[])
+
   return (
     <div className="container">
 

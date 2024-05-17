@@ -51,7 +51,8 @@ const StyledChatItem = styled.div`
 
   cursor: pointer;
   &:hover{
-    background-color: #3b2966;
+    background-color: #5943af;
+    border-radius: 5px;
   }
 `
 
@@ -70,7 +71,8 @@ const StyledName = styled.div`
     p,span{
         font-size: 14px;
         font-weight: 400;
-        color: #979797;
+        /* color: #979797; */
+        color: #e0dfdf;
     }
     
     p{
