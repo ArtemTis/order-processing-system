@@ -14,6 +14,7 @@ import useEcho from '../shared/config/hooks/useEcho'
 import { selectAllChats } from '../entities/chats/selectors'
 import { RootState } from '../app/store/store'
 import Pattern from '../widgets/Pattern'
+import { useChat } from '../shared/config/hooks/useChat'
 
 enum Role {
   USER = 'user',
@@ -89,9 +90,18 @@ const Chat = () => {
     // setText(selectedOptions.map((o) => o.label).join(', '));
   };
 
+  // useEffect(() => {
+  //   scroll.current?.scrollIntoView();
+  // },[])
+
+
   useEffect(() => {
-    scroll.current?.scrollIntoView();
-  },[])
+    scroll.current?.scrollIntoView({
+      behavior: 'smooth'
+    })
+  }, [])
+
+  const { newMessages, setNewMessages,  loading, error } = useChat(chatId ?? '');
 
   return (
     <div className="container">
@@ -113,7 +123,7 @@ const Chat = () => {
 
             <div className="msg-page">
 
-              <Messages chatId={chatId} />
+              <Messages chatId={chatId} messages={newMessages}/>
 
               <span ref={scroll}></span>
 

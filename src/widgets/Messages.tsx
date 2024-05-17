@@ -8,63 +8,65 @@ import { selectAllChats } from '../entities/chats/selectors';
 import { Avatar, message } from 'antd';
 
 interface IMessageProps {
-    chatId?: string
+    chatId?: string,
+    messages: IChatMessages[]
 }
 
-const Messages: React.FC<IMessageProps> = ({ chatId }) => {
+const Messages: React.FC<IMessageProps> = ({ chatId, messages }) => {
 
     const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
-    const { data: responseMessages, isLoading, isError } = companyApi.useChatsMessagesQuery(+(chatId ?? -1));
+    // const { data: responseMessages, isLoading, isError } = companyApi.useChatsMessagesQuery(+(chatId ?? -1));
 
-    const { echo } = useEcho();
+    // const { echo } = useEcho();
 
-    const [newMessages, setNewMessages] = useState<IChatMessages[]>([]);
+    // const [newMessages, setNewMessages] = useState<IChatMessages[]>([]);
 
-    // console.log(responseMessages?.data);
+    // // console.log(responseMessages?.data);
 
-    echo.private(`chats.${chatId}`)
-        .listen('.message.new', (message: IChatMessages) => {
-            console.log(message);
-            // console.log(responseMessages);
+    // echo.private(`chats.${chatId}`)
+    //     .listen('.message.new', (message: IChatMessages) => {
+    //         console.log(message);
+    //         // console.log(responseMessages);
 
-            const uniq = new Set([message, ...newMessages, ...responseMessages?.data ?? []].map(e => JSON.stringify(e)));
+    //         const uniq = new Set([message, ...newMessages, ...responseMessages?.data ?? []].map(e => JSON.stringify(e)));
 
-            const res = Array.from(uniq).map(e => JSON.parse(e));
+    //         const res = Array.from(uniq).map(e => JSON.parse(e));
 
-            console.log(res);
+    //         console.log(res);
 
 
-            setNewMessages(res)
-        });
+    //         setNewMessages(res)
+    //     });
 
-    useEffect(() => {
-        setNewMessages(responseMessages?.data ?? [])
+    // useEffect(() => {
+    //     setNewMessages(responseMessages?.data ?? [])
 
-    }, [responseMessages?.data])
+    // }, [responseMessages?.data])
 
-    useEffect(() => {
-        setNewMessages(responseMessages?.data ?? [])
+    // useEffect(() => {
+    //     setNewMessages(responseMessages?.data ?? [])
 
-        return () => {
-            echo.leave(`chats.${chatId}`)
-        }
-    }, [])
+    //     return () => {
+    //         echo.leave(`chats.${chatId}`)
+    //     }
+    // }, [])
+
 
     return (
         <div className="messages-wrapper">
-            {
+            {/* {
                 isLoading &&
                 <p>Загрузка...</p>
             }
             {
                 isError &&
                 <p>Упс, какая-то ошибочка...</p>
-            }
+            } */}
             {
-                responseMessages &&
+                messages &&
                 // [...newMessages, ...responseMessages?.data].map((message, i) => {
-                newMessages.map((message, i) => {
+                    messages.map((message, i) => {
                     // responseMessages?.data.map((message, index) => {
                     // const itsMe = message.from_user_id.name.trim().toLowerCase() === Role.ADMIN;
                     const itsMe = !!message.from_user_id?.name;
