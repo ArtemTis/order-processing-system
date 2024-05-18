@@ -31,35 +31,14 @@ export const useChat = (chatId: string) => {
 
     const uniqueById = uniqueBy('id')
 
-    console.log('--------------');
-
-    console.log(uniqueById(newMessages));
-
-    // useEffect(()=> {
-    //     setNewMessages(uniqueById(newMessages))
-    // },[newMessages])
-
-
-    // let places: IChatMessages[] = responseMessages?.data ?? [];
-
-    // var cityMap = new Map();
-    // places.forEach(p => cityMap.set(p.id, p));
-
-    // console.log([...cityMap.values()]);
-
-
-
 
     echo.private(`chats.${chatId}`)
         .listen('.message.new', (message: IChatMessages) => {
-            console.log(message);
             // console.log(responseMessages);
 
             const uniq = new Set([message, ...newMessages, ...responseMessages?.data ?? []].map(e => JSON.stringify(e)));
 
             const res = Array.from(uniq).map(e => JSON.parse(e));
-
-            // console.log(res);
 
 
             // setNewMessages(prev => [message, ...prev, ...responseMessages?.data ?? []])

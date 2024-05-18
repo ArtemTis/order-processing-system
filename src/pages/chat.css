@@ -41,6 +41,11 @@ img {
     margin: 0;
     /* border-top-left-radius: 20px;
     border-top-right-radius: 20px; */
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
 }
 
 /* Styling the profile picture */
@@ -56,6 +61,7 @@ img {
     display: flex;
     align-items: center;
     margin: 5px;
+    /* justify-content: space-between; */
 }
 
 /* styling user-name */

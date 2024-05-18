@@ -16,6 +16,8 @@ import { RootState } from '../app/store/store'
 import Pattern from '../widgets/Pattern'
 import { useChat } from '../shared/config/hooks/useChat'
 import { StyledButton } from './Settings'
+import moment from 'moment'
+import styled from 'styled-components'
 
 enum Role {
   USER = 'user',
@@ -113,20 +115,26 @@ const Chat = () => {
     setOpen(false);
   };
 
+  const { data: deals, isLoading: isLoadingDeals, isError: isErrorDeals } = companyApi.useGetDealsByChatQuery(+(chatId ?? -1));
+
+  console.log(deals);
+
+
   return (
     <div className="container">
 
       <div className="msg-header">
         <div className="container1">
+
           {/* <img src="user1.png" className="msgimg" /> */}
           <Avatar size={26} icon={<img src={chatById?.client_contact.photo_url ?? ''} alt="User avatar" />} />
 
           <div className="active">
-            <p>User name</p>
+            <p>{chatById?.name}</p>
           </div>
 
-          <StyledButton style={{height: '20px', padding: '0px', marginLeft: '10px'}} onClick={showDrawer}>Сделка</StyledButton>
         </div>
+        <StyledButton style={{ height: '20px', padding: '0px', marginLeft: '10px' }} onClick={showDrawer}>Сделка</StyledButton>
       </div>
 
       <div className="chat-page">
@@ -169,13 +177,63 @@ const Chat = () => {
         </div>
       </div>
 
-      <Drawer title="Список сделок" onClose={onClose} open={open} closeIcon={null}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Drawer>
+      <StyledDrawer onClose={onClose} open={open} closeIcon={null}>
+        <h2 className='drawer-title'>Список сделок:</h2>
+        {
+          deals?.data.map(deal => {
+            const date = moment(deal.status_of_deal_id.created_at).format("hh:mm / D.MM")
+            return (
+              <StyledDeal key={deal.id}>
+
+                <h2> <span>Название: </span>{deal.desc}</h2>
+                <h3> <span>Стоимость: </span> {deal.amount}</h3>
+                <h4> <span>Статус: </span> {deal.status_of_deal_id.name}</h4>
+                <p>{deal.status_of_deal_id.desc}</p>
+                <p>{date}</p>
+              </StyledDeal>
+            )
+          })
+        }
+      </StyledDrawer>
     </div>
   )
 }
 
 export default Chat
+
+const StyledDeal = styled.div`
+  /* background-color: #e1e1e1; */
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 0px 10px 3px rgba(34, 60, 80, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  h2{
+    font-size: 20px;
+    
+  }
+  h3{
+    font-size: 20px;
+    /* font-weight: 500; */
+  }
+  h4{
+    font-size: 18px;
+  }
+  p{
+    font-size: 16px;
+  }
+  h2 span,h3 span,h4 span{
+    font-weight: 600;
+  }
+`
+
+const StyledDrawer = styled(Drawer)`
+  .drawer-title{
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+`

@@ -28,6 +28,11 @@ const AppSider: React.FC = () => {
     //     return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
     // }
 
+    const isAuthorised = !!useSelector(selectCurrentUser)
+    if (!isAuthorised) {
+      return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
+    }
+
     return (
         <LayoutStyle>
             <SiderStyle trigger={null} collapsible collapsed={false} >
@@ -55,7 +60,8 @@ const AppSider: React.FC = () => {
                         {
                             key: '3',
                             icon: <UserOutlined />,
-                            label: <Link to={ACCOUNT_PATH}>Личный кабинет</Link>,
+                            // label: <Link to={ACCOUNT_PATH}>Личный кабинет</Link>,
+                            label: <Link to={PROFILE_PATH}>Личный кабинет</Link>,
                         },
                     ]}
                 />

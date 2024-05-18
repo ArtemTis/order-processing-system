@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IAddPattern, IAddPatternResponse, IChannel, ICompanyChatsResponse, ILogin, ILoginResponse, IMessageSendResponse, IMessagesResponse, IPatterns, IRegister, ISendMessage, ITag, ITypePattern, IUser } from '../types';
+import { IAddPattern, IAddPatternResponse, IChannel, ICompanyChatsResponse, IDeal, ILogin, ILoginResponse, IMessageSendResponse, IMessagesResponse, IPatterns, IRegister, ISendMessage, ITag, ITypePattern, IUser } from '../types';
 import { RootState } from '../../app/store/store';
 
 const globalUrl = process.env.REACT_APP_API_URL;
@@ -58,7 +58,7 @@ export const companyApi = createApi({
                 url: `/type-of-message-patterns`,
                 method: 'POST',
                 body
-            }),   
+            }),
         }),
         addPattern: build.mutation<IAddPatternResponse, IAddPattern>({
             query: (body) => ({
@@ -88,5 +88,15 @@ export const companyApi = createApi({
                 method: 'GET',
             }),
         }),
+
+        
+        getDealsByChat: build.query<{ data: IDeal[] }, number>({
+            query: (id) => ({
+                url: `/chats/${id}/deals`,
+                method: 'GET',
+            }),
+        }),
+
+
     }),
 })

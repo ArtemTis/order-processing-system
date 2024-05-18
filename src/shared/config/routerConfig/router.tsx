@@ -34,26 +34,33 @@ export const router = createBrowserRouter(
         <Route path={`${TESTS_PATH}/${CREATE_TEST_PATH}`} element={<CreateTest />} />
         <Route path={`${TESTS_PATH}/${EDIT_TEST_PATH}/:testId`} element={<EditTest />} /> */}
 
-        {/* <Route path={PROFILE_PATH} element={<Profile />} /> */}
+        <Route path={PROFILE_PATH} element={<Profile />} />
+
         <Route path={SETTINGS_PATH} element={<Settings />} />
         <Route path="*" element={<NotFound />} />
 
 
-        <Route path={ACCOUNT_PATH} element={<Account />}>
+        {/* <Route path={ACCOUNT_PATH} element={<Account />}>
           <Route index element={<AuthGuard element={<Navigate to={PROFILE_PATH} replace />} />} />
           <Route path={LOGIN_PATH} element={<Login />} />
-          {/* <Route index element={<Navigate to={LOGIN_PATH} />} /> */}
-          {/* </Route> */}
+
 
           <Route path={REGISTER_PATH} element={<Register />} />
           <Route path={PROFILE_PATH} element={<AuthGuard element={<Profile />} />} />
-        </Route>
+        </Route> */}
 
 
       </Route>
       {/* hakaton */}
 
 
+      <Route path={ACCOUNT_PATH} element={<Account />}>
+        <Route index element={<AuthGuard element={<Navigate to={PROFILE_PATH} replace />} />} />
+        <Route path={LOGIN_PATH} element={<Login />} />
+
+        <Route path={REGISTER_PATH} element={<Register />} />
+        <Route path={PROFILE_PATH} element={<AuthGuard element={<Profile />} />} />
+      </Route>
 
 
       {/* <Route path={ACCOUNT_PATH} element={<Account />}>

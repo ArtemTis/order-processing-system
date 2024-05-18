@@ -200,7 +200,7 @@ export interface ITag {
     updated_at: string
 }
 
-export interface IPatterns{
+export interface IPatterns {
     data: [
         {
             id: number,
@@ -216,4 +216,20 @@ export interface IPatterns{
             ]
         }
     ]
+}
+
+
+export interface IDeal {
+    id: number,
+    desc: string,
+    amount: number,
+    status_of_deal_id: {
+        id: number,
+        name: string,
+        desc: string,
+        created_at: string,
+        updated_at: string
+    },
+    created_at: string,
+    closed_at: string
 }
