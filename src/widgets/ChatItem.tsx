@@ -44,15 +44,18 @@ export default ChatItem
 const StyledChatItem = styled.div`
   display: flex;
   /* align-items: center; */
-  gap: 10px;
+  gap: 7px;
 
   max-width: 300px;
   padding: 5px;
-
   cursor: pointer;
+
+  background: #667eea;
+  border-radius: 7px;
+
   &:hover{
     background-color: #5943af;
-    border-radius: 5px;
+    border-radius: 7px;
   }
 `
 

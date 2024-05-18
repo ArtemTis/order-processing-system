@@ -179,7 +179,7 @@ const StyledWrapper = styled.div`
     height: 100vh;
 `
 
-const StyledButton = styled(Button)`
+export const StyledButton = styled(Button)`
   border-radius: 7px;
   color: #f1f1f1;
   border: none;

@@ -72,6 +72,7 @@ const StyledChatsWrapper = styled.div`
 const StyledChats = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 10px;
   /* align-items: stretch; */
 
   min-width: 250px;

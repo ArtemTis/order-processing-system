@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './chat.css'
 import { UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Cascader, CascaderProps, Popover } from 'antd'
+import { Avatar, Button, Cascader, CascaderProps, Drawer, Popover } from 'antd'
 import { companyApi } from '../entities/chats/companyApi'
 import { useParams } from 'react-router-dom'
 import 'moment/locale/ru'
@@ -15,6 +15,7 @@ import { selectAllChats } from '../entities/chats/selectors'
 import { RootState } from '../app/store/store'
 import Pattern from '../widgets/Pattern'
 import { useChat } from '../shared/config/hooks/useChat'
+import { StyledButton } from './Settings'
 
 enum Role {
   USER = 'user',
@@ -101,7 +102,16 @@ const Chat = () => {
     })
   }, [])
 
-  const { newMessages, setNewMessages,  loading, error } = useChat(chatId ?? '');
+  const { newMessages, setNewMessages, loading, error } = useChat(chatId ?? '');
+
+
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div className="container">
@@ -114,6 +124,8 @@ const Chat = () => {
           <div className="active">
             <p>User name</p>
           </div>
+
+          <StyledButton style={{height: '20px', padding: '0px', marginLeft: '10px'}} onClick={showDrawer}>Сделка</StyledButton>
         </div>
       </div>
 
@@ -123,7 +135,7 @@ const Chat = () => {
 
             <div className="msg-page">
 
-              <Messages chatId={chatId} messages={newMessages}/>
+              <Messages chatId={chatId} messages={newMessages} />
 
               <span ref={scroll}></span>
 
@@ -156,6 +168,12 @@ const Chat = () => {
           </div>
         </div>
       </div>
+
+      <Drawer title="Список сделок" onClose={onClose} open={open} closeIcon={null}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Drawer>
     </div>
   )
 }
