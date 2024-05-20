@@ -45,7 +45,7 @@ const AppSider: React.FC = () => {
                 /> */}
                 <MenuStyle
                     mode="inline"
-                    // defaultSelectedKeys={['2']}
+                    defaultSelectedKeys={['3']}
                     items={[
                         {
                             key: '1',
@@ -61,7 +61,7 @@ const AppSider: React.FC = () => {
                             key: '3',
                             icon: <UserOutlined />,
                             // label: <Link to={ACCOUNT_PATH}>Личный кабинет</Link>,
-                            label: <Link to={PROFILE_PATH}>Личный кабинет</Link>,
+                            label: <Link to={PROFILE_PATH}>Личный кабинет</Link>,     
                         },
                     ]}
                 />
@@ -153,6 +153,10 @@ const MenuStyle = styled(Menu)`
 
     .ant-menu-item .ant-menu-item-selected{
         margin-top: 400px !important;
+    }
+    
+    a{
+        font-size: 16px;
     }
 `
 

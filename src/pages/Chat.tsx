@@ -18,6 +18,9 @@ import { useChat } from '../shared/config/hooks/useChat'
 import { StyledButton } from './Settings'
 import moment from 'moment'
 import styled from 'styled-components'
+import star from '../shared/assets/star.svg'
+import send from '../shared/assets/send.svg'
+import { IChatMessages } from '../entities/types'
 
 enum Role {
   USER = 'user',
@@ -41,6 +44,22 @@ const Chat = () => {
   const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
   const [sendText, { isError, isLoading, data }] = companyApi.useSendMessageMutation();
+
+  // useEffect(() => {
+  //   const listener = async (event: KeyboardEvent) => {
+  //     if (event.code === "Enter" || event.code === "NumpadEnter") {
+  //       console.log("Enter key was pressed. Run your function.");
+  //       event.preventDefault();
+  //       // callMyFunction();
+
+  //       await sendMessage()
+  //     }
+  //   };
+  //   document.addEventListener("keydown", listener);
+  //   return () => {
+  //     document.removeEventListener("keydown", listener);
+  //   };
+  // }, []);
 
   const sendMessage = async () => {
 
@@ -75,12 +94,12 @@ const Chat = () => {
   })
 
 
-  const [text, setText] = useState('');
-
   const onChange: CascaderProps<Option>['onChange'] = (_, selectedOptions) => {
-    setText(selectedOptions[1]?.label);
 
     setInputValue(selectedOptions[1]?.label)
+
+    console.log(inputValue);
+
 
     // if (inputRef.current) {
     //   console.log(text);
@@ -93,19 +112,28 @@ const Chat = () => {
     // setText(selectedOptions.map((o) => o.label).join(', '));
   };
 
-  // useEffect(() => {
-  //   scroll.current?.scrollIntoView();
-  // },[])
+  // const { data: responseMessages}
+  //   = companyApi.useChatsMessagesQuery(+ (chatId ?? -1), { refetchOnMountOrArgChange: true });
 
+  const [trigger, { data: responseMessages }] = companyApi.useLazyChatsMessagesQuery();
+
+  const { newMessages, setNewMessages, uniqueById} = useChat(chatId ?? '', responseMessages);
+
+  const [messages, setMessages] = useState<IChatMessages[]>([]);
 
   useEffect(() => {
     scroll.current?.scrollIntoView({
       behavior: 'smooth'
     })
-  }, [])
+  }, [newMessages])
 
-  const { newMessages, setNewMessages, loading, error } = useChat(chatId ?? '');
-
+  useEffect(() => {
+    trigger(+ (chatId ?? -1))
+    setNewMessages(responseMessages?.data ?? [])
+    console.log(responseMessages);
+    console.log(newMessages);
+    setMessages(uniqueById([...messages, ...responseMessages?.data ?? []]))
+  }, [chatId, responseMessages?.data])
 
   const [open, setOpen] = useState(false);
   const showDrawer = () => {
@@ -116,8 +144,6 @@ const Chat = () => {
   };
 
   const { data: deals, isLoading: isLoadingDeals, isError: isErrorDeals } = companyApi.useGetDealsByChatQuery(+(chatId ?? -1));
-
-  console.log(deals);
 
 
   return (
@@ -134,7 +160,7 @@ const Chat = () => {
           </div>
 
         </div>
-        <StyledButton style={{ height: '20px', padding: '0px', marginLeft: '10px' }} onClick={showDrawer}>Сделка</StyledButton>
+        <StyleButton type='primary' onClick={showDrawer}>Список сделок</StyleButton>
       </div>
 
       <div className="chat-page">
@@ -155,7 +181,8 @@ const Chat = () => {
 
 
             <Cascader options={options} onChange={onChange}>
-              <a>Паттерн ответа</a>
+              {/* <a>Паттерн ответа</a> */}
+              <img src={star} alt="Паттерн ответа" />
             </Cascader>
 
             <div className="input-group">
@@ -164,13 +191,13 @@ const Chat = () => {
                 className="form-control"
                 placeholder="Write message..."
                 // ref={inputRef}
-
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />
 
               <span className="input-group-text send-icon" onClick={sendMessage}>
                 <i className="bi bi-send"></i>
+                <img src={send} alt="Отправить" />
               </span>
             </div>
           </div>
@@ -206,6 +233,7 @@ const StyledDeal = styled.div`
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0px 0px 10px 3px rgba(34, 60, 80, 0.2);
+  margin-bottom: 15px;
 
   display: flex;
   flex-direction: column;
@@ -236,4 +264,15 @@ const StyledDrawer = styled(Drawer)`
     font-weight: 600;
     margin-bottom: 15px;
   }
+  
+  .ant-drawer-body{
+    scrollbar-width: thin;
+  }
 `
+
+const StyleButton = styled(Button)`
+  padding: 0px 10px;
+  border-radius: 7px;
+  background-color: #5943af;
+`
+// style={{ height: '20px', padding: '0px', marginLeft: '10px' }}

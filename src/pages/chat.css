@@ -45,7 +45,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 10px;
+    padding: 5px 10px;
 }
 
 /* Styling the profile picture */
@@ -62,6 +62,10 @@ img {
     align-items: center;
     margin: 5px;
     /* justify-content: space-between; */
+}
+
+.container1 p {
+    font-size: 16px;
 }
 
 /* styling user-name */
@@ -97,7 +101,7 @@ img {
     /* max-height: 500px; */
     /* max-height: 100vh; */
 
-    height: calc(100vh - 108px);
+    height: calc(100vh - 118px);
 
     width: auto;
     overflow-y: auto;
@@ -122,6 +126,10 @@ img {
 
     /* background-color: #5943af; */
     /* background-color: #667eea; */
+}
+.msg-bottom img{
+    width: 40px;
+    cursor: pointer;
 }
 
 /* Styling the input field */
@@ -172,7 +180,8 @@ img {
     border: none !important;
     display: flex;
     align-items: center;
-    padding: 0.375rem 1.1rem;
+    /* padding: 0.375rem 1.1rem; */
+    padding: 0 7px 0 0;
     margin-bottom: 0;
     font-size: 1.5rem;
     font-weight: b;
@@ -190,14 +199,19 @@ img {
     border-radius: 0 20px 20px 0;
 }
 
+/* 
 input:focus {
     outline: none;
     border: none !important;
     box-shadow: none !important;
-}
+} */
 
 .send-icon {
     font-weight: bold !important;
+}
+
+.send-icon img{
+    height: 30px;
 }
 
 /* Styling the avatar  */

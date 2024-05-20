@@ -31,7 +31,7 @@ export const userApi = createApi({
                 // }
             })
         }),
-        register: build.mutation<IUser, IRegister>({
+        register: build.mutation<ILoginResponse, IRegister>({
             query: (body) => ({
                 url: '/auth/register',
                 method: 'POST',

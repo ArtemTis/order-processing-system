@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Modal, Tabs } from 'antd';
+import { Button, Input, Modal, Tabs } from 'antd';
 import { channelApi } from '../entities/channel/channelApi';
 import { IPatterns, ReqStatus } from '../entities/types';
 import { Navigate } from 'react-router-dom';
@@ -9,38 +9,21 @@ import { ACCOUNT_PATH, LOGIN_PATH } from '../shared/config/routerConfig/routeCon
 import { companyApi } from '../entities/chats/companyApi';
 import styled from 'styled-components';
 import TextArea from 'antd/es/input/TextArea';
+import Channals from '../widgets/Channals';
+
+
 
 const Settings = () => {
-
-  const { data: response, isLoading, isError } = channelApi.useChannelsQuery();
-
-  const [addVk, { data: addVkRes, isLoading: addVkLoad, isError: addVkError }] = channelApi.useAddVkGroupMutation();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [areaValue, setAreaValue] = useState('');
   const [activeId, setActiveId] = useState<number>();
 
-  const addVkGroup = async () => {
-
-    try {
-      await addVk({
-        access_key: "vk1.a.ddg7R-WvdJhcS6ulG9bpQ79Etd1S4_GDdj-pWvCtxtvVscb1j_Giu-tTAo0QfwUSVG4bYMbiYRR6-u_BgeBP8kkhJkgA38Jm_jEJaV81AComaO3_W2LByQw5MWenKy5pPj9YvDii96ljabNXXJLLp90-JBPELWnzeB_5uEfxy-T9FWtrkV8B9ddTlHTc3uTvYTeZG9NbUV21bA_mDGZZxA",
-        group_id: 220160293
-      }).unwrap();
-
-    } catch (error) {
-      console.log(error);
-
-    }
-  }
 
   const isAuthorised = !!useSelector(selectCurrentUser)
   if (!isAuthorised) {
     return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
   }
-
-
-
 
 
   const { data: res, isLoading: isLoad, isError: isErr } = companyApi.useGetPatternsByTypeQuery();
@@ -62,54 +45,13 @@ const Settings = () => {
     setIsModalOpen(false);
   };
 
-  const channalsTabs = [
-    {
-      key: '1',
-      label: 'Каналы',
-      children: (
-        <>
-          <h2>Добавьте группу ВК</h2>
-          <p>Вы можете добавить группы ВКОНТАКТЕ, созданные вами или в которых вы являетесь администратором. Чтобы добавить их, войдите в группу VK и скопируйте токен и айди</p>
-
-          <StyledButton onClick={addVkGroup}>Add Vk Group</StyledButton>
-          {
-            addVkRes &&
-            <p>{addVkRes.message}</p>
-          }
-        </>
-      )
-    }
-  ]
-
+  
 
   const items = [
     {
       key: '1',
       label: 'Каналы',
-      children: (
-        <>
-          {
-            isLoading &&
-            <p>Loading...</p>
-          }
-
-
-          <StyledTabs
-            tabPosition={"left"}
-            // @ts-ignore
-            items={response?.data.map((channel, i) => {
-              const id = String(i + 1);
-              return {
-                label: channel.name,
-                key: channel.id,
-                children: `Content of Tab ${channel.name}`,
-              };
-            })}
-          />
-
-        
-        </>
-      )
+      children: <Channals/>
       ,
     },
     {
@@ -127,10 +69,10 @@ const Settings = () => {
               children: (<>
                 {
                   pattern.messagePatterns.map(mess => (
-                    <h6 key={mess.id}>{mess.text}</h6>
+                    <h6 className='pattern-text' key={mess.id}>{mess.text}</h6>
                   ))
                 }
-                <StyledButton onClick={() => addPatternModal(pattern.id)}>Add pattern</StyledButton>
+                <StyledButton type='primary' onClick={() => addPatternModal(pattern.id)}>Добавить шаблон</StyledButton>
               </>)
             };
           })}
@@ -141,21 +83,12 @@ const Settings = () => {
 
   return (
     <StyledWrapper>
-      Settings
+      <h1>Настройки</h1>
+
       <StyledMainTabs defaultActiveKey='1' items={items} />
 
-
-      {/* {
-        response &&
-        response.data?.map(chanal => (
-          <div key={chanal.id}>
-            {chanal.name}
-          </div>
-        ))
-      } */}
-
-
-      <StyledModal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+      <StyledModal title="Добавить шаблон" open={isModalOpen} onOk={handleOk}
+        okText={'Сохранить'} cancelText={'Закрыть'} onCancel={handleCancel}>
         <p>Введите текст новго шаблона</p>
         <TextArea
           value={areaValue}
@@ -177,19 +110,28 @@ const StyledWrapper = styled.div`
     padding: 20px 0 0 20px;
     background-color: #f5f5f5;
     height: 100vh;
+
+    h1{
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
 `
 
 export const StyledButton = styled(Button)`
   border-radius: 7px;
-  color: #f1f1f1;
+  /* color: #f1f1f1; */
   border: none;
+  background-color:  #667eea;
 
 `
 
-const StyledTabs = styled(Tabs)`
+export const StyledTabs = styled(Tabs)`
     
   .ant-tabs-tab-active{
     background-color:  #667eea;
+    div{
+      color: #f0f0f0 !important;
+    }
   }
 
   .ant-tabs-tab:hover{
@@ -203,6 +145,15 @@ const StyledTabs = styled(Tabs)`
   .ant-tabs-ink-bar{
     background: #667eea;
   }
+
+  h2{
+    font-size: 18px;
+  }
+
+  .pattern-text{
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
 `
 
 const StyledMainTabs = styled(Tabs)`
@@ -210,10 +161,24 @@ const StyledMainTabs = styled(Tabs)`
   /* .ant-tabs-tab{
     border-radius: 10px;
   } */
+
+  .ant-tabs-tab{
+    font-size: 16px;
+  }
+
+  .channal-title{
+    font-size: 22px;
+    font-weight: 500;
+    margin: 0px 0 15px;
+  }
     
   .ant-tabs-tab-active{
     background-color:  #667eea;
     border-radius: 7px;
+
+    div{
+      color: #f0f0f0 !important;
+    }
   }
 
   .ant-tabs-tab:hover{
@@ -234,6 +199,17 @@ const StyledMainTabs = styled(Tabs)`
 `
 
 const StyledModal = styled(Modal)`
+    .ant-modal-content{
+      border-radius: 7px;
+
+      textarea{
+        border-radius: 7px;
+      }
+      button{
+        border-radius: 7px;
+      }
+    }
+
   .ant-input-outlined{
     background: white;
   }
@@ -242,5 +218,10 @@ const StyledModal = styled(Modal)`
     border-width: 1px;
     border-style: solid;
     border-color: #d9d9d9;
+  }
+
+  p{
+    font-size: 16px;
+    margin-bottom: 10px;
   }
 `

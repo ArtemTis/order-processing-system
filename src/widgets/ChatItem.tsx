@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { UserOutlined } from '@ant-design/icons'
 import { IChatSnippet } from '../entities/types'
-import { useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 
 interface ChatItemProps {
     data: IChatSnippet;
@@ -13,11 +13,16 @@ interface ChatItemProps {
 const ChatItem: React.FC<ChatItemProps> = ({ data }) => {
 
     const { id } = useParams();
+    
+    const location = useLocation();
+
+    const activeChat = +location.pathname.split('/')[3]
 
     const time = data.last_message?.created_at.slice(11, 16);
+    
 
     return (
-        <StyledChatItem>
+        <StyledChatItem style={activeChat === data.id ? {backgroundColor: '#5943af'}: {backgroundColor: ''}}>
             <Avatar size={54} icon={<img src={data.client_contact.photo_url ?? ''} alt="Avatar" />} />
 
             <StyledName>
@@ -50,11 +55,12 @@ const StyledChatItem = styled.div`
   padding: 5px;
   cursor: pointer;
 
-  background: #667eea;
+  background-color: #667eea;
   border-radius: 7px;
 
   &:hover{
-    background-color: #5943af;
+    /* background-color: #5943af; */
+    background-color: #4a64d6;
     border-radius: 7px;
   }
 `

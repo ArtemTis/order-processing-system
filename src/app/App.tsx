@@ -18,15 +18,18 @@ function App() {
         token: {
           // Seed Token
           // colorPrimary: '#818180',
-          colorPrimary: '#f1f1f1',
           // colorPrimary: '#667eea',
+
+          // colorPrimary: '#f1f1f1',
           borderRadius: 0,
 
 
+          colorPrimaryHover: '#5943af'
           // Alias Token
           // colorBgContainer: '#6D31ED',
           // colorBgContainer: '#aeacb1',
-          colorBgContainer: '#667eea',
+
+          // colorBgContainer: '#667eea',
 
         },
         // algorithm: theme.darkAlgorithm,

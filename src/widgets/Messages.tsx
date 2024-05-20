@@ -16,6 +16,9 @@ const Messages: React.FC<IMessageProps> = ({ chatId, messages }) => {
 
     const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
+    console.log(messages);
+    
+
     // const { data: responseMessages, isLoading, isError } = companyApi.useChatsMessagesQuery(+(chatId ?? -1));
 
     // const { echo } = useEcho();

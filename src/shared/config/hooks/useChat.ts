@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { companyApi } from "../../../entities/chats/companyApi";
 import useEcho from "./useEcho";
-import { IChatMessages } from "../../../entities/types";
+import { IChatMessages, IMessagesResponse } from "../../../entities/types";
 
-export const useChat = (chatId: string) => {
+export const useChat = (chatId: string, responseMessages?: IMessagesResponse) => {
 
-    const { data: responseMessages, isLoading: loading, isError: error } = companyApi.useChatsMessagesQuery(+(chatId ?? -1));
+    // const { data: responseMessages, isLoading: loading, isError: error } = companyApi.useChatsMessagesQuery(+(chatId ?? -1));
 
     const { echo } = useEcho();
 
@@ -32,42 +32,53 @@ export const useChat = (chatId: string) => {
     const uniqueById = uniqueBy('id')
 
 
-    echo.private(`chats.${chatId}`)
-        .listen('.message.new', (message: IChatMessages) => {
-            // console.log(responseMessages);
-
-            const uniq = new Set([message, ...newMessages, ...responseMessages?.data ?? []].map(e => JSON.stringify(e)));
-
-            const res = Array.from(uniq).map(e => JSON.parse(e));
-
-
-            // setNewMessages(prev => [message, ...prev, ...responseMessages?.data ?? []])
-            setIncommingessages(prev => [message, ...prev])
-            // setNewMessages([message, ...incommingMessages, ...newMessages, ...responseMessages?.data ?? []])
-            // console.log(newMessages);
-            // setNewMessages(uniqueById([message, ...incommingMessages, ...newMessages, ...responseMessages?.data ?? []]))
-
-            setNewMess(message)
-        });
-
     useEffect(() => {
-        setNewMessages(uniqueById([...incommingMessages, ...incommingMessages, ...newMessages, ...responseMessages?.data ?? []]))
+        setNewMessages([]);
 
+        echo.private(`chats.${chatId}`)
+            .listen('.message.new', (message: IChatMessages) => {
+                console.log(message);
 
-    }, [incommingMessages, newMess])
+                const uniq = new Set([message, ...newMessages, ...responseMessages?.data ?? []].map(e => JSON.stringify(e)));
 
-    useEffect(() => {
-        setNewMessages(responseMessages?.data ?? [])
+                const res = Array.from(uniq).map(e => JSON.parse(e));
 
-    }, [responseMessages?.data])
+                setIncommingessages(prev => [message, ...prev])
+                // setNewMessages([message, ...incommingMessages, ...newMessages, ...responseMessages?.data ?? []])
+                // console.log(newMessages);
+                // setNewMessages(uniqueById([message, ...incommingMessages, ...newMessages, ...responseMessages?.data ?? []]))
 
-    useEffect(() => {
-        setNewMessages(responseMessages?.data ?? [])
+                setNewMess(message)
+
+            });
 
         return () => {
             echo.leave(`chats.${chatId}`)
+            setNewMessages([]);
         }
-    }, [])
 
-    return { newMessages, setNewMessages, loading, error }
+    }, [chatId])
+
+    useEffect(() => {
+        setNewMessages(uniqueById([
+            ...incommingMessages,
+            ...newMessages,
+            ...responseMessages?.data ?? []]))
+
+    }, [incommingMessages, newMess, chatId])
+
+    useEffect(() => {
+        setNewMessages(responseMessages?.data ?? [])
+
+    }, [responseMessages?.data, chatId])
+
+    // useEffect(() => {
+    //     setNewMessages(responseMessages?.data ?? [])
+
+    //     return () => {
+    //         echo.leave(`chats.${chatId}`)
+    //     }
+    // }, [])
+
+    return { newMessages, setNewMessages, uniqueById}
 }

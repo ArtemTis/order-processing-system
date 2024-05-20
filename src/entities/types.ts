@@ -22,14 +22,16 @@ export interface ILogin {
     password: string
 }
 
-export interface IRegister {
-
+export type IRegister = ILogin & {
+    name: string,
+    password_confirmation: string
 }
 
 export interface IChatSnippet {
     id: number,
     name: number,
     client_contact: {
+        id: number,
         created_at: string
         name: string
         photo_url: string | null
@@ -159,7 +161,8 @@ export interface IChannel {
     data: {
         id: number,
         name: EChannelsName,
-        photo_url: string | null
+        photo_url: string | null,
+        isConnected: 1 | 0
     }[]
 }
 
