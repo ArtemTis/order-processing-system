@@ -24,17 +24,27 @@ const Channals = () => {
     const addVkGroup = async () => {
 
         try {
-            await addVk({
-                access_key: "vk1.a.ddg7R-WvdJhcS6ulG9bpQ79Etd1S4_GDdj-pWvCtxtvVscb1j_Giu-tTAo0QfwUSVG4bYMbiYRR6-u_BgeBP8kkhJkgA38Jm_jEJaV81AComaO3_W2LByQw5MWenKy5pPj9YvDii96ljabNXXJLLp90-JBPELWnzeB_5uEfxy-T9FWtrkV8B9ddTlHTc3uTvYTeZG9NbUV21bA_mDGZZxA",
-                group_id: 220160293
-            }).unwrap();
-            messageApi.open({
-                type: 'success',
-                content: 'Вы добавили группу ВК',
-            });
+            if (vkValue?.access_key && vkValue.group_id) {
+                await addVk({
+                    access_key: vkValue?.access_key,
+                    group_id: vkValue?.group_id
+                }).unwrap();
+                messageApi.open({
+                    type: 'success',
+                    content: 'Вы добавили группу ВК',
+                });
+            }else{
+                messageApi.open({
+                    type: 'warning',
+                    content: 'Введите нужную информацию!',
+                });
+            }
         } catch (error) {
             console.log(error);
-
+            messageApi.open({
+                type: 'error',
+                content: 'Ошибка добавления канала',
+            });
         }
     }
 
@@ -48,11 +58,11 @@ const Channals = () => {
                     <p>Вы можете добавить группы ВКОНТАКТЕ, созданные вами или в которых вы являетесь администратором. Чтобы добавить их, войдите в группу VK и скопируйте токен и айди</p>
                     <div className='channal-item'>
                         <div>
-
+                            access key:
                             <Input value={vkValue?.access_key} onChange={(e) => setVkValue({ ...vkValue, access_key: e.target.value })} />
                         </div>
                         <div>
-
+                            group id:
                             <Input type='number' value={vkValue?.group_id} onChange={(e) => setVkValue({ ...vkValue, group_id: +e.target.value })} />
                         </div>
                     </div>
@@ -86,9 +96,9 @@ const Channals = () => {
                     return {
                         label: channel.name,
                         key: channel.id,
-                        children: (!!channel.isConnected ? channalsTabs[i]?.children : 
+                        children: (!!channel.isConnected ? channalsTabs[i]?.children :
                             <h2>Канал уже добавлен</h2>
-                         ),
+                        ),
                     };
                 })}
             />
@@ -104,6 +114,7 @@ export default Channals
 const StyledChannal = styled.div`
   input{
     width: 300px;
+    margin-left: 10px;
   }
 
   .channal-item{ 

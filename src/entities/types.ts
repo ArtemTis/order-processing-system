@@ -236,3 +236,16 @@ export interface IDeal {
     created_at: string,
     closed_at: string
 }
+
+export interface IStatuseDeal{
+    id: number,
+    name: string,
+    desc: string,
+    created_at: string,
+    updated_at: string
+}
+
+export interface IStatusAdd{
+    name: string,
+    desc: string
+}

@@ -100,7 +100,9 @@ const Login = () => {
       const user = await sendInfo(values).unwrap();
       dispatch(setCredentials(user))
       // navigate(`/${ACCOUNT_PATH}/${PROFILE_PATH}`);
-      navigate(`/${PROFILE_PATH}`);
+      if (!isLoading) {
+        navigate(`/${PROFILE_PATH}`);
+      }
     } catch (err) {
       console.log(err);
 

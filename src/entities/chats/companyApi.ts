@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IAddPattern, IAddPatternResponse, IChannel, ICompanyChatsResponse, IDeal, ILogin, ILoginResponse, IMessageSendResponse, IMessagesResponse, IPatterns, IRegister, ISendMessage, ITag, ITypePattern, IUser } from '../types';
+import { IAddPattern, IAddPatternResponse, IChannel, ICompanyChatsResponse, IDeal, ILogin, ILoginResponse, IMessageSendResponse, IMessagesResponse, IPatterns, IRegister, ISendMessage, IStatusAdd, IStatuseDeal, ITag, ITypePattern, IUser } from '../types';
 import { RootState } from '../../app/store/store';
 
 const globalUrl = process.env.REACT_APP_API_URL;
@@ -19,7 +19,7 @@ export const companyApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Messages', 'Patterns'],
+    tagTypes: ['Messages', 'Type', 'Patterns', 'Statuses'],
 
     endpoints: (build) => ({
         chatsByCompany: build.query<ICompanyChatsResponse, number>({
@@ -52,6 +52,7 @@ export const companyApi = createApi({
                 url: `/type-of-message-patterns`,
                 method: 'GET',
             }),
+            providesTags: ['Type']
         }),
         addTypePattern: build.mutation<{ data: ITypePattern[] }, { name: string }>({
             query: (body) => ({
@@ -59,22 +60,27 @@ export const companyApi = createApi({
                 method: 'POST',
                 body
             }),
+            invalidatesTags: ['Type']
         }),
+
+
         addPattern: build.mutation<IAddPatternResponse, IAddPattern>({
             query: (body) => ({
                 url: `/message-patterns`,
                 method: 'POST',
                 body
             }),
-            invalidatesTags: ['Patterns']
+            invalidatesTags: ['Patterns',]
         }),
         getPatternsByType: build.query<IPatterns, void>({
             query: () => ({
                 url: `/message-patterns`,
                 method: 'GET',
             }),
-            providesTags: ['Patterns']
+            providesTags: ['Patterns', 'Type']
         }),
+
+
         addNewTag: build.mutation<{ data: ITag }, { name: string }>({
             query: (body) => ({
                 url: `/tags-for-chat`,
@@ -89,12 +95,27 @@ export const companyApi = createApi({
             }),
         }),
 
-        
+
         getDealsByChat: build.query<{ data: IDeal[] }, number>({
             query: (id) => ({
                 url: `/chats/${id}/deals`,
                 method: 'GET',
             }),
+        }),
+        getAllStatusesOfDeal: build.query<{ data: IStatuseDeal[] }, void>({
+            query: () => ({
+                url: `/status-of-deal`,
+                method: 'GET',
+            }),
+            providesTags: ['Statuses']
+        }),
+        addStatusesOfDeal: build.mutation<string, IStatusAdd>({
+            query: (body) => ({
+                url: `/status-of-deal`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['Statuses']
         }),
 
 

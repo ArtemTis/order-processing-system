@@ -10,15 +10,11 @@ import { companyApi } from '../entities/chats/companyApi';
 import styled from 'styled-components';
 import TextArea from 'antd/es/input/TextArea';
 import Channals from '../widgets/Channals';
-
+import AddPatterns from '../widgets/AddPatterns';
+import Statuses from '../widgets/Statuses';
 
 
 const Settings = () => {
-
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [areaValue, setAreaValue] = useState('');
-  const [activeId, setActiveId] = useState<number>();
-
 
   const isAuthorised = !!useSelector(selectCurrentUser)
   if (!isAuthorised) {
@@ -26,58 +22,26 @@ const Settings = () => {
   }
 
 
-  const { data: res, isLoading: isLoad, isError: isErr } = companyApi.useGetPatternsByTypeQuery();
-  const [sendNewPattern, { isLoading: isLoade, isError: isErro }] = companyApi.useAddPatternMutation();
-
-  const addPatternModal = (id: number) => {
-    setIsModalOpen(true);
-    setActiveId(id)
-  }
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-    sendNewPattern({
-      text: areaValue,
-      type_of_message_pattern_id: activeId ?? -1
-    })
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  
-
   const items = [
     {
       key: '1',
       label: 'Каналы',
-      children: <Channals/>
+      children: <Channals />
       ,
     },
     {
       key: '2',
       label: 'Шаблоны ответов',
       children: (
-        <StyledTabs
-          tabPosition={"left"}
-          // @ts-ignore
-          items={res?.data.map((pattern, i) => {
-            const id = String(i + 1);
-            return {
-              label: pattern.name,
-              key: pattern.id,
-              children: (<>
-                {
-                  pattern.messagePatterns.map(mess => (
-                    <h6 className='pattern-text' key={mess.id}>{mess.text}</h6>
-                  ))
-                }
-                <StyledButton type='primary' onClick={() => addPatternModal(pattern.id)}>Добавить шаблон</StyledButton>
-              </>)
-            };
-          })}
-        />
+        <AddPatterns />
       ),
+    },
+    {
+      key: '3',
+      label: 'Статусы сделок',
+      children: (
+        <Statuses />
+      )
     }
   ];
 
@@ -87,19 +51,6 @@ const Settings = () => {
 
       <StyledMainTabs defaultActiveKey='1' items={items} />
 
-      <StyledModal title="Добавить шаблон" open={isModalOpen} onOk={handleOk}
-        okText={'Сохранить'} cancelText={'Закрыть'} onCancel={handleCancel}>
-        <p>Введите текст новго шаблона</p>
-        <TextArea
-          value={areaValue}
-          onChange={(e) => setAreaValue(e.target.value)}
-          placeholder="Текст шаблона"
-          autoSize={{
-            minRows: 3,
-            maxRows: 5,
-          }}
-        />
-      </StyledModal>
     </StyledWrapper>
   )
 }
@@ -129,6 +80,19 @@ export const StyledTabs = styled(Tabs)`
     
   .ant-tabs-tab-active{
     background-color:  #667eea;
+    div{
+      color: #f0f0f0 !important;
+    }
+  }
+
+  :where(.css-dev-only-do-not-override-1gnzlby).ant-tabs .ant-tabs-tab.ant-tabs-tab-disabled{
+    cursor: pointer;
+  }
+
+  [data-node-key="999"]{
+    background-color: #5943af;
+    border-radius: 7px;
+    cursor: pointer !important;
     div{
       color: #f0f0f0 !important;
     }
@@ -195,33 +159,5 @@ const StyledMainTabs = styled(Tabs)`
 
   .ant-tabs-ink-bar{
     background: #667eea;
-  }
-`
-
-const StyledModal = styled(Modal)`
-    .ant-modal-content{
-      border-radius: 7px;
-
-      textarea{
-        border-radius: 7px;
-      }
-      button{
-        border-radius: 7px;
-      }
-    }
-
-  .ant-input-outlined{
-    background: white;
-  }
-
-  textarea:hover{
-    border-width: 1px;
-    border-style: solid;
-    border-color: #d9d9d9;
-  }
-
-  p{
-    font-size: 16px;
-    margin-bottom: 10px;
   }
 `
