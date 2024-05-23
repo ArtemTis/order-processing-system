@@ -35,7 +35,8 @@ export const useChat = (chatId: string, responseMessages?: IMessagesResponse) =>
     useEffect(() => {
         setNewMessages([]);
 
-        echo.private(`chats.${chatId}`)
+        // echo.private(`chats.${chatId}`)
+        echo.channel(`chats.${chatId}`)
             .listen('.message.new', (message: IChatMessages) => {
                 console.log(message);
 
@@ -49,7 +50,6 @@ export const useChat = (chatId: string, responseMessages?: IMessagesResponse) =>
                 // setNewMessages(uniqueById([message, ...incommingMessages, ...newMessages, ...responseMessages?.data ?? []]))
 
                 setNewMess(message)
-
             });
 
         return () => {

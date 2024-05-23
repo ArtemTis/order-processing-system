@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IAddPattern, IAddPatternResponse, IChannel, ICompanyChatsResponse, IDeal, ILogin, ILoginResponse, IMessageSendResponse, IMessagesResponse, IPatterns, IRegister, ISendMessage, IStatusAdd, IStatuseDeal, ITag, ITypePattern, IUser } from '../types';
+import { IAddPattern, IAddPatternResponse, IChannel, ICompanyChatsResponse, IDeal, IDealSend, ILogin, ILoginResponse, IMessageSendResponse, IMessagesResponse, IPatterns, IRegister, ISendMessage, IStatusAdd, IStatuseDeal, ITag, ITypePattern, IUser } from '../types';
 import { RootState } from '../../app/store/store';
 
 const globalUrl = process.env.REACT_APP_API_URL;
@@ -96,12 +96,7 @@ export const companyApi = createApi({
         }),
 
 
-        getDealsByChat: build.query<{ data: IDeal[] }, number>({
-            query: (id) => ({
-                url: `/chats/${id}/deals`,
-                method: 'GET',
-            }),
-        }),
+
         getAllStatusesOfDeal: build.query<{ data: IStatuseDeal[] }, void>({
             query: () => ({
                 url: `/status-of-deal`,
@@ -117,7 +112,28 @@ export const companyApi = createApi({
             }),
             invalidatesTags: ['Statuses']
         }),
-
+        getDealsByChat: build.query<{ data: IDeal[] }, number>({
+            query: (id) => ({
+                url: `/chats/${id}/deals`,
+                method: 'GET',
+            }),
+        }),
+        addDeal: build.mutation<{ data: IDeal }, IDealSend>({
+            query: (body) => ({
+                url: `/deals`,
+                method: 'POST',
+                body
+            }),
+        }),
+        closeDeal: build.mutation<{ data: IDeal }, ISendMessage>({
+            query: ({ chatId, text }) => ({
+                url: `/deals/${chatId}/close`,
+                method: 'POST',
+                body: {
+                    text
+                }
+            }),
+        }),
 
     }),
 })
