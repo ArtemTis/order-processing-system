@@ -134,7 +134,7 @@ const AddPatterns = () => {
                 isLoad &&
                 <p>Загрузка...</p>
             }
-            <StyledTabs
+            <StyledPatternsTabs
                 tabPosition={"left"}
                 items={tabs}
             />
@@ -193,3 +193,6 @@ export const StyledModal = styled(Modal)`
   }
 `
 
+const StyledPatternsTabs = styled(StyledTabs)`
+    max-height: 70vh;
+`

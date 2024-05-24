@@ -21,7 +21,6 @@ const ChatPatterns:React.FC<IProps> = ({setInputValue}) => {
         setInputValue(selectedOptions[1]?.label)
     };
 
-
     const options: Option[] = (res?.data || []).map(pattern => {
         return {
             value: `${pattern.id}`,

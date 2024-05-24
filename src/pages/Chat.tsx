@@ -24,6 +24,7 @@ import { IChatMessages } from '../entities/types'
 import { messagesApi } from '../entities/chats/messagesApi'
 import { dealsApi } from '../entities/chats/dealsApi'
 import Deals from '../widgets/Deals'
+import ChatPatterns from '../widgets/ChatPatterns'
 
 enum Role {
   USER = 'user',
@@ -61,34 +62,12 @@ const Chat = () => {
     }
   }
 
-
-  const { data: res, isLoading: isLoad, isError: isErr } = companyApi.useGetPatternsByTypeQuery();
-
-  const options: Option[] = (res?.data || []).map(pattern => {
-    return {
-      value: `${pattern.id}`,
-      label: pattern.name,
-      children: pattern.messagePatterns.map(patternChild => (
-        {
-          value: `${patternChild.id}`,
-          label: patternChild.text,
-        }
-      ))
-    }
-  })
-
-
-  const onChange: CascaderProps<Option>['onChange'] = (_, selectedOptions) => {
-
-    setInputValue(selectedOptions[1]?.label)
-  };
-
-
   const [trigger, { data: responseMessages, isLoading: messLoad, isError: messErr }] = messagesApi.useLazyChatsMessagesQuery();
 
   const { newMessages, setNewMessages, uniqueById } = useChat(chatId ?? '', responseMessages);
 
   const [messages, setMessages] = useState<IChatMessages[]>([]);
+
 
   useEffect(() => {
     scroll.current?.scrollIntoView({
@@ -107,7 +86,6 @@ const Chat = () => {
   const showDrawer = () => {
     setOpen(true);
   };
-
 
   return (
     <div className="container">
@@ -142,11 +120,7 @@ const Chat = () => {
 
           <div className="msg-bottom">
 
-
-            <Cascader options={options} onChange={onChange}>
-              {/* <a>Паттерн ответа</a> */}
-              <img src={star} alt="Паттерн ответа" />
-            </Cascader>
+            <ChatPatterns setInputValue={setInputValue}/>
 
             <div className="input-group">
               <input
@@ -167,7 +141,7 @@ const Chat = () => {
         </div>
       </div>
 
-      <Deals chatId={chatId} open={open} setOpen={setOpen}/>
+      <Deals chatId={chatId} open={open} setOpen={setOpen} />
     </div>
   )
 }

@@ -16,46 +16,6 @@ const Messages: React.FC<IMessageProps> = ({ chatId, messages }) => {
 
     const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
-    console.log(messages);
-    
-
-    // const { data: responseMessages, isLoading, isError } = companyApi.useChatsMessagesQuery(+(chatId ?? -1));
-
-    // const { echo } = useEcho();
-
-    // const [newMessages, setNewMessages] = useState<IChatMessages[]>([]);
-
-    // // console.log(responseMessages?.data);
-
-    // echo.private(`chats.${chatId}`)
-    //     .listen('.message.new', (message: IChatMessages) => {
-    //         console.log(message);
-    //         // console.log(responseMessages);
-
-    //         const uniq = new Set([message, ...newMessages, ...responseMessages?.data ?? []].map(e => JSON.stringify(e)));
-
-    //         const res = Array.from(uniq).map(e => JSON.parse(e));
-
-    //         console.log(res);
-
-
-    //         setNewMessages(res)
-    //     });
-
-    // useEffect(() => {
-    //     setNewMessages(responseMessages?.data ?? [])
-
-    // }, [responseMessages?.data])
-
-    // useEffect(() => {
-    //     setNewMessages(responseMessages?.data ?? [])
-
-    //     return () => {
-    //         echo.leave(`chats.${chatId}`)
-    //     }
-    // }, [])
-
-
     return (
         <div className="messages-wrapper">
             {/* {
