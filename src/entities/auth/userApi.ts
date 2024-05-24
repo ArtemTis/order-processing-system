@@ -43,7 +43,13 @@ export const userApi = createApi({
                 url: '/auth/logout',
                 method: 'POST'
             })
-        })
+        }),
+        getMe: build.mutation<{data: {id: number, name: string}}, void>({
+            query: () => ({
+                url: '/auth/me',
+                method: 'POST'
+            })
+        }),
     })
 })
 

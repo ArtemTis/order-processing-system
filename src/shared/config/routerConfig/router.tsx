@@ -11,6 +11,7 @@ import NotFound from "../../NotFound";
 import Settings from "../../../pages/Settings";
 import Chat from "../../../pages/Chat";
 import Chats from "../../../pages/Chats";
+import ChatNew from "../../../pages/ChatNew";
 
 
 export const router = createBrowserRouter(

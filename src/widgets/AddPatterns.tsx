@@ -137,11 +137,12 @@ const AddPatterns = () => {
             <StyledTabs
                 tabPosition={"left"}
                 items={tabs}
+                style={{maxHeight: '70vh'}}
             />
 
             <StyledModal title="Добавить шаблон" open={isModalOpen} onOk={handleOk}
                 okText={'Сохранить'} cancelText={'Закрыть'} onCancel={handleCancel}>
-                <p>Введите текст новго шаблона</p>
+                <p>Введите текст нового шаблона</p>
                 <TextArea
                     value={areaValue}
                     onChange={(e) => setAreaValue(e.target.value)}

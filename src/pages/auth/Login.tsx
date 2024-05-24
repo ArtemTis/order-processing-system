@@ -36,6 +36,8 @@ const Login = () => {
       dispatch(setCredentials(user))
       // navigate(`/${ACCOUNT_PATH}/${PROFILE_PATH}`);
       navigate(`/${PROFILE_PATH}`);
+
+      window.localStorage.setItem('token', user.access_token)
     } catch (err) {
       console.log(err);
 

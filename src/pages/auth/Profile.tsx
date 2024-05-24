@@ -3,17 +3,17 @@ import { userApi } from '../../entities/auth/userApi'
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { ACCOUNT_PATH, LOGIN_PATH } from '../../shared/config/routerConfig/routeConstants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../../entities/auth/selectors';
 import { Avatar, Button, Popconfirm, PopconfirmProps, message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import logout from '../../shared/assets/logout.svg'
+import { setMe } from '../../entities/auth/authSlice';
 
 const Profile = () => {
   const [sendInfo, { isError, isLoading, data }] = userApi.useLogoutMutation();
 
   const navigate = useNavigate();
-
 
   // const logout = () => {
   //   sendInfo(1).then(() => {
@@ -25,11 +25,14 @@ const Profile = () => {
   // const isAuthorised = useSelector(selectIsAuthorised);
 
   const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
 
   console.log(user);
 
   const confirm: PopconfirmProps['onConfirm'] = (e) => {
     sendInfo(1).then(() => {
+      const token = window.localStorage.removeItem('token');
+      dispatch(setMe(token))
       navigate(`/${ACCOUNT_PATH}/${LOGIN_PATH}`)
     });
   };
