@@ -48,24 +48,7 @@ const Chat = () => {
 
   const [sendText, { isError, isLoading, data }] = messagesApi.useSendMessageMutation();
 
-  // useEffect(() => {
-  //   const listener = async (event: KeyboardEvent) => {
-  //     if (event.code === "Enter" || event.code === "NumpadEnter") {
-  //       console.log("Enter key was pressed. Run your function.");
-  //       event.preventDefault();
-  //       // callMyFunction();
-
-  //       await sendMessage()
-  //     }
-  //   };
-  //   document.addEventListener("keydown", listener);
-  //   return () => {
-  //     document.removeEventListener("keydown", listener);
-  //   };
-  // }, []);
-
   const sendMessage = async () => {
-
     try {
       if (inputValue) {
         await sendText({ chatId: +(chatId ?? -1), text: inputValue }).unwrap();
@@ -73,10 +56,8 @@ const Chat = () => {
         setInputValue('');
         scroll.current?.scrollIntoView({ behavior: "smooth" });
       }
-
     } catch (err) {
       console.log(err);
-
     }
   }
 
@@ -100,23 +81,8 @@ const Chat = () => {
   const onChange: CascaderProps<Option>['onChange'] = (_, selectedOptions) => {
 
     setInputValue(selectedOptions[1]?.label)
-
-    console.log(inputValue);
-
-
-    // if (inputRef.current) {
-    //   console.log(text);
-    //   inputRef.current.value = `aaaaaaaa`;
-
-    // }
-
-    //@ts-ignore
-    // inputRef.current = text;
-    // setText(selectedOptions.map((o) => o.label).join(', '));
   };
 
-  // const { data: responseMessages}
-  //   = companyApi.useChatsMessagesQuery(+ (chatId ?? -1), { refetchOnMountOrArgChange: true });
 
   const [trigger, { data: responseMessages, isLoading: messLoad, isError: messErr }] = messagesApi.useLazyChatsMessagesQuery();
 

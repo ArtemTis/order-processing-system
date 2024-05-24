@@ -35,7 +35,9 @@ export const useChat = (chatId: string, responseMessages?: IMessagesResponse) =>
     useEffect(() => {
         setNewMessages([]);
 
-        echo.private(`chats.${chatId}`)
+        console.log("CONNECT");
+
+        const channel = echo.private(`chats.${chatId}`)
         // echo.channel(`chats.${chatId}`)
             .listen('.message.new', (message: IChatMessages) => {
                 console.log(message);
@@ -52,7 +54,11 @@ export const useChat = (chatId: string, responseMessages?: IMessagesResponse) =>
                 setNewMess(message)
             });
 
+
+            
+
         return () => {
+            channel.stopListening('.message.new');
             echo.leave(`chats.${chatId}`)
             setNewMessages([]);
         }
