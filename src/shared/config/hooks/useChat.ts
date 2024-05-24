@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { companyApi } from "../../../entities/chats/companyApi";
 import useEcho from "./useEcho";
 import { IChatMessages, IMessagesResponse } from "../../../entities/types";
+import Echo from "laravel-echo";
 
 export const useChat = (chatId: string, responseMessages?: IMessagesResponse) => {
 
@@ -14,6 +15,7 @@ export const useChat = (chatId: string, responseMessages?: IMessagesResponse) =>
     const [newMess, setNewMess] = useState<IChatMessages>();
 
     // console.log(responseMessages?.data);
+    const [echoInstance, setEchoInstance] = useState<Echo | null>(null);
 
     const uniqueBy = (prop: string) => (list: IChatMessages[]) => {
         const uniques = {}
@@ -52,9 +54,12 @@ export const useChat = (chatId: string, responseMessages?: IMessagesResponse) =>
 
             });
 
+            setEchoInstance(echo);
+
         return () => {
             echo.leave(`chats.${chatId}`)
             setNewMessages([]);
+            setEchoInstance(null);
         }
 
     }, [chatId])
