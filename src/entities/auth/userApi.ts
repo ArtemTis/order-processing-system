@@ -45,10 +45,9 @@ export const userApi = createApi({
             })
         }),
         getMe: build.mutation<{data: {id: number, name: string}}, void>({
-            query: (body) => ({
+            query: () => ({
                 url: '/auth/me',
-                method: 'POST',
-                body
+                method: 'POST'
             })
         }),
     })

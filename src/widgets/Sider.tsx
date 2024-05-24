@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Layout, Menu, Button, theme } from 'antd';
 import { Link, Navigate, Outlet } from 'react-router-dom';
@@ -9,9 +9,11 @@ import teacher from '../assets/sider/Teacher.svg'
 import profile from '../assets/sider/Profile.svg'
 import logout from '../assets/sider/Logout.svg'
 import { ACCOUNT_PATH, CHATS_PATH, LOGIN_PATH, PROFILE_PATH, SETTINGS_PATH } from '../shared/config/routerConfig/routeConstants';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../entities/auth/selectors';
 import { CommentOutlined, MessageOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { userApi } from '../entities/auth/userApi';
+import { setCredentials } from '../entities/auth/authSlice';
 
 
 const { Header, Sider, Content } = Layout;
@@ -27,6 +29,15 @@ const AppSider: React.FC = () => {
     // if (!isAuthorised) {
     //     return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
     // }
+    const dispatch = useDispatch();
+
+    const [sendMe, {data: userData}] = userApi.useGetMeMutation();
+
+    useEffect(()=> {
+        sendMe();
+        // dispatch(setCredentials(userData?.data))
+    },[])
+    
 
     const isAuthorised = !!useSelector(selectCurrentUser)
     if (!isAuthorised) {

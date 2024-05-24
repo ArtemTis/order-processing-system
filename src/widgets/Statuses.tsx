@@ -5,6 +5,7 @@ import { companyApi } from '../entities/chats/companyApi';
 import { StyledModal } from './AddPatterns';
 import { Input, message } from 'antd';
 import { IStatusAdd } from '../entities/types';
+import { dealsApi } from '../entities/chats/dealsApi';
 
 enum STATUS_COLOR {
     '#d61a09cc',
@@ -20,8 +21,8 @@ const Statuses = () => {
 
     const [statusValues, setStatuseValue] = useState<IStatusAdd>();
 
-    const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = companyApi.useGetAllStatusesOfDealQuery();
-    const [addStatus, { isLoading: addStatusLoad, isError: addStatusErr }] = companyApi.useAddStatusesOfDealMutation();
+    const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = dealsApi.useGetAllStatusesOfDealQuery();
+    const [addStatus, { isLoading: addStatusLoad, isError: addStatusErr }] = dealsApi.useAddStatusesOfDealMutation();
     const [messageApi, contextHolder] = message.useMessage();
 
     const addStatusModal = () => {

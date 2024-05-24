@@ -69,7 +69,8 @@ const Messages: React.FC<IMessageProps> = ({ chatId, messages }) => {
             {
                 messages &&
                 // [...newMessages, ...responseMessages?.data].map((message, i) => {
-                    messages.map((message, i) => {
+                    messages.filter(mess => mess.chat_id === +(chatId ?? -1)).map((message, i) => {
+                    // messages.map((message, i) => {
                     // responseMessages?.data.map((message, index) => {
                     // const itsMe = message.from_user_id.name.trim().toLowerCase() === Role.ADMIN;
                     const itsMe = !!message.from_user_id?.name;

@@ -84,7 +84,8 @@ export interface IChatMessages {
         name: string
     } | null,
     id: number,
-    text: string
+    text: string,
+    chat_id: number
 }
 
 export interface IMessagesResponse {
@@ -118,7 +119,8 @@ export interface IMessageSendResponse {
             id: number,
             text: string,
             from_user_id: number | null,
-            created_at: string
+            created_at: string,
+            chat_id: number
         }
     ],
     links: {
@@ -237,7 +239,7 @@ export interface IDeal {
     closed_at: string
 }
 
-export interface IStatuseDeal{
+export interface IStatuseDeal {
     id: number,
     name: string,
     desc: string,
@@ -245,7 +247,17 @@ export interface IStatuseDeal{
     updated_at: string
 }
 
-export interface IStatusAdd{
+export interface IStatusAdd {
     name: string,
     desc: string
+}
+
+export type IDealSend = Pick<IDeal, 'desc' | 'amount'> & {
+    status_of_deal_id: number,
+    contact_id: number
+}
+
+export interface ISendMessage {
+    chatId: number,
+    text: string
 }
