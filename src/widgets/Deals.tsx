@@ -1,4 +1,4 @@
-import { Drawer } from 'antd'
+import { Button, Drawer } from 'antd'
 import React from 'react'
 import styled from 'styled-components'
 import { dealsApi } from '../entities/chats/dealsApi';
@@ -19,8 +19,10 @@ const Deals:React.FC<IProps> = ({open, setOpen, chatId}) => {
     setOpen(false);
   };
 
+
   return (
     <StyledDrawer onClose={onClose} open={open} closeIcon={null}>
+        <Button type='primary'>Добавить сделку</Button>
         <h2 className='drawer-title'>Список сделок:</h2>
         {
           deals?.data.map(deal => {
