@@ -33,6 +33,7 @@ const Channals = () => {
                     type: 'success',
                     content: 'Вы добавили группу ВК',
                 });
+                setVkValue({access_key: '', group_id: undefined});
             }else{
                 messageApi.open({
                     type: 'warning',

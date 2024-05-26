@@ -19,7 +19,7 @@ export const companyApi = createApi({
             return headers
         },
     }),
-    tagTypes: ['Messages', 'Type', 'Patterns', 'Statuses'],
+    tagTypes: ['Messages', 'Type', 'Patterns', 'Statuses', 'Deals'],
 
     endpoints: (build) => ({
         chatsByCompany: build.query<ICompanyChatsResponse, number>({

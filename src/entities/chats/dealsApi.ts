@@ -24,6 +24,7 @@ export const dealsApi = companyApi.injectEndpoints({
             url: `/chats/${id}/deals`,
             method: 'GET',
         }),
+        providesTags: ['Deals']
     }),
     addDeal: build.mutation<{ data: IDeal }, IDealSend>({
         query: (body) => ({
@@ -31,6 +32,7 @@ export const dealsApi = companyApi.injectEndpoints({
             method: 'POST',
             body
         }),
+        invalidatesTags: ['Deals']
     }),
     closeDeal: build.mutation<{ data: IDeal }, ISendMessage>({
         query: ({ chatId, text }) => ({
