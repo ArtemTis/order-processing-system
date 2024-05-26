@@ -8,6 +8,8 @@ import TextArea from 'antd/es/input/TextArea';
 import { StyledModal } from './AddPatterns';
 import { useSelector } from 'react-redux';
 import { selectAllChats } from '../entities/chats/selectors';
+import edit from '../shared/assets/edit.svg'
+import { IDeal } from '../entities/types';
 
 interface IProps {
   open: boolean,
@@ -34,7 +36,7 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
     setOpen(false);
   };
 
-  const addPatternModal = () => {
+  const addDealModal = () => {
     setIsModalOpen(true);
   }
   const [messageApi, contextHolder] = message.useMessage();
@@ -81,16 +83,17 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
 
   return (
     <StyledDrawer onClose={onClose} open={open} closeIcon={null}>
-      <StyledButton type='primary' onClick={addPatternModal}>Добавить сделку</StyledButton>
+      <StyledButton type='primary' onClick={addDealModal}>Добавить сделку</StyledButton>
       <h2 className='drawer-title'>Список сделок:</h2>
       {
         deals?.data.map(deal => {
           const date = moment(deal.status_of_deal_id.created_at).format("hh:mm / D.MM")
           return (
             <StyledDeal key={deal.id}>
-
               <h2> <span>Название: </span>{deal.desc}</h2>
-              <h3> <span>Стоимость: </span> {deal.amount / 100}</h3>
+              <h3> <span>Стоимость: </span> {deal.amount / 100} руб
+                <img src={edit} alt="edit" onClick={addDealModal} />
+              </h3>
               <h4> <span>Статус: </span> {deal.status_of_deal_id.name}</h4>
               <p>{deal.status_of_deal_id.desc}</p>
               <p>{date}</p>
@@ -140,12 +143,23 @@ const StyledDeal = styled.div`
   flex-direction: column;
   gap: 5px;
 
+  img{
+    cursor: pointer;
+    width: 20px;
+    margin-left: 10px;
+  }
   h2{
     font-size: 20px;
+    margin-right: 20px;
   }
   h3{
     font-size: 20px;
     /* font-weight: 500; */
+    display: flex;
+    align-items: center;
+    span{
+      margin-right: 5px;
+    }
   }
   h4{
     font-size: 18px;
