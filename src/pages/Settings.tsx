@@ -57,7 +57,7 @@ const Settings = () => {
 
 export default Settings;
 
-const StyledWrapper = styled.div`
+export const StyledWrapper = styled.div`
     padding: 20px 0 0 20px;
     background-color: #f5f5f5;
     height: 100vh;

@@ -8,10 +8,10 @@ import book from '../assets/sider/Book.svg'
 import teacher from '../assets/sider/Teacher.svg'
 import profile from '../assets/sider/Profile.svg'
 import logout from '../assets/sider/Logout.svg'
-import { ACCOUNT_PATH, CHATS_PATH, LOGIN_PATH, PROFILE_PATH, SETTINGS_PATH } from '../shared/config/routerConfig/routeConstants';
+import { ACCOUNT_PATH, CHATS_PATH, DEALS_PATH, LOGIN_PATH, PROFILE_PATH, SETTINGS_PATH, STATISTICS_PATH } from '../shared/config/routerConfig/routeConstants';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentUser } from '../entities/auth/selectors';
-import { CommentOutlined, MessageOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { AreaChartOutlined, CommentOutlined, FileDoneOutlined, MessageOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { userApi } from '../entities/auth/userApi';
 import { setCredentials } from '../entities/auth/authSlice';
 
@@ -56,7 +56,7 @@ const AppSider: React.FC = () => {
                 /> */}
                 <MenuStyle
                     mode="inline"
-                    defaultSelectedKeys={['3']}
+                    defaultSelectedKeys={['5']}
                     items={[
                         {
                             key: '1',
@@ -70,6 +70,16 @@ const AppSider: React.FC = () => {
                         },
                         {
                             key: '3',
+                            icon: <FileDoneOutlined />,
+                            label: <Link to={DEALS_PATH}>Сделки</Link>,
+                        },
+                        {
+                            key: '4',
+                            icon: <AreaChartOutlined />,
+                            label: <Link to={STATISTICS_PATH}>Статистика</Link>,
+                        },
+                        {
+                            key: '5',
                             icon: <UserOutlined />,
                             // label: <Link to={ACCOUNT_PATH}>Личный кабинет</Link>,
                             label: <Link to={PROFILE_PATH}>Личный кабинет</Link>,     

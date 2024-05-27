@@ -1,5 +1,5 @@
 import { createBrowserRouter, Route, createRoutesFromElements, Navigate } from "react-router-dom"
-import { ACCOUNT_PATH, CHATS_PATH, CHAT_PATH, HOME_PATH, LOGIN_PATH, PROFILE_PATH, REGISTER_PATH, SETTINGS_PATH } from "./routeConstants";
+import { ACCOUNT_PATH, CHATS_PATH, CHAT_PATH, DEALS_PATH, HOME_PATH, LOGIN_PATH, PROFILE_PATH, REGISTER_PATH, SETTINGS_PATH, STATISTICS_PATH } from "./routeConstants";
 import AuthGuard from "../../guards/AuthGuard";
 import AppSider from "../../../widgets/Sider";
 import Main from "../../../pages/Main";
@@ -12,6 +12,8 @@ import Settings from "../../../pages/Settings";
 import Chat from "../../../pages/Chat";
 import Chats from "../../../pages/Chats";
 import ChatNew from "../../../pages/ChatNew";
+import Statistics from "../../../pages/Statistics";
+import DealsPage from "../../../pages/Deals";
 
 
 export const router = createBrowserRouter(
@@ -19,6 +21,9 @@ export const router = createBrowserRouter(
     <>
       <Route path={HOME_PATH} element={<AppSider />} >
         <Route path={CHATS_PATH} element={<Chats />} />
+
+        <Route path={DEALS_PATH} element={<DealsPage />} />
+        <Route path={STATISTICS_PATH} element={<Statistics />} />
 
         {/* <Route index element={<Navigate to={CHATS_PATH} />} /> */}
         <Route index element={<AuthGuard element={<Navigate to={CHATS_PATH} replace />} />} />

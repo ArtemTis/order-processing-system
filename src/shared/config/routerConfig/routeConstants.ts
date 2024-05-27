@@ -8,3 +8,5 @@ export const PROFILE_PATH = 'profile';
 export const CHAT_PATH = 'chat';
 export const CHATS_PATH = 'chats';
 export const SETTINGS_PATH = 'settings';
+export const DEALS_PATH = 'deals';
+export const STATISTICS_PATH = 'statistics';

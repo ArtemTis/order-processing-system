@@ -1,5 +1,5 @@
 import { Button, Drawer, Input, Select, message } from 'antd'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { dealsApi } from '../entities/chats/dealsApi';
 import moment from 'moment';
@@ -24,6 +24,7 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
   const [titleDeal, setTitleDeal] = useState<string>('');
   const [amountDeal, setAmountDeal] = useState<number>();
   const [selectedStatus, setSelectedStatus] = useState<string>();
+  const [selectedfilterStatus, setSelectedFilterStatus] = useState<string>();
 
   const { data: deals, isLoading: isLoadingDeals, isError: isErrorDeals } = dealsApi.useGetDealsByChatQuery(+(chatId ?? -1));
 
@@ -80,26 +81,65 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
     setSelectedStatus(value);
   };
 
+  const [dealsList, setDealsList] = useState<IDeal[]>();
+
+  const handleChangeFilter = (value: string) => {
+    setSelectedFilterStatus(value);
+    // console.log(dealsList);
+    // console.log(selectedfilterStatus);
+    console.log(value);
+
+    if (value === 'all') {
+      setDealsList(deals?.data);
+    } else {
+      setDealsList(deals?.data.filter(item => `${item.status_of_deal_id.id}` === `${value}`))
+    }
+
+  };
+
+  const statusFilter = [{ value: 'all', label: 'Все статусы' },
+  ...(resStatus?.data ?? []).map(status => {
+    return { value: status.id, label: status.name }
+  })]
+
+
+  useEffect(() => {
+    setDealsList(deals?.data)
+  }, [deals?.data])
 
   return (
     <StyledDrawer onClose={onClose} open={open} closeIcon={null}>
       <StyledButton type='primary' onClick={addDealModal}>Добавить сделку</StyledButton>
-      <h2 className='drawer-title'>Список сделок:</h2>
+      <div className='header-wripper'>
+        <h2 className='drawer-title'>Список сделок:</h2>
+        <Select
+          defaultValue='all'
+          style={{ width: 150 }}
+          onChange={handleChangeFilter}
+          placeholder='Статус'
+          options={
+            statusFilter
+          }
+        />
+      </div>
       {
-        deals?.data.map(deal => {
-          const date = moment(deal.status_of_deal_id.created_at).format("hh:mm / D.MM")
-          return (
-            <StyledDeal key={deal.id}>
-              <h2> <span>Название: </span>{deal.desc}</h2>
-              <h3> <span>Стоимость: </span> {deal.amount / 100} руб
-                <img src={edit} alt="edit" onClick={addDealModal} />
-              </h3>
-              <h4> <span>Статус: </span> {deal.status_of_deal_id.name}</h4>
-              <p>{deal.status_of_deal_id.desc}</p>
-              <p>{date}</p>
-            </StyledDeal>
-          )
-        })
+        deals?.data && deals?.data.length > 0 ?
+          // deals?.data.filter(item => `${item.status_of_deal_id.id}` === selectedfilterStatus).map(deal => {
+          dealsList?.map(deal => {
+            const date = moment(deal.status_of_deal_id.created_at).format("hh:mm / D.MM")
+            return (
+              <StyledDeal key={deal.id}>
+                <h2> <span>Название: </span>{deal.desc}</h2>
+                <h3> <span>Стоимость: </span> {deal.amount / 100} руб </h3>
+                <h4> <span>Статус: </span> {deal.status_of_deal_id.name}
+                  <img src={edit} alt="edit" onClick={addDealModal} />
+                </h4>
+                <p>{deal.status_of_deal_id.desc}</p>
+                <p>{date}</p>
+              </StyledDeal>
+            )
+          })
+          : <p>Сделок пока нет</p>
       }
 
       <StyledModal title="Добавить сделку" open={isModalOpen} onOk={handleOk}
@@ -113,7 +153,7 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
 
         <h3>Статус сделки</h3>
         <Select
-          defaultValue='1'
+          defaultValue={resStatus?.data[0].name}
           style={{ width: 220 }}
           onChange={handleChange}
           placeholder='Статус'
@@ -182,6 +222,12 @@ const StyledDrawer = styled(Drawer)`
   
   .ant-drawer-body{
     scrollbar-width: thin;
+  }
+
+  .header-wripper{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 `
 
