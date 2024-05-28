@@ -27,15 +27,17 @@ export type IRegister = ILogin & {
     password_confirmation: string
 }
 
+export interface IClient {
+    id: number,
+    created_at: string
+    name: string
+    photo_url: string | null
+}
+
 export interface IChatSnippet {
     id: number,
     name: number,
-    client_contact: {
-        id: number,
-        created_at: string
-        name: string
-        photo_url: string | null
-    }
+    client_contact: IClient,
     channel: {
         id: number,
         name: string,
@@ -237,6 +239,10 @@ export interface IDeal {
     },
     created_at: string,
     closed_at: string
+}
+
+export type IFullDeal = IDeal & {
+    contact_id: IClient
 }
 
 export interface IStatuseDeal {

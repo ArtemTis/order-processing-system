@@ -1,4 +1,4 @@
-import { IDeal, IDealSend, IMessageSendResponse, IMessagesResponse, ISendMessage, IStatusAdd, IStatuseDeal } from "../types";
+import { IDeal, IDealSend, IFullDeal, IMessageSendResponse, IMessagesResponse, ISendMessage, IStatusAdd, IStatuseDeal } from "../types";
 import { companyApi } from "./companyApi";
 
 
@@ -45,12 +45,20 @@ export const dealsApi = companyApi.injectEndpoints({
         invalidatesTags: ['Deals']
     }),
 
-    getAllDeals: build.query<{ data: IDeal[] }, void>({
+    getAllDeals: build.query<{ data: IFullDeal[] }, void>({
         query: () => ({
             url: `/deals`,
             method: 'GET',
         }),
         providesTags: ['Deals']
+    }),
+    updateDeal:  build.mutation<{ data: IDeal }, {dealId: number, body: Omit<IDealSend,'contact_id'> }>({
+        query: ({ dealId, body }) => ({
+            url: `/deals/${dealId}`,
+            method: 'POST',
+            body
+        }),
+        invalidatesTags: ['Deals']
     }),
   }),
 })

@@ -3,7 +3,8 @@ import { messagesApi } from '../entities/chats/messagesApi';
 import { StyledButton } from '../pages/Settings';
 import { StyledModal } from './AddPatterns';
 import { IChatSnippet } from '../entities/types';
-import { Select, message } from 'antd';
+import { Avatar, Select, message } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
 
 interface IProps {
     chats: IChatSnippet[]
@@ -15,23 +16,25 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const [messageApi, contextHolder] = message.useMessage();
     const [mailingText, setMailingText] = useState<string>();
+    const [clientsId, setClientsId] = useState<number[]>([]);
 
+    const [messageApi, contextHolder] = message.useMessage();
 
     const handleOk = () => {
         try {
-            if (mailingText) {
+            if (mailingText && clientsId.length > 0) {
                 setIsModalOpen(false);
                 sendMailing({
-                    chats_id: [],
-                    text: ''
+                    chats_id: clientsId,
+                    text: mailingText
                 }).unwrap();
                 messageApi.open({
                     type: 'success',
-                    content: 'Вы добавили новую сделку',
+                    content: 'Вы отправили рассылку',
                 });
                 setMailingText('');
+                setClientsId([]);
             } else {
                 messageApi.open({
                     type: 'warning',
@@ -40,6 +43,10 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
             }
         } catch (error) {
             console.log(error);
+            messageApi.open({
+                type: 'error',
+                content: 'Ошибка отправки!',
+            });
         }
     };
 
@@ -52,20 +59,18 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
         setIsModalOpen(true);
     }
 
-    const handleChangeSelect = (value: string[]) => {
-        console.log(`selected ${value}`);
-      };
+    const handleChangeSelect = (value: number[]) => {
+        setClientsId(value)
+    };
 
     return (
-        <div>
+        <>
             <StyledButton type='primary' onClick={openModal}>Рассылка</StyledButton>
 
-            <StyledModal title="Добавить сделку" open={isModalOpen} onOk={handleOk}
+            <StyledModal title="Отправить рассылку" open={isModalOpen} onOk={handleOk}
                 okText={'Сохранить'} cancelText={'Закрыть'} onCancel={handleCancel}>
-                <p>Введите текст новой сделки</p>
 
-
-                <h3>Статус сделки</h3>
+                <h3>Список получателей</h3>
                 <Select
                     mode="multiple"
                     allowClear
@@ -75,14 +80,34 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
                     options={
                         chats.map(chat => {
                             return {
-                                label: chat.name,
+                                label: <>
+                                  <Avatar 
+                                  size={20}
+                                   icon={<img src={chat.client_contact.photo_url ?? ''}
+                                    alt="User avatar" />} 
+                                    style={{marginRight: '7px'}}
+                                    />
+                                {chat.name}
+                                </>,
                                 value: chat.id
                             }
                         })
                     }
                 />
+                <p>Введите текст рассылки</p>
+
+                <TextArea
+                    value={mailingText}
+                    onChange={(e) => setMailingText(e.target.value)}
+                    placeholder="Текст шаблона"
+                    autoSize={{
+                        minRows: 3,
+                        maxRows: 5,
+                    }}
+                />
             </StyledModal>
-        </div>
+            {contextHolder}
+        </>
     )
 }
 

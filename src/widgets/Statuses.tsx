@@ -7,10 +7,12 @@ import { Input, message } from 'antd';
 import { IStatusAdd } from '../entities/types';
 import { dealsApi } from '../entities/chats/dealsApi';
 
-enum STATUS_COLOR {
+export enum STATUS_COLOR {
     '#d61a09cc',
     '#ff7b00cc',
     '#07b11dcc',
+    '#8f07b1cc',
+    '#072fb1cc',
 }
 
 const Statuses = () => {

@@ -9,7 +9,7 @@ import { StyledModal } from './AddPatterns';
 import { useSelector } from 'react-redux';
 import { selectAllChats } from '../entities/chats/selectors';
 import edit from '../shared/assets/edit.svg'
-import { IDeal } from '../entities/types';
+import { IDeal, IDealSend } from '../entities/types';
 
 interface IProps {
   open: boolean,
@@ -24,11 +24,13 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
   const [titleDeal, setTitleDeal] = useState<string>('');
   const [amountDeal, setAmountDeal] = useState<number>();
   const [selectedStatus, setSelectedStatus] = useState<string>();
-  const [selectedfilterStatus, setSelectedFilterStatus] = useState<string>();
+  const [editableDeal, setEditableDeal] = useState<IDeal>();
 
   const { data: deals, isLoading: isLoadingDeals, isError: isErrorDeals } = dealsApi.useGetDealsByChatQuery(+(chatId ?? -1));
 
   const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = dealsApi.useGetAllStatusesOfDealQuery();
+
+  const [updateDeal] = dealsApi.useUpdateDealMutation();
 
   const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
@@ -70,11 +72,49 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
     }
   };
 
+  const handleUpdate = () => {
+    try {
+      if (titleDeal && amountDeal && selectedStatus) {
+        console.log(editableDeal);
+        setIsModalOpen(false);
+        updateDeal({
+          dealId: editableDeal?.id ?? -1,
+          body: {
+            desc: titleDeal,
+            amount: amountDeal * 100 ?? 0,
+            status_of_deal_id: +(selectedStatus ?? -1)
+          }
+        }).unwrap();
+        messageApi.open({
+          type: 'success',
+          content: 'Вы изменили сделку',
+        });
+        setTitleDeal('');
+        setAmountDeal(undefined);
+        setSelectedStatus('');
+        setEditableDeal(undefined);
+      } else {
+        messageApi.open({
+          type: 'warning',
+          content: 'Введите нужную информацию!',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const updateDealModal = (deal: IDeal) => {
+    setIsModalOpen(true);
+    setEditableDeal(deal);
+  }
+
   const handleCancel = () => {
     setIsModalOpen(false);
     setTitleDeal('');
     setAmountDeal(undefined);
     setSelectedStatus('');
+    setEditableDeal(undefined);
   };
 
   const handleChange = (value: string) => {
@@ -84,10 +124,6 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
   const [dealsList, setDealsList] = useState<IDeal[]>();
 
   const handleChangeFilter = (value: string) => {
-    setSelectedFilterStatus(value);
-    // console.log(dealsList);
-    // console.log(selectedfilterStatus);
-    console.log(value);
 
     if (value === 'all') {
       setDealsList(deals?.data);
@@ -132,7 +168,7 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
                 <h2> <span>Название: </span>{deal.desc}</h2>
                 <h3> <span>Стоимость: </span> {deal.amount / 100} руб </h3>
                 <h4> <span>Статус: </span> {deal.status_of_deal_id.name}
-                  <img src={edit} alt="edit" onClick={addDealModal} />
+                  <img src={edit} alt="edit" onClick={() => updateDealModal(deal)} />
                 </h4>
                 <p>{deal.status_of_deal_id.desc}</p>
                 <p>{date}</p>
@@ -142,18 +178,18 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
           : <p>Сделок пока нет</p>
       }
 
-      <StyledModal title="Добавить сделку" open={isModalOpen} onOk={handleOk}
+      <StyledModal title="Добавить сделку" open={isModalOpen} onOk={editableDeal ? handleUpdate : handleOk}
         okText={'Сохранить'} cancelText={'Закрыть'} onCancel={handleCancel}>
-        <p>Введите текст новой сделки</p>
+        <p>Введите текст сделки</p>
 
         <h3>Название сделки</h3>
-        <StyledInput placeholder='Название' value={titleDeal} onChange={e => setTitleDeal(e.target.value)} />
+        <StyledInput placeholder='Название' value={titleDeal || editableDeal?.desc} onChange={e => setTitleDeal(e.target.value)} />
         <h3>Стоимость сделки</h3>
-        <StyledInput placeholder='Стоимость' type='number' value={amountDeal} onChange={e => setAmountDeal(+e.target.value)} />
+        <StyledInput placeholder='Стоимость' type='number' value={amountDeal ?? editableDeal?.amount} onChange={e => setAmountDeal(+e.target.value)} />
 
         <h3>Статус сделки</h3>
         <Select
-          defaultValue={resStatus?.data[0].name}
+          defaultValue={resStatus?.data[editableDeal?.status_of_deal_id.id ?? 0].name}
           style={{ width: 220 }}
           onChange={handleChange}
           placeholder='Статус'

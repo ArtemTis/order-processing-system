@@ -9,7 +9,7 @@ export const messagesApi = companyApi.injectEndpoints({
             url: `/chats/${chatId}/messages`,
             method: 'GET'
         }),
-        // providesTags: ['Messages']
+        providesTags: ['Messages']
     }),
     sendMessage: build.mutation<IMessageSendResponse, ISendMessage>({
         query: ({ chatId, text }) => ({
@@ -28,7 +28,7 @@ export const messagesApi = companyApi.injectEndpoints({
             method: 'POST',
             body
         }),
-        // providesTags: ['Messages']
+        invalidatesTags: ['Messages']
     }),
   }),
 })

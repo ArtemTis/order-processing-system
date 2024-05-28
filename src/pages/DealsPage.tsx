@@ -1,8 +1,10 @@
 import { Space, Table, Tag } from 'antd';
-import React from 'react'
+import React, { Fragment } from 'react'
 import { StyledWrapper } from './Settings';
 import { dealsApi } from '../entities/chats/dealsApi';
 import moment from 'moment';
+import { IClient, IStatuseDeal } from '../entities/types';
+import { STATUS_COLOR } from '../widgets/Statuses';
 
 const { Column, ColumnGroup } = Table;
 
@@ -18,45 +20,15 @@ interface DataType {
 
 const DealsPage = () => {
 
-    const data: DataType[] = [
-        {
-            key: '1',
-            firstName: 'John',
-            lastName: 'Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            tags: ['nice', 'developer'],
-        },
-        {
-            key: '2',
-            firstName: 'Jim',
-            lastName: 'Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
-            tags: ['loser'],
-        },
-        {
-            key: '3',
-            firstName: 'Joe',
-            lastName: 'Black',
-            age: 32,
-            address: 'Sydney No. 1 Lake Park',
-            tags: ['cool', 'teacher'],
-        },
-    ];
-
     const { data: dealsResponse, isLoading: dealsLoading, isError: dealsError } = dealsApi.useGetAllDealsQuery();
 
     return (
         <StyledWrapper>
             <h1>Список заказов</h1>
-
-
             {
                 dealsLoading &&
                 <p>Загрузка...</p>
             }
-
             {
                 dealsResponse &&
 
@@ -65,10 +37,34 @@ const DealsPage = () => {
                     <Column title="Имя" dataIndex="firstName" key="firstName" />
                     <Column title="Last Name" dataIndex="lastName" key="lastName" />
                 </ColumnGroup> */}
-                    <Column title="Имя" dataIndex="firstName" key="firstName" />
-                    <Column title="Почта" dataIndex="age" key="age" />
+                    {/* <Column title="Почта" dataIndex="age" key="age" /> */}
+                    <Column
+                        title="Имя"
+                        dataIndex="contact_id"
+                        key="contact_id"
+                        render={(contact: IClient) => {
+
+                            return (
+                                <Fragment key={contact.id}>
+                                    {contact.name}
+                                </Fragment>
+                            )
+                        }}
+                    />
                     <Column title="Название" dataIndex="desc" key="desc" />
                     <Column title="Сумма" dataIndex="amount" key="amount" />
+                    <Column
+                        title="Статус"
+                        dataIndex="status_of_deal_id"
+                        key="status_of_deal_id"
+                        render={(status: IStatuseDeal) => {
+                            return (
+                                <Tag color={STATUS_COLOR[status.id] ?? 'geekblue'} key={status.id}>
+                                    {status.name}
+                                </Tag>
+                            );
+                        }}
+                    />
                     <Column
                         title="Создана"
                         dataIndex="created_at"
@@ -76,13 +72,13 @@ const DealsPage = () => {
                         render={(time: string) => {
                             const formatTime = moment(time).format("hh:mm | D MMM YYYY")
                             return (
-                                <>
+                                <Fragment key={time}>
                                     {
                                         time &&
-                                        <>  {formatTime}</>
+                                        <>{formatTime}</>
 
                                     }
-                                </>
+                                </Fragment>
                             )
                         }}
                     />
@@ -93,37 +89,18 @@ const DealsPage = () => {
                         render={(time: string) => {
                             const formatTime = moment(time).format("hh:mm | D MM")
                             return (
-                                <>
+                                <Fragment key={time}>
                                     {
                                         time ?
                                             <> formatTime </>
                                             :
                                             <>Не закрыто</>
                                     }
-                                </>
+                                </Fragment>
                             )
                         }}
                     />
-                    {/* <Column
-                        title="Статус"
-                        dataIndex="tags"
-                        key="tags"
-                        render={(tags: string[]) => (
-                            <>
-                                {tags.map((tag) => {
-                                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                                    if (tag === 'loser') {
-                                        color = 'volcano';
-                                    }
-                                    return (
-                                        <Tag color={color} key={tag}>
-                                            {tag.toUpperCase()}
-                                        </Tag>
-                                    );
-                                })}
-                            </>
-                        )}
-                    /> */}
+
                     {/* <Column
                     title="Action"
                     key="action"
