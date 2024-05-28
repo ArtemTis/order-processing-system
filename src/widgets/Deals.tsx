@@ -183,6 +183,10 @@ const StyledDeal = styled.div`
   flex-direction: column;
   gap: 5px;
 
+  .ant-select-selector{
+    border-radius: 7px;
+  }
+
   img{
     cursor: pointer;
     width: 20px;

@@ -13,7 +13,7 @@ import Chat from "../../../pages/Chat";
 import Chats from "../../../pages/Chats";
 import ChatNew from "../../../pages/ChatNew";
 import Statistics from "../../../pages/Statistics";
-import DealsPage from "../../../pages/Deals";
+import DealsPage from "../../../pages/DealsPage";
 
 
 export const router = createBrowserRouter(

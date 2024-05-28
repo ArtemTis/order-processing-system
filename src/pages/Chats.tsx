@@ -9,6 +9,7 @@ import { setChats } from '../entities/chats/chatSlice'
 import useEcho from '../shared/config/hooks/useEcho'
 import { IChatSnippet } from '../entities/types'
 import { selectCurrentUser } from '../entities/auth/selectors'
+import Mailing from '../widgets/Mailing'
 
 const Chats = () => {
 
@@ -17,6 +18,7 @@ const Chats = () => {
   const { echo } = useEcho();
 
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (response?.data) {
@@ -44,9 +46,12 @@ const Chats = () => {
     return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
   }
 
+
+ 
   return (
     <StyledChatsWrapper>
       <StyledChats>
+        <Mailing chats={response?.data ?? []}/>
         {
           response?.data.map((item, index) =>
             <Link to={`${CHAT_PATH}/${item.id}`} key={item.id}>

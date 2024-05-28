@@ -23,7 +23,7 @@ import send from '../shared/assets/send.svg'
 import { IChatMessages } from '../entities/types'
 import { messagesApi } from '../entities/chats/messagesApi'
 import { dealsApi } from '../entities/chats/dealsApi'
-import Deals from '../widgets/DealsPage'
+import Deals from '../widgets/Deals'
 import ChatPatterns from '../widgets/ChatPatterns'
 
 enum Role {

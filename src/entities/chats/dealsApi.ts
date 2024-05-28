@@ -42,6 +42,15 @@ export const dealsApi = companyApi.injectEndpoints({
                 text
             }
         }),
+        invalidatesTags: ['Deals']
+    }),
+
+    getAllDeals: build.query<{ data: IDeal[] }, void>({
+        query: () => ({
+            url: `/deals`,
+            method: 'GET',
+        }),
+        providesTags: ['Deals']
     }),
   }),
 })

@@ -261,3 +261,8 @@ export interface ISendMessage {
     chatId: number,
     text: string
 }
+
+export interface ISendMailing {
+    chats_id: number[],
+    text: string
+}
