@@ -272,3 +272,8 @@ export interface ISendMailing {
     chats_id: number[],
     text: string
 }
+
+export interface IGetAmountMess {
+    date_from:  string,
+    date_to: string
+}
