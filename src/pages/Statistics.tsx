@@ -20,23 +20,23 @@ const Statistics = () => {
 
     const formatTime = moment().format("DD/MM/YYYY");
 
-    // const dates: IGetAmountMess = {
-    //     date_from: `${moment().subtract(7, 'days').format("DD/MM/YYYY")}`,
-    //     date_to:  `${moment().format("DD/MM/YYYY")}`
-    // }
     const dates: IGetAmountMess = {
-        date_from: "25/05/2024",
-        date_to: "29/05/2024"
+        date_from: `${moment().subtract(7, 'days').format("DD/MM/YYYY")}`,
+        date_to:  `${moment().format("DD/MM/YYYY")}`
     }
-    console.log(dates);
+    // const dates: IGetAmountMess = {
+    //     date_from: "25/05/2024",
+    //     date_to: "29/05/2024"
+    // }
 
 
-    const { data: amountData, isLoading: amountLoad, isError: amountError } = statsApi.useAmountMessQuery(dates, {refetchOnMountOrArgChange: true});
-    const { data: dealsData, isLoading: dealsLoad, isError: dealsError } = statsApi.useDealsByDatesQuery(dates);
+    const [sendAmount, { data: amountData, isLoading: amountLoad, isError: amountError }] = statsApi.useAmountMessMutation();
+    const [sendDeals, { data: dealsData, isLoading: dealsLoad, isError: dealsError }] = statsApi.useDealsByDatesMutation();
 
-    console.log(amountData);
-    console.log(dealsData);
-
+    useEffect(() => {
+        sendAmount(dates)
+        sendDeals(dates)
+    }, [])
 
     return (
         <StyledWrapper>

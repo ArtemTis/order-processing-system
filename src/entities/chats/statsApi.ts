@@ -4,17 +4,17 @@ import { companyApi } from "./companyApi";
 
 export const statsApi = companyApi.injectEndpoints({
   endpoints: (build) => ({
-    amountMess: build.query<number, IGetAmountMess>({
+    amountMess: build.mutation<number, IGetAmountMess>({
         query: (body) => ({
             url: `/stats/amount-messages-by-dates`,
-            method: 'GET',
+            method: 'POST',
             body
         }),
     }),
-    dealsByDates: build.query<number, IGetAmountMess>({
+    dealsByDates: build.mutation<number, IGetAmountMess>({
         query: (body) => ({
             url: `/stats/count-deals-by-dates`,
-            method: 'GET',
+            method: 'POST',
             body
         }),
     }),
