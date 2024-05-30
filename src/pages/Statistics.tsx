@@ -1,4 +1,4 @@
-import { Statistic } from 'antd'
+import { Col, Row, Statistic } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { StyledWrapper } from './Settings'
 import { companyApi } from '../entities/chats/companyApi';
@@ -6,6 +6,7 @@ import { messagesApi } from '../entities/chats/messagesApi';
 import { statsApi } from '../entities/chats/statsApi';
 import { IGetAmountMess } from '../entities/types';
 import moment from 'moment';
+import Chart from '../widgets/Chart';
 
 const Statistics = () => {
 
@@ -22,7 +23,7 @@ const Statistics = () => {
 
     const dates: IGetAmountMess = {
         date_from: `${moment().subtract(7, 'days').format("DD/MM/YYYY")}`,
-        date_to:  `${moment().format("DD/MM/YYYY")}`
+        date_to: `${moment().format("DD/MM/YYYY")}`
     }
     // const dates: IGetAmountMess = {
     //     date_from: "25/05/2024",
@@ -41,10 +42,20 @@ const Statistics = () => {
     return (
         <StyledWrapper>
             <h1>Статистика</h1>
+            <Row gutter={16}>
+                <Col span={8}>
+                    <Statistic title="Активные чаты" value={chatsResponse?.data.length} />
+                </Col>
+                <Col span={8}>
+                    <Statistic title="Колличество сообщений за неделю" value={amountData} />
+                </Col>
+                <Col span={8}>
+                    <Statistic title="Колличество сделок за неделю" value={dealsData} />
+                </Col>
+            </Row>
 
-            <Statistic title="Активные чаты" value={chatsResponse?.data.length} />
-            <Statistic title="Колличество сообщений за неделю" value={amountData} />
-            <Statistic title="Колличество сделок за неделю" value={dealsData} />
+
+            <Chart />
         </StyledWrapper>
     )
 }

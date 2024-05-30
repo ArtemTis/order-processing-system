@@ -165,10 +165,12 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
             const date = moment(deal.status_of_deal_id.created_at).format("hh:mm / D.MM")
             return (
               <StyledDeal key={deal.id}>
-                <h2> <span>Название: </span>{deal.desc}</h2>
+                <h2>
+                  <span>Название: </span>{deal.desc}
+                  <img src={edit} alt="edit" onClick={() => updateDealModal(deal)} />
+                </h2>
                 <h3> <span>Стоимость: </span> {deal.amount / 100} руб </h3>
                 <h4> <span>Статус: </span> {deal.status_of_deal_id.name}
-                  <img src={edit} alt="edit" onClick={() => updateDealModal(deal)} />
                 </h4>
                 <p>{deal.status_of_deal_id.desc}</p>
                 <p>{date}</p>
@@ -226,11 +228,18 @@ const StyledDeal = styled.div`
   img{
     cursor: pointer;
     width: 20px;
-    margin-left: 10px;
+    /* margin-left: 10px; */
   }
   h2{
     font-size: 20px;
     margin-right: 20px;
+    position: relative;
+
+    img{
+      position: absolute;
+      top: 2px;
+      right: -18px;
+    }
   }
   h3{
     font-size: 20px;

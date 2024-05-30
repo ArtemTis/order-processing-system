@@ -75,7 +75,7 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
                     mode="multiple"
                     allowClear
                     style={{ width: '100%' }}
-                    placeholder="Please select"
+                    placeholder="Выберете клиентов"
                     onChange={handleChangeSelect}
                     options={
                         chats.map(chat => {
