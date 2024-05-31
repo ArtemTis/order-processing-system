@@ -7,6 +7,7 @@ import { statsApi } from '../entities/chats/statsApi';
 import { IGetAmountMess } from '../entities/types';
 import moment from 'moment';
 import Chart from '../widgets/Chart';
+import styled from 'styled-components';
 
 const Statistics = () => {
 
@@ -42,17 +43,11 @@ const Statistics = () => {
     return (
         <StyledWrapper>
             <h1>Статистика</h1>
-            <Row gutter={16}>
-                <Col span={8}>
-                    <Statistic title="Активные чаты" value={chatsResponse?.data.length} />
-                </Col>
-                <Col span={8}>
-                    <Statistic title="Колличество сообщений за неделю" value={amountData} />
-                </Col>
-                <Col span={8}>
-                    <Statistic title="Колличество сделок за неделю" value={dealsData} />
-                </Col>
-            </Row>
+            <StatWrap>
+                <Statistic title="Активные чаты" value={chatsResponse?.data.length} />
+                <Statistic title="Колличество сообщений за неделю" value={amountData} />
+                <Statistic title="Колличество сделок за неделю" value={dealsData} />
+            </StatWrap>
 
 
             <Chart />
@@ -61,3 +56,8 @@ const Statistics = () => {
 }
 
 export default Statistics
+
+const StatWrap = styled.div`
+    display: flex;
+    justify-content: space-around;
+`

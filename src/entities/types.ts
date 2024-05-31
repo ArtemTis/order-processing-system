@@ -277,3 +277,8 @@ export interface IGetAmountMess {
     date_from:  string,
     date_to: string
 }
+
+export interface IChartResponse  {
+    date: string,
+    count: number,
+}
