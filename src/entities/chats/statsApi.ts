@@ -18,14 +18,14 @@ export const statsApi = companyApi.injectEndpoints({
             body
         }),
     }),
-    messagesChart: build.mutation<IChartResponse, IGetAmountMess>({
+    messagesChart: build.mutation<IChartResponse[], IGetAmountMess>({
         query: (body) => ({
             url: `/stats/count-messages-by-dates-group-by-day`,
             method: 'POST',
             body
         }),
     }),
-    dealsChart: build.mutation<IChartResponse, IGetAmountMess>({
+    dealsChart: build.mutation<IChartResponse[], IGetAmountMess>({
         query: (body) => ({
             url: `/stats/count-deals-by-dates-group-by-day`,
             method: 'POST',

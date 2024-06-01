@@ -1,30 +1,9 @@
-import React from "react";
-// import {
-//     Chart as ChartJS,
-//     CategoryScale,
-//     LinearScale,
-//     PointElement,
-//     LineElement,
-//     Title,
-//     Tooltip,
-//     Legend,
-// } from 'chart.js';
-// import { Line } from 'react-chartjs-2';
-import styled from "styled-components";
+import moment from "moment";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-
-//   import faker from 'faker';
-
-
-// ChartJS.register(
-//     CategoryScale,
-//     LinearScale,
-//     PointElement,
-//     LineElement,
-//     Title,
-//     Tooltip,
-//     Legend
-// );
+import { IGetAmountMess } from "../entities/types";
+import { statsApi } from "../entities/chats/statsApi";
+import { useEffect } from "react";
+import styled from "styled-components";
 
 export const options = {
     responsive: true,
@@ -61,7 +40,39 @@ export const dataL = {
 
 const Chart = () => {
 
+    const dates: IGetAmountMess = {
+        date_from: `${moment().subtract(7, 'days').format("DD/MM/YYYY")}`,
+        date_to: `${moment().format("DD/MM/YYYY")}`
+    }
+
+    const [getMessages, { data: messChartData, isLoading: messChartLoad, isError: messChartError }] = statsApi.useMessagesChartMutation();
+    const [getDeals, { data: dealsChartData, isLoading: dealsChartLoad, isError: dealsChartError }] = statsApi.useDealsChartMutation();
+
+    useEffect(() => {
+        getMessages(dates)
+        getDeals(dates)
+    }, [])
+
+    const arr3 = messChartData?.map((item, i) => {
+
+        const deakByTime = dealsChartData?.find(deal => deal.date === item.date)
+
+        // if (item.date === (dealsChartData ?? [])[i]?.date) {
+        if (deakByTime) {
+
+            // return Object.assign({}, item, { dealsCount: (dealsChartData ?? [])[i]?.count });
+            return Object.assign({}, item, deakByTime);
+        }
+        return Object.assign({}, item);
+    });
+
+
     const data = [
+        // ...messChartData?.map(mess => {
+        //     return {
+        //         name: mess.date
+        //     }
+        // })
         {
             name: 'Page A',
             uv: 4000,
@@ -108,11 +119,11 @@ const Chart = () => {
 
 
     return (
-        <>
-            <h2>Динамика сообщений за месяц</h2>
+        <StyledWrap>
+            <h2>Динамика сообщений и заявок за месяц</h2>
             <LineChart
-                width={500}
-                height={300}
+                width={800}
+                height={500}
                 data={data}
                 margin={{
                     top: 5,
@@ -129,7 +140,20 @@ const Chart = () => {
                 <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeDasharray="5 5" />
                 <Line type="monotone" dataKey="uv" stroke="#82ca9d" strokeDasharray="3 4 5 2" />
             </LineChart>
-        </>
+        </StyledWrap>
+
+
     );
 };
 export default Chart;
+
+const StyledWrap = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    h2{
+        font-size: 20px;
+        margin: 20px;
+    }
+`

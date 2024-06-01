@@ -26,11 +26,6 @@ const Statistics = () => {
         date_from: `${moment().subtract(7, 'days').format("DD/MM/YYYY")}`,
         date_to: `${moment().format("DD/MM/YYYY")}`
     }
-    // const dates: IGetAmountMess = {
-    //     date_from: "25/05/2024",
-    //     date_to: "29/05/2024"
-    // }
-
 
     const [sendAmount, { data: amountData, isLoading: amountLoad, isError: amountError }] = statsApi.useAmountMessMutation();
     const [sendDeals, { data: dealsData, isLoading: dealsLoad, isError: dealsError }] = statsApi.useDealsByDatesMutation();

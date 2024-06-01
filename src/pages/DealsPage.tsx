@@ -1,26 +1,163 @@
-import { Space, Table, Tag } from 'antd';
-import React, { Fragment } from 'react'
+import { Form, Popconfirm, Space, Table, TableColumnsType, TableProps, Tag, Typography } from 'antd';
+import React, { Fragment, ReactElement, useState } from 'react'
 import { StyledWrapper } from './Settings';
 import { dealsApi } from '../entities/chats/dealsApi';
 import moment from 'moment';
 import { IClient, IStatuseDeal } from '../entities/types';
 import { STATUS_COLOR } from '../widgets/Statuses';
+import { DeleteOutlined, DownSquareOutlined, EditOutlined, FilterOutlined } from '@ant-design/icons';
 
 const { Column, ColumnGroup } = Table;
 
 
+// interface DataType {
+//     key: React.Key;
+//     name: string;
+//     desc: string;
+//     amount: number;
+//     status_of_deal_id: ReactElement;
+//     created_at: string;
+//     closed_at: string;
+// }
+
 interface DataType {
-    key: React.Key;
-    firstName: string;
-    lastName: string;
-    age: number;
-    address: string;
-    tags: string[];
+    key: number;
+    id: number;
+    desc: string;
+    amount: number;
+    status_of_deal_id: IStatuseDeal;
+    created_at: string;
+    closed_at: string;
+    contact_id: IClient;
 }
+
+const columns: TableColumnsType<DataType> = [
+    {
+        title: 'Имя',
+        dataIndex: 'contact_id',
+        showSorterTooltip: { target: 'full-header' },
+        sorter: (a, b) => a.contact_id.name.length - b.contact_id.name.length,
+        sortDirections: ['descend'],
+    },
+    {
+        title: 'Название',
+        dataIndex: 'desc',
+        defaultSortOrder: 'descend',
+        sorter: (a, b) => a.desc.length - b.desc.length,
+    },
+    {
+        title: 'Сумма',
+        dataIndex: 'amount',
+        defaultSortOrder: 'descend',
+        sorter: (a, b) => a.amount - b.amount,
+    },
+    {
+        title: 'Статус',
+        dataIndex: 'status_of_deal_id',
+        defaultSortOrder: 'descend',
+        //   sorter: (a, b) => a.status_of_deal_id.props.length - b.amount,
+    },
+    {
+        title: 'Создана',
+        dataIndex: 'created_at',
+        // defaultSortOrder: 'descend',
+        sorter: (a, b) => +a.created_at - +b.created_at,
+    },
+    {
+        title: 'Закрыта',
+        dataIndex: 'closed_at',
+    }
+];
 
 const DealsPage = () => {
 
     const { data: dealsResponse, isLoading: dealsLoading, isError: dealsError } = dealsApi.useGetAllDealsQuery();
+    const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = dealsApi.useGetAllStatusesOfDealQuery();
+
+    const [updateDeal] = dealsApi.useUpdateDealMutation();
+    const [deleteDeal] = dealsApi.useDeleteDealMutation();
+
+    const statuses = resStatus?.data.map(status => {
+        return {
+            text: status.name,
+            value: status.name,
+        }
+    })
+
+    const data = dealsResponse?.data.map((deal, ind) => {
+        return {
+            ...deal,
+            key: ind
+        }
+    })
+
+    const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
+        console.log('params', pagination, filters, sorter, extra);
+    };
+
+    const handleDelete = (id: number) => {
+        // const newData = dataSource.filter((item) => item.key !== key);
+        // setDataSource(newData);
+        try {
+            deleteDeal(id)
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleUpdate = () => {
+        try {
+            updateDeal({
+                dealId: 1,
+                body: {
+                    desc: '',
+                    amount: 10,
+                    status_of_deal_id: 1
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const [form] = Form.useForm();
+    const [nData, setNData] = useState<DataType[] | undefined>(data);
+    const [editingKey, setEditingKey] = useState<number>(-1);
+
+    const isEditing = (record: DataType) => record.key === editingKey;
+
+    const edit = (record: Partial<DataType> & { key: React.Key }) => {
+        form.setFieldsValue({ name: '', age: '', address: '', ...record });
+        setEditingKey(record.key);
+    };
+
+    const cancel = () => {
+        setEditingKey(-1);
+    };
+
+    const save = async (key: React.Key) => {
+        try {
+          const row = (await form.validateFields()) as DataType;
+    
+          const newData = [...nData ?? []];
+          const index = newData.findIndex((item) => key === item.key);
+          if (index > -1) {
+            const item = newData[index];
+            newData.splice(index, 1, {
+              ...item,
+              ...row,
+            });
+            setNData(newData);
+            setEditingKey(-1);
+          } else {
+            newData.push(row);
+            setNData(newData);
+            setEditingKey(-1);
+          }
+        } catch (errInfo) {
+          console.log('Validate Failed:', errInfo);
+        }
+      };
 
     return (
         <StyledWrapper>
@@ -32,16 +169,21 @@ const DealsPage = () => {
             {
                 dealsResponse &&
 
-                <Table dataSource={dealsResponse.data} pagination={false}>
-                    {/* <ColumnGroup title="Name">
-                    <Column title="Имя" dataIndex="firstName" key="firstName" />
-                    <Column title="Last Name" dataIndex="lastName" key="lastName" />
-                </ColumnGroup> */}
-                    {/* <Column title="Почта" dataIndex="age" key="age" /> */}
+                <Table
+                    dataSource={data}
+                    pagination={false}
+                    // columns={columns}
+                    // onChange={onChange}
+                    showSorterTooltip={{ target: 'sorter-icon' }}
+                >
                     <Column
                         title="Имя"
                         dataIndex="contact_id"
                         key="contact_id"
+                        sortIcon={() => <DownSquareOutlined />}
+                        //@ts-ignore
+                        sorter={(a, b) => a.contact_id.name.length - b.contact_id.name.length}
+                        sortDirections={['descend']}
                         render={(contact: IClient) => {
 
                             return (
@@ -52,11 +194,29 @@ const DealsPage = () => {
                         }}
                     />
                     <Column title="Название" dataIndex="desc" key="desc" />
-                    <Column title="Сумма" dataIndex="amount" key="amount" />
+                    <Column
+                        title="Сумма"
+                        dataIndex="amount"
+                        key="amount"
+                        sortIcon={() => <DownSquareOutlined />}
+                        sortDirections={['descend']}
+                        //@ts-ignore
+                        sorter={(a, b) => a.amount - b.amount}
+                        render={amount => amount / 100}
+                    />
                     <Column
                         title="Статус"
                         dataIndex="status_of_deal_id"
                         key="status_of_deal_id"
+                        // sortDirections={['descend']}
+                        // defaultSortOrder='descend'
+                        filters={statuses}
+                        sortIcon={() => <DownSquareOutlined />}
+                        filterIcon={() => <FilterOutlined />}
+                        //@ts-ignore
+                        onFilter={(value, record) => record.status_of_deal_id.name.indexOf(value as string) === 0}
+                        //@ts-ignore
+                        sorter={(a, b) => a.status_of_deal_id.name.length - b.status_of_deal_id.name.length}
                         render={(status: IStatuseDeal) => {
                             return (
                                 <Tag color={STATUS_COLOR[status.id] ?? 'geekblue'} key={status.id}>
@@ -76,7 +236,6 @@ const DealsPage = () => {
                                     {
                                         time &&
                                         <>{formatTime}</>
-
                                     }
                                 </Fragment>
                             )
@@ -92,7 +251,7 @@ const DealsPage = () => {
                                 <Fragment key={time}>
                                     {
                                         time ?
-                                            <> formatTime </>
+                                            <> {formatTime} </>
                                             :
                                             <>Не закрыто</>
                                     }
@@ -100,19 +259,46 @@ const DealsPage = () => {
                             )
                         }}
                     />
+                    <Column
+                        title="Изменить"
+                        dataIndex="update"
+                        key="update"
+                        render={(_: any, record: DataType) => {
+                            const editable = isEditing(record);
+                            return editable ? (
+                                <span>
+                                    <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+                                        Сохранить
+                                    </Typography.Link>
+                                    <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                                        <a>Закрыть</a>
+                                    </Popconfirm>
+                                </span>
+                            ) : (
+                                <Typography.Link disabled={editingKey !== -1} onClick={() => edit(record)}>
+                                    <EditOutlined />
+                                </Typography.Link>
+                            );
+                        }}
+                    />
+                    <Column
+                        title="Удалить"
+                        dataIndex="delete"
+                        key="delete"
+                        render={(_, record) => {
+                            if ((data?.length ?? 0) >= 1) {
+                                return (
+                                    //@ts-ignore
+                                    <Popconfirm title="Удалить заявку?" onConfirm={() => handleDelete(record.id)}>
+                                        <DeleteOutlined />
+                                    </Popconfirm>
+                                )
+                            }
+                            return null
+                        }}
+                    />
 
-                    {/* <Column
-                    title="Action"
-                    key="action"
-                    render={(_: any, record: DataType) => (
-                        <Space size="middle">
-                            <a>Invite {record.lastName}</a>
-                            <a>Delete</a>
-                        </Space>
-                    )}
-                /> */}
                 </Table>
-
             }
         </StyledWrapper>
     )

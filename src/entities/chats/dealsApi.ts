@@ -3,62 +3,69 @@ import { companyApi } from "./companyApi";
 
 
 export const dealsApi = companyApi.injectEndpoints({
-  endpoints: (build) => ({
-    getAllStatusesOfDeal: build.query<{ data: IStatuseDeal[] }, void>({
-        query: () => ({
-            url: `/status-of-deal`,
-            method: 'GET',
+    endpoints: (build) => ({
+        getAllStatusesOfDeal: build.query<{ data: IStatuseDeal[] }, void>({
+            query: () => ({
+                url: `/status-of-deal`,
+                method: 'GET',
+            }),
+            providesTags: ['Statuses']
         }),
-        providesTags: ['Statuses']
-    }),
-    addStatusesOfDeal: build.mutation<string, IStatusAdd>({
-        query: (body) => ({
-            url: `/status-of-deal`,
-            method: 'POST',
-            body
+        addStatusesOfDeal: build.mutation<string, IStatusAdd>({
+            query: (body) => ({
+                url: `/status-of-deal`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['Statuses']
         }),
-        invalidatesTags: ['Statuses']
-    }),
-    getDealsByChat: build.query<{ data: IDeal[] }, number>({
-        query: (id) => ({
-            url: `/chats/${id}/deals`,
-            method: 'GET',
+        getDealsByChat: build.query<{ data: IDeal[] }, number>({
+            query: (id) => ({
+                url: `/chats/${id}/deals`,
+                method: 'GET',
+            }),
+            providesTags: ['Deals']
         }),
-        providesTags: ['Deals']
-    }),
-    addDeal: build.mutation<{ data: IDeal }, IDealSend>({
-        query: (body) => ({
-            url: `/deals`,
-            method: 'POST',
-            body
+        addDeal: build.mutation<{ data: IDeal }, IDealSend>({
+            query: (body) => ({
+                url: `/deals`,
+                method: 'POST',
+                body
+            }),
+            invalidatesTags: ['Deals']
         }),
-        invalidatesTags: ['Deals']
-    }),
-    closeDeal: build.mutation<{ data: IDeal }, ISendMessage>({
-        query: ({ chatId, text }) => ({
-            url: `/deals/${chatId}/close`,
-            method: 'POST',
-            body: {
-                text
-            }
+        closeDeal: build.mutation<{ data: IDeal }, ISendMessage>({
+            query: ({ chatId, text }) => ({
+                url: `/deals/${chatId}/close`,
+                method: 'POST',
+                body: {
+                    text
+                }
+            }),
+            invalidatesTags: ['Deals']
         }),
-        invalidatesTags: ['Deals']
-    }),
 
-    getAllDeals: build.query<{ data: IFullDeal[] }, void>({
-        query: () => ({
-            url: `/deals`,
-            method: 'GET',
+        getAllDeals: build.query<{ data: IFullDeal[] }, void>({
+            query: () => ({
+                url: `/deals`,
+                method: 'GET',
+            }),
+            providesTags: ['Deals']
         }),
-        providesTags: ['Deals']
-    }),
-    updateDeal:  build.mutation<{ data: IDeal }, {dealId: number, body: Omit<IDealSend,'contact_id'> }>({
-        query: ({ dealId, body }) => ({
-            url: `/deals/${dealId}`,
-            method: 'POST',
-            body
+        updateDeal: build.mutation<{ data: IDeal }, { dealId: number, body: Omit<IDealSend, 'contact_id'> }>({
+            query: ({ dealId, body }) => ({
+                url: `/deals/${dealId}`,
+                method: 'PUT',
+                body
+            }),
+            invalidatesTags: ['Deals']
         }),
-        invalidatesTags: ['Deals']
+        deleteDeal: build.mutation<{ data: IDeal }, number>({
+            query: (dealId) => ({
+                url: `/deals/${dealId}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Deals']
+        }),
     }),
-  }),
 })

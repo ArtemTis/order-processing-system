@@ -31,9 +31,6 @@ const Statuses = () => {
         setIsModalOpen(true);
     }
 
-    console.log(resStatus);
-    
-
     const handleOk = () => {
         try {
             if (inputName && inputDesc) {

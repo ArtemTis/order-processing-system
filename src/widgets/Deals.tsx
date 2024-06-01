@@ -31,6 +31,7 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
   const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = dealsApi.useGetAllStatusesOfDealQuery();
 
   const [updateDeal] = dealsApi.useUpdateDealMutation();
+  const [deleteDeal] = dealsApi.useDeleteDealMutation();
 
   const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
@@ -107,6 +108,10 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
   const updateDealModal = (deal: IDeal) => {
     setIsModalOpen(true);
     setEditableDeal(deal);
+
+    setTitleDeal(deal.desc);
+    setAmountDeal(deal.amount / 100);
+    setSelectedStatus(`${deal.status_of_deal_id.id}`)
   }
 
   const handleCancel = () => {
@@ -119,6 +124,8 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
 
   const handleChange = (value: string) => {
     setSelectedStatus(value);
+    console.log(value);
+
   };
 
   const [dealsList, setDealsList] = useState<IDeal[]>();
@@ -146,7 +153,7 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
   return (
     <StyledDrawer onClose={onClose} open={open} closeIcon={null}>
       <StyledButton type='primary' onClick={addDealModal}>Добавить сделку</StyledButton>
-      <div className='header-wripper'>
+      <div className='header-wrapper'>
         <h2 className='drawer-title'>Список сделок:</h2>
         <Select
           defaultValue='all'
@@ -185,9 +192,9 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
         <p>Введите текст сделки</p>
 
         <h3>Название сделки</h3>
-        <StyledInput placeholder='Название' value={titleDeal || editableDeal?.desc} onChange={e => setTitleDeal(e.target.value)} />
+        <StyledInput placeholder='Название' value={titleDeal} onChange={e => setTitleDeal(e.target.value)} />
         <h3>Стоимость сделки</h3>
-        <StyledInput placeholder='Стоимость' type='number' value={amountDeal ?? editableDeal?.amount} onChange={e => setAmountDeal(+e.target.value)} />
+        <StyledInput placeholder='Стоимость' type='number' value={amountDeal} onChange={e => setAmountDeal(+e.target.value)} />
 
         <h3>Статус сделки</h3>
         <Select
@@ -273,10 +280,11 @@ const StyledDrawer = styled(Drawer)`
     scrollbar-width: thin;
   }
 
-  .header-wripper{
+  .header-wrapper{
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin: 5px 0;
   }
 `
 
