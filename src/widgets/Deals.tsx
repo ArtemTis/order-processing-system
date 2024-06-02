@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { selectAllChats } from '../entities/chats/selectors';
 import edit from '../shared/assets/edit.svg'
 import { IDeal, IDealSend } from '../entities/types';
+import DealModal from '../shared/ui/DealModal';
 
 interface IProps {
   open: boolean,
@@ -21,21 +22,21 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const [titleDeal, setTitleDeal] = useState<string>('');
-  const [amountDeal, setAmountDeal] = useState<number>();
-  const [selectedStatus, setSelectedStatus] = useState<string>();
+  // const [titleDeal, setTitleDeal] = useState<string>('');
+  // const [amountDeal, setAmountDeal] = useState<number>();
+  // const [selectedStatus, setSelectedStatus] = useState<string>();
   const [editableDeal, setEditableDeal] = useState<IDeal>();
 
   const { data: deals, isLoading: isLoadingDeals, isError: isErrorDeals } = dealsApi.useGetDealsByChatQuery(+(chatId ?? -1));
 
   const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = dealsApi.useGetAllStatusesOfDealQuery();
 
-  const [updateDeal] = dealsApi.useUpdateDealMutation();
+
   const [deleteDeal] = dealsApi.useDeleteDealMutation();
 
-  const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
+  // const chatById = useSelector(selectAllChats)?.find(chat => chat.id === +(chatId ?? -1));
 
-  const [addDeal, { isLoading, isError }] = dealsApi.useAddDealMutation();
+  // const [addDeal, { isLoading, isError }] = dealsApi.useAddDealMutation();
   const onClose = () => {
     setOpen(false);
   };
@@ -43,90 +44,88 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
   const addDealModal = () => {
     setIsModalOpen(true);
   }
-  const [messageApi, contextHolder] = message.useMessage();
+  // const [messageApi, contextHolder] = message.useMessage();
 
-  const handleOk = () => {
-    try {
-      if (titleDeal && amountDeal && selectedStatus) {
-        setIsModalOpen(false);
-        addDeal({
-          desc: titleDeal,
-          amount: amountDeal * 100 ?? 0,
-          status_of_deal_id: +(selectedStatus ?? -1),
-          contact_id: chatById?.client_contact.id ?? -1
-        }).unwrap();
-        messageApi.open({
-          type: 'success',
-          content: 'Вы добавили новую сделку',
-        });
-        setTitleDeal('');
-        setAmountDeal(undefined);
-        setSelectedStatus('');
-      } else {
-        messageApi.open({
-          type: 'warning',
-          content: 'Введите нужную информацию!',
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const handleOk = () => {
+  //   try {
+  //     if (titleDeal && amountDeal && selectedStatus) {
+  //       setIsModalOpen(false);
+  //       addDeal({
+  //         desc: titleDeal,
+  //         amount: amountDeal * 100 ?? 0,
+  //         status_of_deal_id: +(selectedStatus ?? -1),
+  //         contact_id: chatById?.client_contact.id ?? -1
+  //       }).unwrap();
+  //       messageApi.open({
+  //         type: 'success',
+  //         content: 'Вы добавили новую сделку',
+  //       });
+  //       setTitleDeal('');
+  //       setAmountDeal(undefined);
+  //       setSelectedStatus('');
+  //     } else {
+  //       messageApi.open({
+  //         type: 'warning',
+  //         content: 'Введите нужную информацию!',
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  const handleUpdate = () => {
-    try {
-      if (titleDeal && amountDeal && selectedStatus) {
-        console.log(editableDeal);
-        setIsModalOpen(false);
-        updateDeal({
-          dealId: editableDeal?.id ?? -1,
-          body: {
-            desc: titleDeal,
-            amount: amountDeal * 100 ?? 0,
-            status_of_deal_id: +(selectedStatus ?? -1)
-          }
-        }).unwrap();
-        messageApi.open({
-          type: 'success',
-          content: 'Вы изменили сделку',
-        });
-        setTitleDeal('');
-        setAmountDeal(undefined);
-        setSelectedStatus('');
-        setEditableDeal(undefined);
-      } else {
-        messageApi.open({
-          type: 'warning',
-          content: 'Введите нужную информацию!',
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // const handleUpdate = () => {
+  //   try {
+  //     if (titleDeal && amountDeal && selectedStatus) {
+  //       console.log(editableDeal);
+  //       setIsModalOpen(false);
+  //       updateDeal({
+  //         dealId: editableDeal?.id ?? -1,
+  //         body: {
+  //           desc: titleDeal,
+  //           amount: amountDeal * 100 ?? 0,
+  //           status_of_deal_id: +(selectedStatus ?? -1)
+  //         }
+  //       }).unwrap();
+  //       messageApi.open({
+  //         type: 'success',
+  //         content: 'Вы изменили сделку',
+  //       });
+  //       setTitleDeal('');
+  //       setAmountDeal(undefined);
+  //       setSelectedStatus('');
+  //       setEditableDeal(undefined);
+  //     } else {
+  //       messageApi.open({
+  //         type: 'warning',
+  //         content: 'Введите нужную информацию!',
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const updateDealModal = (deal: IDeal) => {
     setIsModalOpen(true);
     setEditableDeal(deal);
 
-    setTitleDeal(deal.desc);
-    setAmountDeal(deal.amount / 100);
-    setSelectedStatus(`${deal.status_of_deal_id.id}`)
+    // setTitleDeal(deal.desc);
+    // setAmountDeal(deal.amount / 100);
+    // setSelectedStatus(`${deal.status_of_deal_id.id}`)
   }
 
-  const handleCancel = () => {
-    setIsModalOpen(false);
-    setTitleDeal('');
-    setAmountDeal(undefined);
-    setSelectedStatus('');
-    setEditableDeal(undefined);
-  };
+  // const handleCancel = () => {
+  //   setIsModalOpen(false);
+  //   setTitleDeal('');
+  //   setAmountDeal(undefined);
+  //   setSelectedStatus('');
+  //   setEditableDeal(undefined);
+  // };
 
-  const handleChange = (value: string) => {
-    setSelectedStatus(value);
-    console.log(value);
-
-  };
+  // const handleChange = (value: string) => {
+  //   setSelectedStatus(value);
+  // };
 
   const [dealsList, setDealsList] = useState<IDeal[]>();
 
@@ -186,7 +185,7 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
           })
           : <p>Сделок пока нет</p>
       }
-
+      {/* 
       <StyledModal title="Добавить сделку" open={isModalOpen} onOk={editableDeal ? handleUpdate : handleOk}
         okText={'Сохранить'} cancelText={'Закрыть'} onCancel={handleCancel}>
         <p>Введите текст сделки</p>
@@ -208,9 +207,16 @@ const Deals: React.FC<IProps> = ({ open, setOpen, chatId }) => {
             })
           }
         />
-      </StyledModal>
+      </StyledModal> */}
 
-      {contextHolder}
+      <DealModal
+        chatId={chatId}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        editableDeal={editableDeal}
+        setEditableDeal={setEditableDeal}
+      />
+
     </StyledDrawer>
   )
 }
@@ -288,6 +294,3 @@ const StyledDrawer = styled(Drawer)`
   }
 `
 
-const StyledInput = styled(Input)`
-  margin-bottom: 15px;
-`

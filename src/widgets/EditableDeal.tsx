@@ -1,5 +1,6 @@
-import { Form, Input, InputNumber } from 'antd';
-import React from 'react'
+import { Form, Input, InputNumber, Select } from 'antd';
+import React, { useState } from 'react'
+import { dealsApi } from '../entities/chats/dealsApi';
 
 
 
@@ -23,7 +24,7 @@ interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     editing: boolean;
     dataIndex: string;
     title: any;
-    inputType: 'number' | 'text';
+    inputType: 'number' | 'text' | 'select';
     record: Item;
     index: number;
 }
@@ -38,7 +39,29 @@ const EditableDeal: React.FC<React.PropsWithChildren<EditableCellProps>> = ({
     children,
     ...restProps
 }) => {
-    const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+    const [selectedStatus, setSelectedStatus] = useState<string>();
+
+    const handleChange = (value: string) => {
+        setSelectedStatus(value);
+    };
+
+    const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = dealsApi.useGetAllStatusesOfDealQuery();
+    let inputNode = 
+    inputType === 'number' ?
+        <InputNumber />
+        : 'select' ?
+            <Select
+                style={{ width: 220 }}
+                onChange={handleChange}
+                placeholder='Статус'
+                options={
+                    resStatus?.data.map(status => {
+                        return { value: status.id, label: status.name }
+                    })
+                }
+            />
+            : <Input />;
+    
 
     return (
         <td {...restProps}>

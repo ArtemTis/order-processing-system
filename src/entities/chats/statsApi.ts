@@ -1,4 +1,4 @@
-import { IChartResponse, IGetAmountMess } from "../types";
+import { IChartResponse, IGetAmountMess, IUniversalChartResponse } from "../types";
 import { companyApi } from "./companyApi";
 
 
@@ -28,6 +28,13 @@ export const statsApi = companyApi.injectEndpoints({
     dealsChart: build.mutation<IChartResponse[], IGetAmountMess>({
         query: (body) => ({
             url: `/stats/count-deals-by-dates-group-by-day`,
+            method: 'POST',
+            body
+        }),
+    }),
+    dealsAndMessagesChart: build.mutation<IUniversalChartResponse[], IGetAmountMess>({
+        query: (body) => ({
+            url: `/stats/count-deals-messages-by-dates-group-by-day`,
             method: 'POST',
             body
         }),

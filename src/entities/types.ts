@@ -282,3 +282,9 @@ export interface IChartResponse  {
     date: string,
     count: number,
 }
+
+export interface IUniversalChartResponse  {
+    date: string,
+    deals: number,
+    messages: number,
+}

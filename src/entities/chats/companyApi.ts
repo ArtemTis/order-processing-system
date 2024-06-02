@@ -26,7 +26,7 @@ export const companyApi = createApi({
             query: (chatId) => ({
                 url: `/companies/${chatId}/chats`,
                 method: 'GET'
-            })
+            }),
         }),  
 
 

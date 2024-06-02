@@ -1,13 +1,12 @@
-import { Form, Popconfirm, Select, Space, Table, TableColumnsType, TableProps, Tag, Typography } from 'antd';
+import { Form, Popconfirm, Space, Table, TableColumnsType, TableProps, Tag, Typography } from 'antd';
 import React, { Fragment, ReactElement, useState } from 'react'
 import { StyledWrapper } from './Settings';
 import { dealsApi } from '../entities/chats/dealsApi';
 import moment from 'moment';
-import { IClient, IDeal, IStatuseDeal } from '../entities/types';
+import { IClient, IStatuseDeal } from '../entities/types';
 import { STATUS_COLOR } from '../widgets/Statuses';
 import { DeleteOutlined, DownSquareOutlined, EditOutlined, FilterOutlined } from '@ant-design/icons';
 import EditableDeal from '../widgets/EditableDeal';
-import DealModal from '../shared/ui/DealModal';
 
 const { Column, ColumnGroup } = Table;
 
@@ -21,6 +20,7 @@ const { Column, ColumnGroup } = Table;
 //     created_at: string;
 //     closed_at: string;
 // }
+
 
 interface DataType {
     key: number;
@@ -71,7 +71,7 @@ const columns: TableColumnsType<DataType> = [
     }
 ];
 
-const DealsPage = () => {
+const NewDealsPage = () => {
 
     const { data: dealsResponse, isLoading: dealsLoading, isError: dealsError } = dealsApi.useGetAllDealsQuery();
     const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = dealsApi.useGetAllStatusesOfDealQuery();
@@ -122,6 +122,9 @@ const DealsPage = () => {
         }
     }
 
+
+    /////////////////
+
     const [form] = Form.useForm();
     const [nData, setNData] = useState<DataType[] | undefined>(data);
     const [editingKey, setEditingKey] = useState<number>(-1);
@@ -162,27 +165,161 @@ const DealsPage = () => {
     };
 
 
-    // const mergedColumns: TableProps['columns'] = columns.map((col) => {
-    //     if (!col.editable) {
-    //         return col;
-    //     }
-    //     return {
-    //         ...col,
-    //         onCell: (record: Item) => ({
-    //             record,
-    //             inputType: col.dataIndex === 'age' ? 'number' : 'text',
-    //             dataIndex: col.dataIndex,
-    //             title: col.title,
-    //             editing: isEditing(record),
-    //         }),
-    //     };
-    // });
+    /////////////////
 
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [editableDeal, setEditableDeal] = useState<IDeal>();
-    const addDealModal = () => {
-        setIsModalOpen(true);
-    }
+
+    const columns = [
+        {
+            title: "Имя",
+            dataIndex: "contact_id",
+            key: "contact_id",
+            sortIcon: () => <DownSquareOutlined />,
+            // @ts-ignore
+            sorter: (a, b) => a.contact_id.name.length - b.contact_id.name.length,
+            sortDirections: ['descend'],
+            render: (contact: IClient) => {
+                return (
+                    <Fragment key={contact.id}>
+                        {contact.name}
+                    </Fragment>
+                )
+            },
+            editable: true,
+        },
+        {
+            title: "Название",
+            dataIndex: "desc",
+            key: "desc",
+            editable: true,
+        },
+        {
+            title: "Сумма",
+            dataIndex: "amount",
+            key: "amount",
+            sortIcon: () => <DownSquareOutlined />,
+            sortDirections: ['descend'],
+            //@ts-ignore
+            sorter: (a, b) => a.amount - b.amount,
+            //@ts-ignore
+            render: amount => amount / 100,
+            editable: true,
+        },
+        {
+            title: "Статус",
+            dataIndex: "status_of_deal_id",
+            key: "status_of_deal_id",
+            // sortDirection:{['descend']}
+            // defaultSortOrde:'descend'
+            filters: statuses,
+            sortIcon: () => <DownSquareOutlined />,
+            filterIcon: () => <FilterOutlined />,
+            //@ts-ignore
+            onFilter: (value, record) => record.status_of_deal_id.name.indexOf(value as string) === 0,
+            //@ts-ignore
+            sorter: (a, b) => a.status_of_deal_id.name.length - b.status_of_deal_id.name.length,
+            render: (status: IStatuseDeal) => {
+                return (
+                    <Tag color={STATUS_COLOR[status.id] ?? 'geekblue'} key={status.id}>
+                        {status.name}
+                    </Tag>
+                );
+            },
+            editable: true
+        },
+        {
+            title: "Создана",
+            dataIndex: "created_at",
+            key: "created_at",
+            render: (time: string) => {
+                const formatTime = moment(time).format("hh:mm | D MMM YYYY")
+                return (
+                    <Fragment key={time}>
+                        {
+                            time &&
+                            <>{formatTime}</>
+                        }
+                    </Fragment>
+                )
+            },
+            editable: true
+        },
+        {
+            title: "Закрыта",
+            dataIndex: "closed_at",
+            key: "closed_at",
+            render: (time: string) => {
+                const formatTime = moment(time).format("hh:mm | D MM")
+                return (
+                    <Fragment key={time}>
+                        {
+                            time ?
+                                <> {formatTime} </>
+                                :
+                                <>Не закрыто</>
+                        }
+                    </Fragment>
+                )
+            },
+            editable: true
+        },
+        {
+            title: "Изменить",
+            dataIndex: "update",
+            key: "update",
+            render: (_: any, record: DataType) => {
+                const editable = isEditing(record);
+                return editable ? (
+                    <span>
+                        <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
+                            Сохранить
+                        </Typography.Link>
+                        <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
+                            <a>Закрыть</a>
+                        </Popconfirm>
+                    </span>
+                ) : (
+                    <Typography.Link disabled={editingKey !== -1} onClick={() => edit(record)}>
+                        <EditOutlined />
+                    </Typography.Link>
+                );
+            }
+        },
+        {
+            title: "Удалить",
+            dataIndex: "delete",
+            key: "delete",
+            render: (_: any, record: DataType) => {
+                if ((data?.length ?? 0) >= 1) {
+                    return (
+                        //@ts-ignore
+                        <Popconfirm title="Удалить заявку?" onConfirm={() => handleDelete(record.id)}>
+                            <DeleteOutlined />
+                        </Popconfirm>
+                    )
+                }
+                return null
+            }
+        }
+    ];
+
+
+    //@ts-ignore
+    const mergedColumns: TableProps['columns'] = columns.map((col) => {
+        if (!col.editable) {
+            return col;
+        }
+        return {
+            ...col,
+            onCell: (record: DataType) => ({
+                record,
+                inputType: col.dataIndex === 'amount' ? 'number' : 'status_of_deal_id' ? 'select' : 'text',
+                dataIndex: col.dataIndex,
+                title: col.title,
+                editing: isEditing(record),
+            }),
+        };
+    });
+
     return (
         <StyledWrapper>
             <h1>Список сделок</h1>
@@ -199,14 +336,15 @@ const DealsPage = () => {
                                 cell: EditableDeal,
                             },
                         }}
-
+                        columns={mergedColumns}
+                        rowClassName="editable-row"
                         dataSource={data}
                         pagination={false}
                         // columns={columns}
                         // onChange={onChange}
                         showSorterTooltip={{ target: 'sorter-icon' }}
                     >
-                        <Column
+                        {/* <Column
                             title="Имя"
                             dataIndex="contact_id"
                             key="contact_id"
@@ -326,22 +464,14 @@ const DealsPage = () => {
                                 }
                                 return null
                             }}
-                        />
+                        /> */}
 
                     </Table>
                 </Form>
             }
-
-            <DealModal
-                isModalOpen={isModalOpen}
-                setIsModalOpen={setIsModalOpen}
-                editableDeal={editableDeal}
-                setEditableDeal={setEditableDeal}
-            />
-
         </StyledWrapper>
     )
 }
 
-export default DealsPage
+export default NewDealsPage
 

@@ -23,7 +23,7 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
 
     const handleOk = () => {
         try {
-            if (mailingText && clientsId.length > 0) {
+            if (clientsId && mailingText && clientsId?.length > 0) {
                 setIsModalOpen(false);
                 sendMailing({
                     chats_id: clientsId,
@@ -81,13 +81,13 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
                         chats.map(chat => {
                             return {
                                 label: <>
-                                  <Avatar 
-                                  size={20}
-                                   icon={<img src={chat.client_contact.photo_url ?? ''}
-                                    alt="User avatar" />} 
-                                    style={{marginRight: '7px'}}
+                                    <Avatar
+                                        size={20}
+                                        icon={<img src={chat.client_contact.photo_url ?? ''}
+                                            alt="User avatar" />}
+                                        style={{ marginRight: '7px' }}
                                     />
-                                {chat.name}
+                                    {chat.name}
                                 </>,
                                 value: chat.id
                             }
@@ -99,7 +99,7 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
                 <TextArea
                     value={mailingText}
                     onChange={(e) => setMailingText(e.target.value)}
-                    placeholder="Текст шаблона"
+                    placeholder="Текст рассылки"
                     autoSize={{
                         minRows: 3,
                         maxRows: 5,

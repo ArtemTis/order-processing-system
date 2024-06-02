@@ -14,6 +14,7 @@ import Chats from "../../../pages/Chats";
 import ChatNew from "../../../pages/ChatNew";
 import Statistics from "../../../pages/Statistics";
 import DealsPage from "../../../pages/DealsPage";
+import NewDealsPage from "../../../pages/NewDealsPage";
 
 
 export const router = createBrowserRouter(
@@ -22,7 +23,8 @@ export const router = createBrowserRouter(
       <Route path={HOME_PATH} element={<AppSider />} >
         <Route path={CHATS_PATH} element={<Chats />} />
 
-        <Route path={DEALS_PATH} element={<DealsPage />} />
+        {/* <Route path={DEALS_PATH} element={<DealsPage />} /> */}
+        <Route path={DEALS_PATH} element={<NewDealsPage />} />
         <Route path={STATISTICS_PATH} element={<Statistics />} />
 
         {/* <Route index element={<Navigate to={CHATS_PATH} />} /> */}
