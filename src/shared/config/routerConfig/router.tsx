@@ -23,8 +23,8 @@ export const router = createBrowserRouter(
       <Route path={HOME_PATH} element={<AppSider />} >
         <Route path={CHATS_PATH} element={<Chats />} />
 
-        {/* <Route path={DEALS_PATH} element={<DealsPage />} /> */}
-        <Route path={DEALS_PATH} element={<NewDealsPage />} />
+        <Route path={DEALS_PATH} element={<DealsPage />} />
+        {/* <Route path={DEALS_PATH} element={<NewDealsPage />} /> */}
         <Route path={STATISTICS_PATH} element={<Statistics />} />
 
         {/* <Route index element={<Navigate to={CHATS_PATH} />} /> */}

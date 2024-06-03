@@ -17,7 +17,7 @@ export default function useEcho() {
         forceTLS: false,
         enabledTransports: ['ws', 'wss'],
         //authEndpoint is your apiUrl + /broadcasting/auth
-        authEndpoint: "http://tisho.creatrix-digital.ru/api/broadcasting/auth",
+        authEndpoint: "https://tisho.creatrix-digital.ru/api/broadcasting/auth",
         // As I'm using JWT tokens, I need to manually set up the headers.
         auth: {
             headers: {

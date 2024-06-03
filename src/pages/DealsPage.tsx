@@ -1,4 +1,4 @@
-import { Form, Popconfirm, Select, Space, Table, TableColumnsType, TableProps, Tag, Typography } from 'antd';
+import { Button, Form, Popconfirm, Select, Space, Table, TableColumnsType, TableProps, Tag, Typography } from 'antd';
 import React, { Fragment, ReactElement, useState } from 'react'
 import { StyledWrapper } from './Settings';
 import { dealsApi } from '../entities/chats/dealsApi';
@@ -8,6 +8,7 @@ import { STATUS_COLOR } from '../widgets/Statuses';
 import { DeleteOutlined, DownSquareOutlined, EditOutlined, FilterOutlined } from '@ant-design/icons';
 import EditableDeal from '../widgets/EditableDeal';
 import DealModal from '../shared/ui/DealModal';
+import styled from 'styled-components';
 
 const { Column, ColumnGroup } = Table;
 
@@ -178,10 +179,12 @@ const DealsPage = () => {
     //     };
     // });
 
+
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [editableDeal, setEditableDeal] = useState<IDeal>();
-    const addDealModal = () => {
+    const addDealModal = (deal: DataType) => {
         setIsModalOpen(true);
+        setEditableDeal(deal);
     }
     return (
         <StyledWrapper>
@@ -192,104 +195,110 @@ const DealsPage = () => {
             }
             {
                 dealsResponse &&
-                <Form form={form} component={false}>
-                    <Table
-                        components={{
-                            body: {
-                                cell: EditableDeal,
-                            },
-                        }}
+                <StyledTableWrapper>
+                    <Form form={form} component={false}>
+                        <Table
+                            // components={{
+                            //     body: {
+                            //         cell: EditableDeal,
+                            //     },
+                            // }}
+                            style={{height: 400}}
+                            dataSource={data}
+                            pagination={false}
+                            // columns={columns}
+                            // onChange={onChange}
+                            showSorterTooltip={{ target: 'sorter-icon' }}
+                        >
+                            <Column
+                                title="Имя"
+                                dataIndex="contact_id"
+                                key="contact_id"
+                                width={150}
+                                sortIcon={() => <DownSquareOutlined />}
+                                //@ts-ignore
+                                sorter={(a, b) => a.contact_id.name.length - b.contact_id.name.length}
+                                sortDirections={['descend']}
+                                render={(contact: IClient) => {
 
-                        dataSource={data}
-                        pagination={false}
-                        // columns={columns}
-                        // onChange={onChange}
-                        showSorterTooltip={{ target: 'sorter-icon' }}
-                    >
-                        <Column
-                            title="Имя"
-                            dataIndex="contact_id"
-                            key="contact_id"
-                            sortIcon={() => <DownSquareOutlined />}
-                            //@ts-ignore
-                            sorter={(a, b) => a.contact_id.name.length - b.contact_id.name.length}
-                            sortDirections={['descend']}
-                            render={(contact: IClient) => {
-
-                                return (
-                                    <Fragment key={contact.id}>
-                                        {contact.name}
-                                    </Fragment>
-                                )
-                            }}
-                        />
-                        <Column title="Название" dataIndex="desc" key="desc" />
-                        <Column
-                            title="Сумма"
-                            dataIndex="amount"
-                            key="amount"
-                            sortIcon={() => <DownSquareOutlined />}
-                            sortDirections={['descend']}
-                            //@ts-ignore
-                            sorter={(a, b) => a.amount - b.amount}
-                            render={amount => amount / 100}
-                        />
-                        <Column
-                            title="Статус"
-                            dataIndex="status_of_deal_id"
-                            key="status_of_deal_id"
-                            // sortDirections={['descend']}
-                            // defaultSortOrder='descend'
-                            filters={statuses}
-                            sortIcon={() => <DownSquareOutlined />}
-                            filterIcon={() => <FilterOutlined />}
-                            //@ts-ignore
-                            onFilter={(value, record) => record.status_of_deal_id.name.indexOf(value as string) === 0}
-                            //@ts-ignore
-                            sorter={(a, b) => a.status_of_deal_id.name.length - b.status_of_deal_id.name.length}
-                            render={(status: IStatuseDeal) => {
-                                return (
-                                    <Tag color={STATUS_COLOR[status.id] ?? 'geekblue'} key={status.id}>
-                                        {status.name}
-                                    </Tag>
-                                );
-                            }}
-                        />
-                        <Column
-                            title="Создана"
-                            dataIndex="created_at"
-                            key="created_at"
-                            render={(time: string) => {
-                                const formatTime = moment(time).format("hh:mm | D MMM YYYY")
-                                return (
-                                    <Fragment key={time}>
-                                        {
-                                            time &&
-                                            <>{formatTime}</>
-                                        }
-                                    </Fragment>
-                                )
-                            }}
-                        />
-                        <Column
-                            title="Закрыта"
-                            dataIndex="closed_at"
-                            key="closed_at"
-                            render={(time: string) => {
-                                const formatTime = moment(time).format("hh:mm | D MM")
-                                return (
-                                    <Fragment key={time}>
-                                        {
-                                            time ?
-                                                <> {formatTime} </>
-                                                :
-                                                <>Не закрыто</>
-                                        }
-                                    </Fragment>
-                                )
-                            }}
-                        />
-                        <Column
+                                    return (
+                                        <Fragment key={contact.id}>
+                                            {contact.name}
+                                        </Fragment>
+                                    )
+                                }}
+                            />
+                            <Column title="Название" dataIndex="desc" key="desc" width={251} />
+                            <Column
+                                title="Сумма"
+                                dataIndex="amount"
+                                key="amount"
+                                sortIcon={() => <DownSquareOutlined />}
+                                sortDirections={['descend']}
+                                width={104}
+                                //@ts-ignore
+                                sorter={(a, b) => a.amount - b.amount}
+                                render={amount => amount / 100}
+                            />
+                            <Column
+                                title="Статус"
+                                dataIndex="status_of_deal_id"
+                                key="status_of_deal_id"
+                                width={180}
+                                // sortDirections={['descend']}
+                                // defaultSortOrder='descend'
+                                filters={statuses}
+                                sortIcon={() => <DownSquareOutlined />}
+                                filterIcon={() => <FilterOutlined />}
+                                //@ts-ignore
+                                onFilter={(value, record) => record.status_of_deal_id.name.indexOf(value as string) === 0}
+                                //@ts-ignore
+                                sorter={(a, b) => a.status_of_deal_id.name.length - b.status_of_deal_id.name.length}
+                                render={(status: IStatuseDeal) => {
+                                    return (
+                                        <Tag color={STATUS_COLOR[status.id] ?? 'geekblue'} key={status.id}>
+                                            {status.name}
+                                        </Tag>
+                                    );
+                                }}
+                            />
+                            <Column
+                                title="Создана"
+                                dataIndex="created_at"
+                                key="created_at"
+                                width={175}
+                                render={(time: string) => {
+                                    const formatTime = moment(time).format("hh:mm | D MMM YYYY")
+                                    return (
+                                        <Fragment key={time}>
+                                            {
+                                                time &&
+                                                <>{formatTime}</>
+                                            }
+                                        </Fragment>
+                                    )
+                                }}
+                            />
+                            <Column
+                                title="Закрыта"
+                                dataIndex="closed_at"
+                                key="closed_at"
+                                width={119}
+                                render={(time: string) => {
+                                    const formatTime = moment(time).format("hh:mm | D MM")
+                                    return (
+                                        <Fragment key={time}>
+                                            {
+                                                time ?
+                                                    <> {formatTime} </>
+                                                    :
+                                                    <>Не закрыто</>
+                                            }
+                                        </Fragment>
+                                    )
+                                }}
+                            />
+                            {/* <Column
                             title="Изменить"
                             dataIndex="update"
                             key="update"
@@ -305,31 +314,46 @@ const DealsPage = () => {
                                         </Popconfirm>
                                     </span>
                                 ) : (
-                                    <Typography.Link disabled={editingKey !== -1} onClick={() => edit(record)}>
+                                    // <Typography.Link disabled={editingKey !== -1} onClick={() => edit(record)}>
+                                    <Typography.Link disabled={editingKey !== -1} onClick={() => editDeal(record)}>
                                         <EditOutlined />
                                     </Typography.Link>
                                 );
                             }}
-                        />
-                        <Column
-                            title="Удалить"
-                            dataIndex="delete"
-                            key="delete"
-                            render={(_, record) => {
-                                if ((data?.length ?? 0) >= 1) {
+                        /> */}
+                            <Column
+                                title="Изменить"
+                                dataIndex="update"
+                                key="update"
+                                width={105}
+                                render={(_: any, record: DataType) => {
                                     return (
-                                        //@ts-ignore
-                                        <Popconfirm title="Удалить заявку?" onConfirm={() => handleDelete(record.id)}>
-                                            <DeleteOutlined />
-                                        </Popconfirm>
-                                    )
-                                }
-                                return null
-                            }}
-                        />
+                                        <EditOutlined onClick={() => addDealModal(record)} />
+                                    );
+                                }}
+                            />
+                            <Column
+                                title="Удалить"
+                                dataIndex="delete"
+                                key="delete"
+                                width={105}
+                                render={(_, record) => {
+                                    if ((data?.length ?? 0) >= 1) {
+                                        return (
+                                            //@ts-ignore
+                                            <Popconfirm title="Удалить заявку?" onConfirm={() => handleDelete(record.id)}>
+                                                <DeleteOutlined />
+                                            </Popconfirm>
+                                        )
+                                    }
+                                    return null
+                                }}
+                            />
 
-                    </Table>
-                </Form>
+                        </Table>
+                    </Form>
+
+                </StyledTableWrapper>
             }
 
             <DealModal
@@ -345,3 +369,7 @@ const DealsPage = () => {
 
 export default DealsPage
 
+const StyledTableWrapper = styled.div`
+    scrollbar-width: none;
+    height: 300px;
+`

@@ -91,6 +91,7 @@ const AppSider: React.FC = () => {
                 style={{
                     overflow: 'auto',
                     height: '100vh',
+                    backgroundColor: '#f5f5f5',
                 }}>
                 <Outlet />
             </Content>

@@ -35,13 +35,24 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
 
     const [addDeal, { isLoading, isError }] = dealsApi.useAddDealMutation();
 
+    console.log(editableDeal);
+    
+    // console.log(resStatus?.data[editableDeal?.status_of_deal_id.id ?? 0].name);
+    console.log(editableDeal?.status_of_deal_id.name);
+
+    console.log(resStatus?.data);
+    
+    // const defaultSelect = editableDeal?.status_of_deal_id.name;
+
+    // const [defaultSelect, setDefaultSelect] = useState<string>(resStatus?.data[0].name);
+
     const handleChange = (value: string) => {
+
         setSelectedStatus(value);
     };
 
     useEffect(() => {
         if (editableDeal) {
-
             setTitleDeal(editableDeal?.desc ?? '');
             setAmountDeal((editableDeal?.amount ?? 0) / 100 ?? 0);
             setSelectedStatus(`${editableDeal?.status_of_deal_id.id ?? 0}`)
@@ -130,7 +141,9 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
 
                 <h3>Статус сделки</h3>
                 <Select
-                    defaultValue={resStatus?.data[editableDeal?.status_of_deal_id.id ?? 0].name}
+                    // defaultValue={resStatus?.data[editableDeal?.status_of_deal_id.id ?? 0].name}
+                    // defaultValue={resStatus?.data.find(stat => stat.id === +(selectedStatus ?? 0))?.name}
+                    defaultValue={editableDeal?.status_of_deal_id.name}
                     style={{ width: 220 }}
                     onChange={handleChange}
                     placeholder='Статус'
