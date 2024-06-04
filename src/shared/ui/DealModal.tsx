@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { StyledModal } from '../../widgets/AddPatterns'
 import styled from 'styled-components'
 import { Input, Select, message } from 'antd'
@@ -32,25 +32,33 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
 
     const [addDeal, { isLoading, isError }] = dealsApi.useAddDealMutation();
 
-    console.log(editableDeal);
-
     // console.log(resStatus?.data[editableDeal?.status_of_deal_id.id ?? 0].name);
     console.log(editableDeal?.status_of_deal_id.name);
 
-    console.log(resStatus?.data);
-
     const handleChange = (value: string) => {
-
         setSelectedStatus(value);
     };
 
     useEffect(() => {
+        // handleChange(`${editableDeal?.status_of_deal_id.id}`)
+        console.log(editableDeal?.id);
+
         if (editableDeal) {
-            setTitleDeal(editableDeal?.desc ?? '');
-            setAmountDeal((editableDeal?.amount ?? 0) / 100 ?? 0);
-            setSelectedStatus(`${editableDeal?.status_of_deal_id.id ?? 0}`)
+            setTitleDeal(editableDeal.desc);
+            setAmountDeal(editableDeal.amount / 100);
+            setSelectedStatus(`${editableDeal.status_of_deal_id.id}`)
         }
-    }, [editableDeal])
+    }, [editableDeal?.id])
+
+    console.log(selectedStatus);
+
+    const defaultValue = useMemo(() =>
+        // resStatus?.data.find(stat => stat.id === +(selectedStatus ?? 0))?.name
+        `${editableDeal?.status_of_deal_id.id}`
+        , [editableDeal?.id]);
+
+    console.log(defaultValue);
+
 
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -143,6 +151,7 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
                     // defaultValue={resStatus?.data[editableDeal?.status_of_deal_id.id ?? 0].name}
                     // defaultValue={resStatus?.data.find(stat => stat.id === +(selectedStatus ?? 0))?.name}
                     defaultValue={editableDeal?.status_of_deal_id.name}
+                    // defaultValue={defaultValue}
                     style={{ width: 220 }}
                     onChange={handleChange}
                     placeholder='Статус'

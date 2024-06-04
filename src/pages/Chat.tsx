@@ -92,8 +92,13 @@ const Chat = () => {
       <div className="msg-header">
         <div className="container1">
 
-          {/* <img src="user1.png" className="msgimg" /> */}
-          <Avatar size={26} icon={<img src={chatById?.client_contact.photo_url ?? ''} alt="User avatar" />} />
+          <Avatar
+                size={26}
+                icon={
+                    chatById?.client_contact.photo_url
+                        ? <img src={chatById?.client_contact.photo_url} alt="User avatar" />
+                        : <UserOutlined />}
+            />
 
           <div className="active">
             <p>{chatById?.name}</p>

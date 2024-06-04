@@ -158,8 +158,8 @@ const AddPatterns = () => {
                     children: (<>
                         {
                             pattern.messagePatterns.map(mess => (
-                                <StyledDiv>
-                                    <h6 className='pattern-text' key={mess.id}>{mess.text}</h6>
+                                <StyledDiv key={mess.id}>
+                                    <h6 className='pattern-text'>{mess.text}</h6>
 
                                     <Popconfirm title="Удалить шаблон?" onConfirm={() => deletePattern(mess)}>
                                         <CloseOutlined />

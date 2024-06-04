@@ -13,17 +13,23 @@ interface ChatItemProps {
 const ChatItem: React.FC<ChatItemProps> = ({ data }) => {
 
     const { id } = useParams();
-    
+
     const location = useLocation();
 
     const activeChat = +location.pathname.split('/')[3]
 
     const time = data.last_message?.created_at.slice(11, 16);
-    
+
 
     return (
-        <StyledChatItem style={activeChat === data.id ? {backgroundColor: '#5943af'}: {backgroundColor: ''}}>
-            <Avatar size={54} icon={<img src={data.client_contact.photo_url ?? ''} alt="Avatar" />} />
+        <StyledChatItem style={activeChat === data.id ? { backgroundColor: '#5943af' } : { backgroundColor: '' }}>
+            <Avatar
+                size={54}
+                icon={
+                    data.client_contact.photo_url
+                        ? <img src={data.client_contact.photo_url} alt="Avatar" />
+                        : <UserOutlined />}
+            />
 
             <StyledName>
                 <h3>{data.name}</h3>

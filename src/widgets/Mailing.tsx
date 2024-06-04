@@ -5,6 +5,7 @@ import { StyledModal } from './AddPatterns';
 import { IChatSnippet } from '../entities/types';
 import { Avatar, Select, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import { UserOutlined } from '@ant-design/icons';
 
 interface IProps {
     chats: IChatSnippet[]
@@ -83,8 +84,10 @@ const Mailing: React.FC<IProps> = ({ chats }) => {
                                 label: <>
                                     <Avatar
                                         size={20}
-                                        icon={<img src={chat.client_contact.photo_url ?? ''}
-                                            alt="User avatar" />}
+                                        icon={
+                                            chat.client_contact.photo_url
+                                                ? <img src={chat.client_contact.photo_url} alt="User avatar" />
+                                                : <UserOutlined />}
                                         style={{ marginRight: '7px' }}
                                     />
                                     {chat.name}
