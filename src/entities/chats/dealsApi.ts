@@ -19,6 +19,13 @@ export const dealsApi = companyApi.injectEndpoints({
             }),
             invalidatesTags: ['Statuses']
         }),
+        deleteStatusesOfDeal: build.mutation<string, number>({
+            query: (id) => ({
+                url: `/status-of-deal/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['Statuses']
+        }),
         getDealsByChat: build.query<{ data: IDeal[] }, number>({
             query: (id) => ({
                 url: `/chats/${id}/deals`,

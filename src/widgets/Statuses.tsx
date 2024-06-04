@@ -3,9 +3,10 @@ import { StyledButton } from '../pages/Settings';
 import styled from 'styled-components';
 import { companyApi } from '../entities/chats/companyApi';
 import { StyledModal } from './AddPatterns';
-import { Input, message } from 'antd';
-import { IStatusAdd } from '../entities/types';
+import { Input, Popconfirm, message } from 'antd';
+import { IStatusAdd, IStatuseDeal } from '../entities/types';
 import { dealsApi } from '../entities/chats/dealsApi';
+import { CloseOutlined } from '@ant-design/icons';
 
 export enum STATUS_COLOR {
     '#d61a09cc',
@@ -25,11 +26,16 @@ const Statuses = () => {
 
     const { data: resStatus, isLoading: isLoadingStatus, isError: isErrorStatus } = dealsApi.useGetAllStatusesOfDealQuery();
     const [addStatus, { isLoading: addStatusLoad, isError: addStatusErr }] = dealsApi.useAddStatusesOfDealMutation();
+    const [delStatus, { isLoading: delStatusLoad, isError: delStatusErr }] = dealsApi.useDeleteStatusesOfDealMutation();
     const [messageApi, contextHolder] = message.useMessage();
 
     const addStatusModal = () => {
         setIsModalOpen(true);
     }
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
 
     const handleOk = () => {
         try {
@@ -54,9 +60,25 @@ const Statuses = () => {
         }
 
     };
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
+
+    const deleteStatus = async (item: IStatuseDeal) => {
+        try {
+            if (item) {
+                delStatus(item.id).unwrap();
+                messageApi.open({
+                    type: 'success',
+                    content: 'Вы удалили статус',
+                });
+            } else {
+                messageApi.open({
+                    type: 'warning',
+                    content: 'Неверная информация о статусе!',
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -69,8 +91,14 @@ const Statuses = () => {
                 resStatus &&
                 resStatus?.data.map(item => (
                     <StyledStatus key={item.id} colordot={STATUS_COLOR[item.id - 1]}>
-                        <h2>{item.name}</h2>
+                        <div>
+                            <h2>{item.name}</h2>
+                            <Popconfirm title="Удалить статус?" onConfirm={() => deleteStatus(item)}>
+                                <CloseOutlined style={{color:'##420c0c'}}/>
+                            </Popconfirm>
+                        </div>
                         <h3>{item.desc}</h3>
+
                     </StyledStatus>
                 ))
             }
@@ -116,5 +144,12 @@ const StyledStatus = styled.div<{ colordot?: string }>`
   h3{
     font-size: 16px;
     margin-left: 25px;
+  }
+
+  div{
+      display: flex;
+      gap: 20px;
+    /* width: 300px; */
+    /* justify-content: space-between; */
   }
 `

@@ -45,6 +45,13 @@ export const companyApi = createApi({
             }),
             invalidatesTags: ['Type']
         }),
+        deleteTypePattern: build.mutation<string, number>({
+            query: (id) => ({
+                url: `/type-of-message-patterns/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Type']
+        }),
 
 
         addPattern: build.mutation<IAddPatternResponse, IAddPattern>({
@@ -62,7 +69,13 @@ export const companyApi = createApi({
             }),
             providesTags: ['Patterns', 'Type']
         }),
-
+        deletePattern: build.mutation<string, number>({
+            query: (id) => ({
+                url: `/message-patterns/${id}`,
+                method: 'DELETE'
+            }),
+            invalidatesTags: ['Patterns']
+        }),
 
         addNewTag: build.mutation<{ data: ITag }, { name: string }>({
             query: (body) => ({

@@ -211,21 +211,27 @@ export interface ITag {
     updated_at: string
 }
 
+export interface IPatternMessage {
+    id: number,
+    text: string,
+    type_of_message_pattern_id: number,
+    created_at: string,
+    updated_at: string
+}
+
+export interface IPattern {
+    id: number,
+    name: string,
+    messagePatterns: [
+        IPatternMessage 
+    ]
+}
+
+
+
 export interface IPatterns {
     data: [
-        {
-            id: number,
-            name: string,
-            messagePatterns: [
-                {
-                    id: number,
-                    text: string,
-                    type_of_message_pattern_id: number,
-                    created_at: string,
-                    updated_at: string
-                }
-            ]
-        }
+        IPattern
     ]
 }
 
@@ -242,7 +248,8 @@ export interface IDeal {
         updated_at: string
     },
     created_at: string,
-    closed_at: string
+    closed_at: string,
+    isSendToCrm: boolean
 }
 
 export type IFullDeal = IDeal & {
@@ -278,16 +285,16 @@ export interface ISendMailing {
 }
 
 export interface IGetAmountMess {
-    date_from:  string,
+    date_from: string,
     date_to: string
 }
 
-export interface IChartResponse  {
+export interface IChartResponse {
     date: string,
     count: number,
 }
 
-export interface IUniversalChartResponse  {
+export interface IUniversalChartResponse {
     date: string,
     deals: number,
     messages: number,

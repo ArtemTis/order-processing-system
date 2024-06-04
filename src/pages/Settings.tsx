@@ -117,7 +117,7 @@ export const StyledTabs = styled(Tabs)`
 
   .pattern-text{
     font-size: 16px;
-    margin-bottom: 10px;
+    /* margin-bottom: 10px; */
   }
 `
 

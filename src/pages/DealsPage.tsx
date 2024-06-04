@@ -1,6 +1,6 @@
 import { Button, Form, Popconfirm, Select, Space, Table, TableColumnsType, TableProps, Tag, Typography } from 'antd';
-import React, { Fragment, ReactElement, useState } from 'react'
-import { StyledWrapper } from './Settings';
+import React, { Fragment, ReactElement, useEffect, useState } from 'react'
+import { StyledButton, StyledWrapper } from './Settings';
 import { dealsApi } from '../entities/chats/dealsApi';
 import moment from 'moment';
 import { IClient, IDeal, IStatuseDeal } from '../entities/types';
@@ -32,6 +32,7 @@ interface DataType {
     created_at: string;
     closed_at: string;
     contact_id: IClient;
+    isSendToCrm: boolean
 }
 
 const columns: TableColumnsType<DataType> = [
@@ -94,10 +95,6 @@ const DealsPage = () => {
         }
     })
 
-    const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-        console.log('params', pagination, filters, sorter, extra);
-    };
-
     const handleDelete = (id: number) => {
         // const newData = dataSource.filter((item) => item.key !== key);
         // setDataSource(newData);
@@ -123,44 +120,58 @@ const DealsPage = () => {
         }
     }
 
-    const [form] = Form.useForm();
-    const [nData, setNData] = useState<DataType[] | undefined>(data);
-    const [editingKey, setEditingKey] = useState<number>(-1);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [editableDeal, setEditableDeal] = useState<IDeal>();
+    const addDealModal = (deal: DataType) => {
+        setIsModalOpen(true);
+        setEditableDeal(deal);
+    }
+    const sendToCRM = (deal: DataType) => {
 
-    const isEditing = (record: DataType) => record.key === editingKey;
+    }
 
-    const edit = (record: Partial<DataType> & { key: React.Key }) => {
-        form.setFieldsValue({ name: '', age: '', address: '', ...record });
-        setEditingKey(record.key);
-    };
+    // const [form] = Form.useForm();
+    // const [nData, setNData] = useState<DataType[] | undefined>(data);
+    // const [editingKey, setEditingKey] = useState<number>(-1);
 
-    const cancel = () => {
-        setEditingKey(-1);
-    };
+    // const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
+    //     console.log('params', pagination, filters, sorter, extra);
+    // };
 
-    const save = async (key: React.Key) => {
-        try {
-            const row = (await form.validateFields()) as DataType;
+    // const isEditing = (record: DataType) => record.key === editingKey;
 
-            const newData = [...nData ?? []];
-            const index = newData.findIndex((item) => key === item.key);
-            if (index > -1) {
-                const item = newData[index];
-                newData.splice(index, 1, {
-                    ...item,
-                    ...row,
-                });
-                setNData(newData);
-                setEditingKey(-1);
-            } else {
-                newData.push(row);
-                setNData(newData);
-                setEditingKey(-1);
-            }
-        } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
-        }
-    };
+    // const edit = (record: Partial<DataType> & { key: React.Key }) => {
+    //     form.setFieldsValue({ name: '', age: '', address: '', ...record });
+    //     setEditingKey(record.key);
+    // };
+
+    // const cancel = () => {
+    //     setEditingKey(-1);
+    // };
+
+    // const save = async (key: React.Key) => {
+    //     try {
+    //         const row = (await form.validateFields()) as DataType;
+
+    //         const newData = [...nData ?? []];
+    //         const index = newData.findIndex((item) => key === item.key);
+    //         if (index > -1) {
+    //             const item = newData[index];
+    //             newData.splice(index, 1, {
+    //                 ...item,
+    //                 ...row,
+    //             });
+    //             setNData(newData);
+    //             setEditingKey(-1);
+    //         } else {
+    //             newData.push(row);
+    //             setNData(newData);
+    //             setEditingKey(-1);
+    //         }
+    //     } catch (errInfo) {
+    //         console.log('Validate Failed:', errInfo);
+    //     }
+    // };
 
 
     // const mergedColumns: TableProps['columns'] = columns.map((col) => {
@@ -180,12 +191,8 @@ const DealsPage = () => {
     // });
 
 
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const [editableDeal, setEditableDeal] = useState<IDeal>();
-    const addDealModal = (deal: DataType) => {
-        setIsModalOpen(true);
-        setEditableDeal(deal);
-    }
+   
+    
     return (
         <StyledWrapper>
             <h1>Список сделок</h1>
@@ -196,14 +203,14 @@ const DealsPage = () => {
             {
                 dealsResponse &&
                 <StyledTableWrapper>
-                    <Form form={form} component={false}>
+                    {/* <Form form={form} component={false}> */}
                         <Table
                             // components={{
                             //     body: {
                             //         cell: EditableDeal,
                             //     },
                             // }}
-                            style={{height: 400}}
+                            style={{ height: 400 }}
                             dataSource={data}
                             pagination={false}
                             // columns={columns}
@@ -214,7 +221,7 @@ const DealsPage = () => {
                                 title="Имя"
                                 dataIndex="contact_id"
                                 key="contact_id"
-                                width={150}
+                                // width={150}
                                 sortIcon={() => <DownSquareOutlined />}
                                 //@ts-ignore
                                 sorter={(a, b) => a.contact_id.name.length - b.contact_id.name.length}
@@ -235,7 +242,7 @@ const DealsPage = () => {
                                 key="amount"
                                 sortIcon={() => <DownSquareOutlined />}
                                 sortDirections={['descend']}
-                                width={104}
+                                // width={104}
                                 //@ts-ignore
                                 sorter={(a, b) => a.amount - b.amount}
                                 render={amount => amount / 100}
@@ -244,7 +251,7 @@ const DealsPage = () => {
                                 title="Статус"
                                 dataIndex="status_of_deal_id"
                                 key="status_of_deal_id"
-                                width={180}
+                                // width={180}
                                 // sortDirections={['descend']}
                                 // defaultSortOrder='descend'
                                 filters={statuses}
@@ -266,7 +273,7 @@ const DealsPage = () => {
                                 title="Создана"
                                 dataIndex="created_at"
                                 key="created_at"
-                                width={175}
+                                // width={175}
                                 render={(time: string) => {
                                     const formatTime = moment(time).format("hh:mm | D MMM YYYY")
                                     return (
@@ -283,7 +290,7 @@ const DealsPage = () => {
                                 title="Закрыта"
                                 dataIndex="closed_at"
                                 key="closed_at"
-                                width={119}
+                                // width={119}
                                 render={(time: string) => {
                                     const formatTime = moment(time).format("hh:mm | D MM")
                                     return (
@@ -321,11 +328,22 @@ const DealsPage = () => {
                                 );
                             }}
                         /> */}
+                            {/* <Column
+                                title="Отправить  в CRM"
+                                dataIndex="send"
+                                key="send"
+                                // width={105}
+                                render={(_: any, record: DataType) => {
+                                    return (
+                                        <Button style={{ padding: '3px 6px' }} onClick={() => sendToCRM(record)}>Отправить</Button>
+                                    );
+                                }}
+                            /> */}
                             <Column
                                 title="Изменить"
                                 dataIndex="update"
                                 key="update"
-                                width={105}
+                                // width={105}
                                 render={(_: any, record: DataType) => {
                                     return (
                                         <EditOutlined onClick={() => addDealModal(record)} />
@@ -336,7 +354,7 @@ const DealsPage = () => {
                                 title="Удалить"
                                 dataIndex="delete"
                                 key="delete"
-                                width={105}
+                                // width={105}
                                 render={(_, record) => {
                                     if ((data?.length ?? 0) >= 1) {
                                         return (
@@ -351,7 +369,7 @@ const DealsPage = () => {
                             />
 
                         </Table>
-                    </Form>
+                    {/* </Form> */}
 
                 </StyledTableWrapper>
             }

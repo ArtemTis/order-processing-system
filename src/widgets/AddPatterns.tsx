@@ -2,8 +2,10 @@ import React, { MouseEvent, useEffect, useState } from 'react'
 import { companyApi } from '../entities/chats/companyApi';
 import { StyledButton, StyledTabs } from '../pages/Settings';
 import styled from 'styled-components';
-import { Input, Modal, message } from 'antd';
+import { Input, Modal, Popconfirm, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
+import { CloseOutlined } from '@ant-design/icons';
+import { IPattern, IPatternMessage, IPatterns, ITypePattern } from '../entities/types';
 
 interface ITab {
     key: string;
@@ -28,6 +30,9 @@ const AddPatterns = () => {
     const [sendNewPattern, { isLoading: isLoade, isError: isErro }] = companyApi.useAddPatternMutation();
     const [sendNewTypePattern, { data, isLoading: isLoadType, isError: isErrorType }] = companyApi.useAddTypePatternMutation();
     const [messageApi, contextHolder] = message.useMessage();
+
+    const [delTypePattern, { data: dataTypePattern, isLoading: isLoadTypePattern, isError: isErrorTypePattern }] = companyApi.useDeleteTypePatternMutation();
+    const [delPattern, { data : dataPattern, isLoading: isLoadPattern, isError: isErrorPattern }] = companyApi.useDeletePatternMutation();
 
     const addTypePatternModal = () => {
         setIsTypeModalOpen(true);
@@ -98,6 +103,45 @@ const AddPatterns = () => {
         setTypePattern('');
     };
 
+    const deleteTypePattern = async (patternType: ITypePattern) => {
+        try {
+            if (patternType) {
+                delTypePattern(patternType.id).unwrap();
+                messageApi.open({
+                    type: 'success',
+                    content: 'Вы удалили тип шаблона',
+                });
+            } else {
+                messageApi.open({
+                    type: 'warning',
+                    content: 'Неверная информация о шаблоне!',
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+
+    const deletePattern = async (pattern: IPatternMessage) => {
+        try {
+            if (pattern) {
+                delPattern(pattern.id).unwrap();
+                messageApi.open({
+                    type: 'success',
+                    content: 'Вы удалили шаблон',
+                });
+            } else {
+                messageApi.open({
+                    type: 'warning',
+                    content: 'Неверная информация о шаблоне!',
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     const tabs =
         //  React.useMemo<ITab[]>(() =>
         [
@@ -105,11 +149,22 @@ const AddPatterns = () => {
                 const id = String(i + 1);
                 return {
                     key: `${pattern.id}`,
-                    label: pattern.name,
+                    // label: pattern.name,
+                    label: <StyledLabel> {pattern.name}
+                        <Popconfirm title="Удалить тип шаблона?" onConfirm={() => deleteTypePattern(pattern)}>
+                            <CloseOutlined />
+                        </Popconfirm>
+                    </StyledLabel>,
                     children: (<>
                         {
                             pattern.messagePatterns.map(mess => (
-                                <h6 className='pattern-text' key={mess.id}>{mess.text}</h6>
+                                <StyledDiv>
+                                    <h6 className='pattern-text' key={mess.id}>{mess.text}</h6>
+
+                                    <Popconfirm title="Удалить шаблон?" onConfirm={() => deletePattern(mess)}>
+                                        <CloseOutlined />
+                                    </Popconfirm>
+                                </StyledDiv>
                             ))
                         }
                         <StyledButton type='primary' onClick={() => addPatternModal(pattern.id)}>Добавить шаблон</StyledButton>
@@ -136,8 +191,9 @@ const AddPatterns = () => {
             }
             <StyledTabs
                 tabPosition={"left"}
+                defaultActiveKey='1'
                 items={tabs}
-                style={{maxHeight: '70vh'}}
+                style={{ maxHeight: '70vh' }}
             />
 
             <StyledModal title="Добавить шаблон" open={isModalOpen} onOk={handleOk}
@@ -194,3 +250,14 @@ export const StyledModal = styled(Modal)`
   }
 `
 
+const StyledLabel = styled.label`
+    display: flex;
+    gap: 10px;
+`
+
+const StyledDiv = styled.label`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+`

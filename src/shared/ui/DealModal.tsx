@@ -20,12 +20,9 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    // const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
     const [titleDeal, setTitleDeal] = useState<string>('');
     const [amountDeal, setAmountDeal] = useState<number>();
     const [selectedStatus, setSelectedStatus] = useState<string>();
-    // const [editableDeal, setEditableDeal] = useState<IDeal>();
 
     const [updateDeal] = dealsApi.useUpdateDealMutation();
 
@@ -36,15 +33,11 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
     const [addDeal, { isLoading, isError }] = dealsApi.useAddDealMutation();
 
     console.log(editableDeal);
-    
+
     // console.log(resStatus?.data[editableDeal?.status_of_deal_id.id ?? 0].name);
     console.log(editableDeal?.status_of_deal_id.name);
 
     console.log(resStatus?.data);
-    
-    // const defaultSelect = editableDeal?.status_of_deal_id.name;
-
-    // const [defaultSelect, setDefaultSelect] = useState<string>(resStatus?.data[0].name);
 
     const handleChange = (value: string) => {
 
@@ -66,6 +59,12 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
         setSelectedStatus('');
         setEditableDeal(undefined);
     };
+
+    useEffect(() => {
+        return () => {
+            handleCancel();
+        }
+    }, [])
 
     const handleOk = () => {
         try {
