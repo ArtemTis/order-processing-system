@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IAddGroupVk, IChannel, ICompanyChatsResponse, ILogin, ILoginResponse, IMessagesResponse, IRegister, ISendMessage, IUser, ReqStatus } from '../types';
+import { IAddGroupVk, IAddTg, IChannel, ICompanyChatsResponse, ILogin, ILoginResponse, IMessagesResponse, IRegister, ISendMessage, IUser, ReqStatus } from '../types';
 import { RootState } from '../../app/store/store';
 
 const globalUrl = process.env.REACT_APP_API_URL;
@@ -39,5 +39,13 @@ export const channelApi = createApi({
             }),
 
         }),
+
+        addTgBot: build.mutation<{message: string}, IAddTg>({
+            query: (body) => ({
+                url: `/contacts/add-telegram-bot-contact`,
+                method: 'POST',
+                body
+            })
+        })
     })
 })

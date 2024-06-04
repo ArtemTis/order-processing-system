@@ -14,15 +14,16 @@ const Channals = () => {
     const { data: response, isLoading, isError } = channelApi.useChannelsQuery();
 
     const [addVk, { data: addVkRes, isLoading: addVkLoad, isError: addVkError }] = channelApi.useAddVkGroupMutation();
+    const [addTG, { data: addTGRes, isLoading: addTGLoad, isError: addTGError }] = channelApi.useAddTgBotMutation();
 
 
     const [vkValue, setVkValue] = useState<IVKgroup>();
+    const [tgValue, setTgValue] = useState<string>();
 
     const [messageApi, contextHolder] = message.useMessage();
 
 
     const addVkGroup = async () => {
-
         try {
             if (vkValue?.access_key && vkValue.group_id) {
                 await addVk({
@@ -34,6 +35,32 @@ const Channals = () => {
                     content: 'Вы добавили группу ВК',
                 });
                 setVkValue({access_key: '', group_id: undefined});
+            }else{
+                messageApi.open({
+                    type: 'warning',
+                    content: 'Введите нужную информацию!',
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            messageApi.open({
+                type: 'error',
+                content: 'Ошибка добавления канала',
+            });
+        }
+    }
+
+    const addTgBot = async () => {
+        try {
+            if (tgValue) {
+                await addTG({
+                   token: tgValue
+                }).unwrap();
+                messageApi.open({
+                    type: 'success',
+                    content: 'Вы добавили чат-бота Tg',
+                });
+                setTgValue('');
             }else{
                 messageApi.open({
                     type: 'warning',
@@ -69,14 +96,41 @@ const Channals = () => {
                     </div>
                     <StyledButton type='primary' onClick={addVkGroup}>Добавить группу ВК</StyledButton>
                     {
-                        isError &&
+                        addVkError &&
                         <p style={{ color: '#c20707', marginBottom: '10px' }}>Произошла ошибка</p>
                     }
-                    {
+                    {/* {
                         addVkRes &&
                         <p>{addVkRes.message}</p>
-                    }
+                    } */}
                 </StyledChannal>
+            )
+        },
+        {
+            key: '2',
+            label: 'Telegram',
+            children: (
+                <StyledChannal>
+                <h2>Добавьте чат-бота Telegram</h2>
+                <p>Вы можете добавить чат-ботов Telegram, созданные вами или в которых вы являетесь администратором. 
+                    {/* Чтобы добавить их, войдите в группу VK и скопируйте токен и айди */}
+                    </p>
+                <div className='channal-item'>
+                    <div>
+                        token:
+                        <Input value={vkValue?.access_key} onChange={(e) => setTgValue(e.target.value)} />
+                    </div>
+                </div>
+                <StyledButton type='primary' onClick={addTgBot}>Добавить чат-бота Telegram</StyledButton>
+                {
+                    addTGError &&
+                    <p style={{ color: '#c20707', marginBottom: '10px' }}>Произошла ошибка</p>
+                }
+                {/* {
+                    addTGRes &&
+                    <p>{addTGRes.message}</p>
+                } */}
+            </StyledChannal>
             )
         }
     ]
@@ -97,7 +151,9 @@ const Channals = () => {
                     return {
                         label: channel.name,
                         key: channel.id,
-                        children: (!!channel.isConnected ? channalsTabs[i]?.children :
+                        children: (
+                            // !!channel.isConnected ? channalsTabs[i]?.children :
+                            channel.id < 3 ? channalsTabs[i]?.children :
                             <h2>Канал уже добавлен</h2>
                         ),
                     };

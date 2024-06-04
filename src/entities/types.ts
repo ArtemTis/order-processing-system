@@ -175,6 +175,10 @@ export interface IAddGroupVk {
     group_id: number
 }
 
+export interface IAddTg {
+    token: string
+}
+
 export enum ReqStatus {
     success,
     reject

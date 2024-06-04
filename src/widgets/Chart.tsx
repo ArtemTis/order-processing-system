@@ -29,7 +29,7 @@ const Chart = () => {
             <h2>Динамика сообщений и заявок за неделю</h2>
             <LineChart
                 width={800}
-                height={500}
+                height={400}
                 data={messAndDeals}
                 margin={{
                     top: 5,
