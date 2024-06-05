@@ -46,12 +46,13 @@ const Chats = () => {
     return <Navigate to={`/${ACCOUNT_PATH}/${LOGIN_PATH}`} />
   }
 
+  console.log(response);
 
- 
+
   return (
     <StyledChatsWrapper>
       <StyledChats>
-        <Mailing chats={response?.data ?? []}/>
+        <Mailing chats={response?.data ?? []} />
         {
           response?.data.map((item, index) =>
             <Link to={`${CHAT_PATH}/${item.id}`} key={item.id}>

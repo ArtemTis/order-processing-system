@@ -6,6 +6,9 @@ import { UserOutlined } from '@ant-design/icons'
 import { IChatSnippet } from '../entities/types'
 import { useLocation, useParams } from 'react-router-dom'
 
+import vk from '../shared/assets/vk.svg'
+import tg from '../shared/assets/tg.svg'
+
 interface ChatItemProps {
     data: IChatSnippet;
 }
@@ -32,7 +35,10 @@ const ChatItem: React.FC<ChatItemProps> = ({ data }) => {
             />
 
             <StyledName>
-                <h3>{data.name}</h3>
+                <div>
+                    <h3>{data.name}</h3>
+                    <img src={data.channel.name === 'VKGroup' ? vk : tg} alt="channel icon" />
+                </div>
                 <StyledContainer>
                     {
                         data.last_message?.text &&
@@ -77,6 +83,16 @@ const StyledName = styled.div`
     justify-content: space-between;
     width: 70%;
     margin: 5px 0;
+
+    >div{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        img{
+            width: 20px;
+        }
+    }
 
     h3{
         font-size: 16px;
