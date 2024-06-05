@@ -130,7 +130,7 @@ const Chat = () => {
               <input
                 type="text"
                 className="form-control"
-                placeholder="Write message..."
+                placeholder="Напишите сообщение..."
                 // ref={inputRef}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}

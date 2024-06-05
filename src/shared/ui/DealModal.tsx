@@ -32,9 +32,6 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
 
     const [addDeal, { isLoading, isError }] = dealsApi.useAddDealMutation();
 
-    // console.log(resStatus?.data[editableDeal?.status_of_deal_id.id ?? 0].name);
-    console.log(editableDeal?.status_of_deal_id.name);
-
     const handleChange = (value: string) => {
         setSelectedStatus(value);
     };
@@ -50,14 +47,10 @@ const DealModal: React.FC<IProps> = ({ chatId, isModalOpen, setIsModalOpen, edit
         }
     }, [editableDeal?.id])
 
-    console.log(selectedStatus);
-
     const defaultValue = useMemo(() =>
         // resStatus?.data.find(stat => stat.id === +(selectedStatus ?? 0))?.name
         `${editableDeal?.status_of_deal_id.id}`
         , [editableDeal?.id]);
-
-    console.log(defaultValue);
 
 
     const handleCancel = () => {

@@ -190,9 +190,12 @@ const DealsPage = () => {
     //     };
     // });
 
+    const statColor = (status: IStatuseDeal) => {
+        const index = resStatus?.data.findIndex(stat => stat.id === status.id) ?? -1;
+        return index >= 0 ? STATUS_COLOR[index] : 'geekblue';
+    }
 
-   
-    
+
     return (
         <StyledWrapper>
             <h1>Список сделок</h1>
@@ -204,108 +207,139 @@ const DealsPage = () => {
                 dealsResponse &&
                 <StyledTableWrapper>
                     {/* <Form form={form} component={false}> */}
-                        <Table
-                            // components={{
-                            //     body: {
-                            //         cell: EditableDeal,
-                            //     },
-                            // }}
-                            style={{ height: 400 }}
-                            dataSource={data}
-                            pagination={false}
-                            // columns={columns}
-                            // onChange={onChange}
-                            showSorterTooltip={{ target: 'sorter-icon' }}
-                        >
-                            <Column
-                                title="Имя"
-                                dataIndex="contact_id"
-                                key="contact_id"
-                                // width={150}
-                                sortIcon={() => <DownSquareOutlined />}
-                                //@ts-ignore
-                                sorter={(a, b) => a.contact_id.name.length - b.contact_id.name.length}
-                                sortDirections={['descend']}
-                                render={(contact: IClient) => {
-
-                                    return (
-                                        <Fragment key={contact.id}>
-                                            {contact.name}
-                                        </Fragment>
-                                    )
-                                }}
-                            />
-                            <Column title="Название" dataIndex="desc" key="desc" width={251} />
-                            <Column
-                                title="Сумма"
-                                dataIndex="amount"
-                                key="amount"
-                                sortIcon={() => <DownSquareOutlined />}
-                                sortDirections={['descend']}
-                                // width={104}
-                                //@ts-ignore
-                                sorter={(a, b) => a.amount - b.amount}
-                                render={amount => amount / 100}
-                            />
-                            <Column
-                                title="Статус"
-                                dataIndex="status_of_deal_id"
-                                key="status_of_deal_id"
-                                // width={180}
-                                // sortDirections={['descend']}
-                                // defaultSortOrder='descend'
-                                filters={statuses}
-                                sortIcon={() => <DownSquareOutlined />}
-                                filterIcon={() => <FilterOutlined />}
-                                //@ts-ignore
-                                onFilter={(value, record) => record.status_of_deal_id.name.indexOf(value as string) === 0}
-                                //@ts-ignore
-                                sorter={(a, b) => a.status_of_deal_id.name.length - b.status_of_deal_id.name.length}
-                                render={(status: IStatuseDeal) => {
-                                    return (
-                                        <Tag color={STATUS_COLOR[status.id] ?? 'geekblue'} key={status.id}>
+                    <Table
+                        // components={{
+                        //     body: {
+                        //         cell: EditableDeal,
+                        //     },
+                        // }}
+                        expandable={{
+                            expandedRowRender: (record) =>
+                                <p style={{ margin: 0 }}
+                                    dangerouslySetInnerHTML={{ __html: record.desc.split(', ').join(' <br/> ') }}
+                                />,
+                            // </p>,
+                            rowExpandable: (record) => record.desc.length > 30,
+                        }}
+                        style={{ height: 400 }}
+                        dataSource={data}
+                        pagination={false}
+                        // columns={columns}
+                        // onChange={onChange}
+                        showSorterTooltip={{ target: 'sorter-icon' }}
+                    >
+                        <Column
+                            title="Имя"
+                            dataIndex="contact_id"
+                            key="contact_id"
+                            // width={150}
+                            sortIcon={() => <DownSquareOutlined />}
+                            //@ts-ignore
+                            sorter={(a, b) => a.contact_id.name.length - b.contact_id.name.length}
+                            sortDirections={['descend']}
+                            render={(contact: IClient) => {
+                                return (
+                                    <Fragment key={contact.id}>
+                                        {contact.name}
+                                    </Fragment>
+                                )
+                            }}
+                        />
+                        <Column
+                            title="Название"
+                            dataIndex="desc"
+                            key="desc"
+                            width={251}
+                            render={(record) => {
+                                return (
+                                    <p className='table-desc'>
+                                        {record}
+                                    </p>
+                                )
+                            }}
+                        />
+                        <Column
+                            title="Сумма"
+                            dataIndex="amount"
+                            key="amount"
+                            sortIcon={() => <DownSquareOutlined />}
+                            sortDirections={['descend']}
+                            // width={104}
+                            //@ts-ignore
+                            sorter={(a, b) => a.amount - b.amount}
+                            render={amount => amount / 100}
+                        />
+                        <Column
+                            title="Статус"
+                            dataIndex="status_of_deal_id"
+                            key="status_of_deal_id"
+                            // width={180}
+                            // sortDirections={['descend']}
+                            // defaultSortOrder='descend'
+                            filters={statuses}
+                            sortIcon={() => <DownSquareOutlined />}
+                            filterIcon={() => <FilterOutlined />}
+                            //@ts-ignore
+                            onFilter={(value, record) => record.status_of_deal_id.name.indexOf(value as string) === 0}
+                            //@ts-ignore
+                            sorter={(a, b) => a.status_of_deal_id.name.length - b.status_of_deal_id.name.length}
+                            render={(status: IStatuseDeal, record: DataType, index: number) => {
+                                console.log(record);
+                                
+                                return (
+                                    // <Tag color={STATUS_COLOR[index] ?? 'geekblue'} key={status.id}>
+                                    <span key={status.id}>
+                                        <Tag
+                                            color={statColor(status)}
+                                        >
                                             {status.name}
                                         </Tag>
-                                    );
-                                }}
-                            />
-                            <Column
-                                title="Создана"
-                                dataIndex="created_at"
-                                key="created_at"
-                                // width={175}
-                                render={(time: string) => {
-                                    const formatTime = moment(time).format("hh:mm | D MMM YYYY")
-                                    return (
-                                        <Fragment key={time}>
-                                            {
-                                                time &&
-                                                <>{formatTime}</>
-                                            }
-                                        </Fragment>
-                                    )
-                                }}
-                            />
-                            <Column
-                                title="Закрыта"
-                                dataIndex="closed_at"
-                                key="closed_at"
-                                // width={119}
-                                render={(time: string) => {
-                                    const formatTime = moment(time).format("hh:mm | D MM")
-                                    return (
-                                        <Fragment key={time}>
-                                            {
-                                                time ?
-                                                    <> {formatTime} </>
-                                                    :
-                                                    <>Не закрыто</>
-                                            }
-                                        </Fragment>
-                                    )
-                                }}
-                            />
-                            {/* <Column
+                                        {record.isSendToCrm &&
+                                            <Tag color='geekblue'>
+                                                Из CRM
+                                            </Tag>
+                                        }
+                                    </span>
+                                );
+                            }}
+                        />
+                        <Column
+                            title="Создана"
+                            dataIndex="created_at"
+                            key="created_at"
+                            // width={175}
+                            render={(time: string) => {
+                                const formatTime = moment(time).format("hh:mm | D MMM YYYY")
+                                return (
+                                    <Fragment key={time}>
+                                        {
+                                            time &&
+                                            <>{formatTime}</>
+                                        }
+                                    </Fragment>
+                                )
+                            }}
+                        />
+                        <Column
+                            title="Закрыта"
+                            dataIndex="closed_at"
+                            key="closed_at"
+                            // width={119}
+                            render={(time: string) => {
+                                const formatTime = moment(time).format("hh:mm | D MM")
+                                return (
+                                    <Fragment key={time}>
+                                        {
+                                            time ?
+                                                <> {formatTime} </>
+                                                :
+                                                <>Не закрыто</>
+                                        }
+                                    </Fragment>
+                                )
+                            }}
+                        />
+                        {/* <Column
                             title="Изменить"
                             dataIndex="update"
                             key="update"
@@ -328,7 +362,7 @@ const DealsPage = () => {
                                 );
                             }}
                         /> */}
-                            {/* <Column
+                        {/* <Column
                                 title="Отправить  в CRM"
                                 dataIndex="send"
                                 key="send"
@@ -339,36 +373,36 @@ const DealsPage = () => {
                                     );
                                 }}
                             /> */}
-                            <Column
-                                title="Изменить"
-                                dataIndex="update"
-                                key="update"
-                                // width={105}
-                                render={(_: any, record: DataType) => {
+                        <Column
+                            title="Изменить"
+                            dataIndex="update"
+                            key="update"
+                            // width={105}
+                            render={(_: any, record: DataType) => {
+                                return (
+                                    <EditOutlined onClick={() => addDealModal(record)} />
+                                );
+                            }}
+                        />
+                        <Column
+                            title="Удалить"
+                            dataIndex="delete"
+                            key="delete"
+                            // width={105}
+                            render={(_, record) => {
+                                if ((data?.length ?? 0) >= 1) {
                                     return (
-                                        <EditOutlined onClick={() => addDealModal(record)} />
-                                    );
-                                }}
-                            />
-                            <Column
-                                title="Удалить"
-                                dataIndex="delete"
-                                key="delete"
-                                // width={105}
-                                render={(_, record) => {
-                                    if ((data?.length ?? 0) >= 1) {
-                                        return (
-                                            //@ts-ignore
-                                            <Popconfirm title="Удалить заявку?" onConfirm={() => handleDelete(record.id)}>
-                                                <DeleteOutlined />
-                                            </Popconfirm>
-                                        )
-                                    }
-                                    return null
-                                }}
-                            />
+                                        //@ts-ignore
+                                        <Popconfirm title="Удалить заявку?" onConfirm={() => handleDelete(record.id)}>
+                                            <DeleteOutlined />
+                                        </Popconfirm>
+                                    )
+                                }
+                                return null
+                            }}
+                        />
 
-                        </Table>
+                    </Table>
                     {/* </Form> */}
 
                 </StyledTableWrapper>
@@ -390,4 +424,12 @@ export default DealsPage
 const StyledTableWrapper = styled.div`
     scrollbar-width: none;
     height: 300px;
+
+    .table-desc{
+        width: 200px;
+        white-space: nowrap; 
+        overflow: hidden; 
+        text-overflow: ellipsis; 
+    }
+
 `

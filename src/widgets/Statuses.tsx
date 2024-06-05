@@ -16,6 +16,7 @@ export enum STATUS_COLOR {
     '#072fb1cc',
 }
 
+
 const Statuses = () => {
 
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -35,6 +36,8 @@ const Statuses = () => {
 
     const handleCancel = () => {
         setIsModalOpen(false);
+        setInputName('');
+        setInputDesc('');
     };
 
     const handleOk = () => {
@@ -49,6 +52,8 @@ const Statuses = () => {
                     type: 'success',
                     content: 'Вы добпавили новый статус',
                 });
+                setInputName('');
+                setInputDesc('');
             } else {
                 messageApi.open({
                     type: 'warning',
@@ -58,24 +63,32 @@ const Statuses = () => {
         } catch (error) {
             console.log(error);
         }
-
     };
 
     const deleteStatus = async (item: IStatuseDeal) => {
         try {
             if (item) {
-                delStatus(item.id).unwrap();
-                messageApi.open({
-                    type: 'success',
-                    content: 'Вы удалили статус',
-                });
+                delStatus(item.id).unwrap()
+                    .then(() => {
+                        messageApi.open({
+                            type: 'success',
+                            content: 'Вы удалили статус',
+                        });
+                    }).catch((error) => {
+                        if (error.status === 400) {
+                            messageApi.open({
+                                type: 'error',
+                                content: error.data.message,
+                            });
+                        }
+                    });
             } else {
                 messageApi.open({
                     type: 'warning',
                     content: 'Неверная информация о статусе!',
                 });
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
         }
     }
@@ -89,12 +102,12 @@ const Statuses = () => {
             {contextHolder}
             {
                 resStatus &&
-                resStatus?.data.map(item => (
-                    <StyledStatus key={item.id} colordot={STATUS_COLOR[item.id - 1]}>
+                resStatus?.data.map((item, index) => (
+                    <StyledStatus key={item.id} colordot={STATUS_COLOR[index]}>
                         <div>
                             <h2>{item.name}</h2>
                             <Popconfirm title="Удалить статус?" onConfirm={() => deleteStatus(item)}>
-                                <CloseOutlined style={{color:'##420c0c'}}/>
+                                <CloseOutlined style={{ color: '##420c0c' }} />
                             </Popconfirm>
                         </div>
                         <h3>{item.desc}</h3>
@@ -104,7 +117,7 @@ const Statuses = () => {
             }
             <StyledButton type='primary' onClick={addStatusModal}>Добавить статус</StyledButton>
 
-            <StyledModal title="Добавить шаблон" open={isModalOpen} onOk={handleOk}
+            <StyledModal title="Добавить статус" open={isModalOpen} onOk={handleOk}
                 okText={'Сохранить'} cancelText={'Закрыть'} onCancel={handleCancel}>
                 <p>Введите название и описание нового статуса</p>
                 <div>
