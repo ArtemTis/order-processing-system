@@ -17,8 +17,11 @@ const Channals = () => {
     const [addTG, { data: addTGRes, isLoading: addTGLoad, isError: addTGError }] = channelApi.useAddTgBotMutation();
 
 
-    const [vkValue, setVkValue] = useState<IVKgroup>();
-    const [tgValue, setTgValue] = useState<string>();
+    const [vkValue, setVkValue] = useState<IVKgroup>({
+        access_key: 'vk1.a.ddg7R-WvdJhcS6ulG9bpQ79Etd1S4_GDdj-pWvCtxtvVscb1j_Giu-tTAo0QfwUSVG4bYMbiYRR6-u_BgeBP8kkhJkgA38Jm_jEJaV81AComaO3_W2LByQw5MWenKy5pPj9YvDii96ljabNXXJLLp90-JBPELWnzeB_5uEfxy-T9FWtrkV8B9ddTlHTc3uTvYTeZG9NbUV21bA_mDGZZxA',
+        group_id: 220160293
+    });
+    const [tgValue, setTgValue] = useState<string>('7151286309:AAE_UOCqJwbHnlinyPqjh-VhkLIuGPiSz4Y');
 
     const [messageApi, contextHolder] = message.useMessage();
 
@@ -146,7 +149,7 @@ const Channals = () => {
             <StyledTabs
                 tabPosition={"left"}
                 // @ts-ignore
-                items={response?.data.map((channel, i) => {
+                items={response?.data.slice(0,3).map((channel, i) => {
                     const id = String(i + 1);
                     return {
                         label: channel.name,
