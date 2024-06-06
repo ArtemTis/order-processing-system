@@ -121,7 +121,7 @@ const Channals = () => {
                 <div className='channal-item'>
                     <div>
                         token:
-                        <Input value={vkValue?.access_key} onChange={(e) => setTgValue(e.target.value)} />
+                        <Input value={tgValue} onChange={(e) => setTgValue(e.target.value)} />
                     </div>
                 </div>
                 <StyledButton type='primary' onClick={addTgBot}>Добавить чат-бота Telegram</StyledButton>
